@@ -3,9 +3,12 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import MobileFooterMenu from "../components/common/MobileFooterMenu";
+import ScrollToTop from "../utils/ScrollToTop";
+
 const PlainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#fafafa]">
+       <ScrollToTop />
       {/* Navbar */}
       <Navbar />
 

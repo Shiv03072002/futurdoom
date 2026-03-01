@@ -4,10 +4,11 @@ import Navbar from "../components/common/Navbar";
 import Sidebar from "../components/common/Sidebar";
 import Footer from "../components/common/Footer";
 import MobileFooterMenu from "../components/common/MobileFooterMenu"; // Import your mobile footer menu
-
+import ScrollToTop from "../utils/ScrollToTop";
 const MainLayout = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#fafafa" }}>
+       <ScrollToTop />
       {/* Fixed top navbar */}
       <Navbar />
 
@@ -15,7 +16,7 @@ const MainLayout = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex gap-4 py-6 items-start">
           {/* LEFT SIDEBAR — fixed width like Instagram */}
-          <div className="w-[270px] hidden md:block shrink-0 sticky top-20 h-fit">
+          <div className="w-[280px] hidden md:block shrink-0 sticky top-20 h-fit">
             <Sidebar />
           </div>
 
