@@ -164,11 +164,7 @@ const DiscussionChatMain = () => {
     },
   };
 
-  // Auto scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
+ 
   // Avatar component for participants
   const ParticipantAvatar = ({ participant, size = 36, showStatus = true }) => (
     <div className="relative flex-shrink-0">
@@ -216,8 +212,8 @@ const DiscussionChatMain = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
-      <div className="max-w-5xl mx-auto">
+    <div className=" bg-gray-50 p-2 sm:p-4">
+      <div className="max-w-7xl mx-auto">
         
         {/* Main Chat - Discussion Version */}
         <motion.div

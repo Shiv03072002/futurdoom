@@ -162,11 +162,7 @@ const GroupChat = () => {
     },
   };
 
-  // Auto scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
+ 
   // Avatar component for group members
   const MemberAvatar = ({ member, size = 36, showStatus = true }) => (
     <div className="relative flex-shrink-0">
@@ -214,7 +210,7 @@ const GroupChat = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
+    <div className=" bg-gray-50 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto">
         
         {/* Main Chat - Group Chat Version */}
