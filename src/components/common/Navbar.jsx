@@ -86,8 +86,8 @@ const Navbar = () => {
                 className="w-10 h-10 object-contain"
               />
               <h1 className="text-3xl tracking-wide leading-none font-medium">
-                <span className="text-slate-800 font-medium">futur</span>
-                <span className="bg-[#2364eb] bg-clip-text text-transparent inline-block font-bold">
+                <span className="text-slate-800 font-extralight">futur</span>
+                <span className="bg-[#2364eb] bg-clip-text text-transparent inline-block font-extrabold">
                   DooM
                 </span>
               </h1>
@@ -269,7 +269,7 @@ const Navbar = () => {
                 className="flex items-center gap-1.5 px-3 md:px-4 h-9 rounded-lg text-slate-600 hover:text-[#2563eb] hover:bg-blue-50 transition-all duration-200"
               >
                 <LogOut size={18} strokeWidth={1.75} />
-                <span className="hidden md:inline text-sm font-medium">Close</span>
+                <span className="hidden md:inline text-sm font-medium">Logout</span>
               </Link>
             </div>
           </div>

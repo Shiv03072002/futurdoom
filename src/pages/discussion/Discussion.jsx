@@ -29,15 +29,72 @@ const DiscussionMain = () => {
     { id: 3, name: "Sneha Rao", avatar: "SR", color: "from-emerald-400 to-teal-500", online: false },
     { id: 4, name: "Rahul Sharma", avatar: "RS", color: "from-purple-400 to-pink-400", online: true },
     { id: 5, name: "Priya Patel", avatar: "PP", color: "from-orange-400 to-rose-400", online: false },
+    { id: 6, name: "Amit Kumar", avatar: "AK", color: "from-cyan-400 to-blue-400", online: true },
   ];
 
-  // Sample previous chats
-  const previousChats = [
-    { id: 1, name: "Aarav Mehta", avatar: "AM", color: "from-blue-400 to-indigo-500", lastMessage: "Thanks for the help!", time: "2 min ago", unread: 2 },
-    { id: 2, name: "Sneha Rao", avatar: "SR", color: "from-emerald-400 to-teal-500", lastMessage: "Can you explain that again?", time: "1 hour ago", unread: 0 },
-    { id: 3, name: "Rahul Sharma", avatar: "RS", color: "from-purple-400 to-pink-400", lastMessage: "Great discussion!", time: "3 hours ago", unread: 1 },
-    { id: 4, name: "Priya Patel", avatar: "PP", color: "from-orange-400 to-rose-400", lastMessage: "See you tomorrow", time: "1 day ago", unread: 0 },
-  ];
+  // Sample previous chats (user to user conversations)
+ const previousChats = [
+  { 
+    id: 1, 
+    name: "Dipankar & Shiv", 
+    avatar: "DS", 
+    color: "from-pink-400 to-red-400", 
+    lastMessage: "Dipankar: Hey Shiv, did you check the latest updates?", 
+    time: "2 min ago", 
+    unread: 2,
+    participants: ["Dipankar Porey", "Shiv Kumar"]
+  },
+  { 
+    id: 2, 
+    name: "Aarav & Shiv", 
+    avatar: "AS", 
+    color: "from-blue-400 to-indigo-500", 
+    lastMessage: "Aarav: Thanks for the help with the project!", 
+    time: "1 hour ago", 
+    unread: 0,
+    participants: ["Aarav Mehta", "Shiv Kumar"]
+  },
+  { 
+    id: 3, 
+    name: "Sneha & Shiv", 
+    avatar: "SS", 
+    color: "from-emerald-400 to-teal-500", 
+    lastMessage: "Sneha: Can you explain that concept again?", 
+    time: "3 hours ago", 
+    unread: 1,
+    participants: ["Sneha Rao", "Shiv Kumar"]
+  },
+  { 
+    id: 4, 
+    name: "Rahul & Shiv", 
+    avatar: "RS", 
+    color: "from-purple-400 to-pink-400", 
+    lastMessage: "Rahul: Great discussion about the new features!", 
+    time: "5 hours ago", 
+    unread: 0,
+    participants: ["Rahul Sharma", "Shiv Kumar"]
+  },
+  { 
+    id: 5, 
+    name: "Priya & Shiv", 
+    avatar: "PS", 
+    color: "from-orange-400 to-rose-400", 
+    lastMessage: "Priya: See you at the meeting tomorrow", 
+    time: "1 day ago", 
+    unread: 0,
+    participants: ["Priya Patel", "Shiv Kumar"]
+  },
+  { 
+    id: 6, 
+    name: "Amit & Shiv", 
+    avatar: "AS", 
+    color: "from-cyan-400 to-blue-400", 
+    lastMessage: "Amit: The code changes look good to me", 
+    time: "2 days ago", 
+    unread: 0,
+    participants: ["Amit Kumar", "Shiv Kumar"]
+  }
+];
 
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -145,17 +202,17 @@ const DiscussionMain = () => {
   };
 
   return (
-    <div className="flex items-center justify-center ">
+    <div className="flex items-center justify-center  ">
       
       <motion.div 
-        className="w-full max-w-md"
+        className="w-full max-w-lg"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Main Card */}
         <motion.div 
-          className="bg-white rounded-3xl shadow-xl shadow-blue-200/50 border border-blue-50 overflow-hidden relative"
+          className="bg-white rounded-xl border border-blue-50 overflow-hidden relative"
           variants={itemVariants}
         >
           {/* Header with Gradient */}
@@ -227,7 +284,7 @@ const DiscussionMain = () => {
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 400 }}
             >
-              FD
+              D
             </motion.div>
             <motion.span 
               className="absolute bottom-2 right-2 w-4 h-4 bg-green-400 rounded-full ring-2 ring-white"
@@ -304,9 +361,6 @@ const DiscussionMain = () => {
                 </motion.button>
                 <span className="text-xs font-medium text-slate-400">New Discussion</span>
               </motion.div>
-
-             
-              
             </motion.div>
 
             {/* Previous Chats List */}
@@ -329,7 +383,7 @@ const DiscussionMain = () => {
                     {previousChats.map((chat) => (
                       <motion.div
                         key={chat.id}
-                        
+                       
                         className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all"
                         onClick={() => openPreviousChat(chat.id)}
                       >
@@ -339,7 +393,7 @@ const DiscussionMain = () => {
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-slate-800">{chat.name}</p>
-                            <p className="text-xs text-slate-400 mt-0.5">{chat.lastMessage}</p>
+                            <p className="text-xs text-slate-400 mt-0.5 max-w-[180px] truncate">{chat.lastMessage}</p>
                           </div>
                         </div>
                         <div className="flex flex-col items-end">
@@ -401,7 +455,7 @@ const DiscussionMain = () => {
                     {filteredUsers.map((user) => (
                       <motion.div
                         key={user.id}
-                       
+                        
                         className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
                           selectedUsers.includes(user.id)
                             ? 'bg-blue-50 border-2 border-blue-400'

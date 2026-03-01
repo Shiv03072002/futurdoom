@@ -35,13 +35,75 @@ const Groups = () => {
     { id: 6, name: "Amit Kumar", avatar: "AK", color: "from-cyan-400 to-blue-400", online: true },
   ];
 
-  // Sample previous group chats
+  // Sample previous group chats with first message only
   const previousGroups = [
-    { id: 1, name: "Frontend Devs", avatar: "FD", color: "from-blue-400 to-indigo-500", members: 8, lastMessage: "John: Check this PR", time: "5 min ago", unread: 3 },
-    { id: 2, name: "AI Enthusiasts", avatar: "AI", color: "from-purple-400 to-pink-400", members: 15, lastMessage: "Sarah: Great discussion!", time: "2 hours ago", unread: 0 },
-    { id: 3, name: "Project X", avatar: "PX", color: "from-green-400 to-emerald-500", members: 5, lastMessage: "Mike: Meeting at 3pm", time: "1 day ago", unread: 1 },
-    { id: 4, name: "Design Team", avatar: "DT", color: "from-orange-400 to-red-400", members: 12, lastMessage: "Emma: New mockups ready", time: "2 days ago", unread: 0 },
-  ];
+  { 
+    id: 1, 
+    name: "Dipankar & Shiv", 
+    avatar: "DS", 
+    color: "from-pink-400 to-red-400",
+    members: 2, 
+    lastMessage: "Dipankar: Hey Shiv, did you check the latest updates on the project?", 
+    time: "Just now", 
+    unread: 2,
+    participants: ["Dipankar Porey", "Shiv Kumar"]
+  },
+  { 
+    id: 2, 
+    name: "Aarav & Sneha", 
+    avatar: "AS", 
+    color: "from-blue-400 to-indigo-500",
+    members: 2, 
+    lastMessage: "Aarav: Want to grab coffee later?", 
+    time: "5 min ago", 
+    unread: 3,
+    participants: ["Aarav Mehta", "Sneha Rao"]
+  },
+  { 
+    id: 3, 
+    name: "Rahul & Priya", 
+    avatar: "RP", 
+    color: "from-purple-400 to-pink-400",
+    members: 2, 
+    lastMessage: "Priya: Did you see the movie last night?", 
+    time: "2 hours ago", 
+    unread: 0,
+    participants: ["Rahul Sharma", "Priya Patel"]
+  },
+  { 
+    id: 4, 
+    name: "Amit & Dipankar", 
+    avatar: "AD", 
+    color: "from-green-400 to-emerald-500",
+    members: 2, 
+    lastMessage: "Amit: The code is ready for deployment", 
+    time: "1 day ago", 
+    unread: 1,
+    participants: ["Amit Kumar", "Dipankar Porey"]
+  },
+  { 
+    id: 5, 
+    name: "Shiv & Sneha", 
+    avatar: "SS", 
+    color: "from-orange-400 to-red-400",
+    members: 2, 
+    lastMessage: "Shiv: Thanks for your help yesterday!", 
+    time: "2 days ago", 
+    unread: 0,
+    participants: ["Shiv Kumar", "Sneha Rao"]
+  },
+  { 
+    id: 6, 
+    name: "Priya & Aarav", 
+    avatar: "PA", 
+    color: "from-cyan-400 to-blue-400",
+    members: 2, 
+    lastMessage: "Priya: The design looks amazing!", 
+    time: "3 days ago", 
+    unread: 0,
+    participants: ["Priya Patel", "Aarav Mehta"]
+  }
+];
 
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -149,17 +211,16 @@ const Groups = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center ">
-      
+    <div className="flex items-center justify-center">
       <motion.div 
-        className="w-full max-w-md"
+        className="w-full max-w-lg"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Main Card */}
         <motion.div 
-          className="bg-white rounded-xl shadow-xl shadow-blue-200/50 border border-blue-50 overflow-hidden relative"
+          className="bg-white rounded-xl  border border-blue-50 overflow-hidden relative"
           variants={itemVariants}
         >
           {/* Header with Gradient */}
@@ -231,7 +292,7 @@ const Groups = () => {
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 400 }}
             >
-              FD
+              GC
             </motion.div>
             <motion.span 
               className="absolute bottom-2 right-2 w-4 h-4 bg-green-400 rounded-full ring-2 ring-white"
@@ -330,7 +391,7 @@ const Groups = () => {
                     {previousGroups.map((group) => (
                       <motion.div
                         key={group.id}
-                        whileHover={{ scale: 1.02, x: 5 }}
+                       
                         className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all"
                         onClick={() => openPreviousGroup(group.id)}
                       >
@@ -406,7 +467,7 @@ const Groups = () => {
                     {filteredUsers.map((user) => (
                       <motion.div
                         key={user.id}
-                        whileHover={{ scale: 1.02, x: 5 }}
+                      
                         className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
                           selectedUsers.includes(user.id)
                             ? 'bg-blue-50 border-2 border-blue-400'

@@ -222,12 +222,12 @@ const Home = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.46, type: "spring", stiffness: 190 }}
-                className="font-black text-white leading-none tracking-tight mb-1"
-                style={{ fontSize: "clamp(2.8rem,9vw,3.6rem)", fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: "-0.03em" }}
+                className="font-black text-white font-normal leading-none tracking-tight mb-1"
+                style={{ fontSize: "clamp(2.8rem,9vw,3.6rem)", letterSpacing: "-0.03em" }}
               >
                 Futur
                 <motion.span
-                  className="text-blue-300"
+                  className="text-blue-300 font-extrabold"
                   animate={{ textShadow: ["0 0 0px rgba(147,197,253,0)", "0 0 28px rgba(147,197,253,0.7)", "0 0 0px rgba(147,197,253,0)"] }}
                   transition={{ duration: 2.8, repeat: Infinity }}
                 >

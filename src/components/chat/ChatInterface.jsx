@@ -259,7 +259,7 @@ const ChatInterface = () => {
                           className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
                           title="Reply"
                         >
-                          <Reply size={14} />
+                          <Heart size={14} />
                         </motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
@@ -273,10 +273,15 @@ const ChatInterface = () => {
   whileHover={{ scale: 1.1 }}
   whileTap={{ scale: 0.9 }}
   onClick={() => navigate("/deepaskshare")}
-  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors"
-  title="Deep Ask Share"
+  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
+  title="Deep Ask Share - 4 notifications"
 >
   <Brain size={14} />
+  
+  {/* Static "4" notification badge */}
+  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+    4
+  </span>
 </motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}

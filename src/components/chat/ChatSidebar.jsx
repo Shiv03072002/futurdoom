@@ -1,67 +1,71 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Search, Clock } from "lucide-react";
+import { MessageSquare, Search, Bot, Sparkles, Cpu, Zap, Globe, Brain } from "lucide-react";
 
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
 
-// Sample chat history for right sidebar
+// AI Chat history with names (stored but not displayed)
 const chatHistory = [
   {
     id: 1,
-    name: "Dipankar Porey",
-    lastMessage: "how to do frontend in html",
+    name: "ChatGPT-4", // Stored but not shown
+    lastMessage: "How can I help with your React component?",
     time: "2:10 PM",
     date: "Today",
     unread: 2,
+    icon: <Brain size={16} />
   },
   {
     id: 2,
-    name: "Aarav Mehta",
-    lastMessage: "Thanks for the help!",
+    name: "Claude 3", // Stored but not shown
+    lastMessage: "Here's an optimized solution for your problem",
     time: "11:30 AM",
     date: "Yesterday",
     unread: 0,
+    icon: <Sparkles size={16} />
   },
   {
     id: 3,
-    name: "Sneha Rao",
-    lastMessage: "See you tomorrow",
+    name: "Gemini Pro", // Stored but not shown
+    lastMessage: "Let me analyze that code for you",
     time: "9:15 AM",
     date: "Yesterday",
     unread: 1,
+    icon: <Zap size={16} />
   },
   {
     id: 4,
-    name: "Rahul Sharma",
-    lastMessage: "Great discussion!",
+    name: "Llama 3", // Stored but not shown
+    lastMessage: "I can help you debug that issue",
     time: "6:20 PM",
     date: "Feb 25",
     unread: 0,
+    icon: <Cpu size={16} />
   },
   {
     id: 5,
-    name: "Priya Patel",
-    lastMessage: "Thanks for the meeting",
+    name: "Copilot", // Stored but not shown
+    lastMessage: "Here's a suggestion for your code",
     time: "3:45 PM",
     date: "Feb 24",
     unread: 0,
+    icon: <Bot size={16} />
   },
 ];
 
-const Avatar = ({ size = 36, status = true }) => (
+const Avatar = ({ size = 36, status = true, icon }) => (
   <div className="relative flex-shrink-0">
     <div
-      className="flex items-center justify-center rounded-xl text-white font-bold"
+      className="flex items-center justify-center rounded-xl text-white"
       style={{
         width: size,
         height: size,
         background: `linear-gradient(135deg, ${DARK_BLUE}, ${BLUE})`,
-        fontSize: size * 0.35,
         boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
       }}
     >
-      {chatHistory.find(c => c.name)?.name.split(' ').map(n => n[0]).join('') || 'DP'}
+      {icon || <Bot size={size * 0.5} />}
     </div>
     {status && (
       <motion.span
@@ -121,7 +125,7 @@ const ChatSidebar = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search chats..."
+            placeholder="Search conversations..."
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-200 bg-white text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
@@ -140,30 +144,29 @@ const ChatSidebar = () => {
               className="p-3 mb-2 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-100 transition-all"
             >
               <div className="flex items-start gap-3">
-                <Avatar size={40} status={chat.unread > 0} />
+                {/* <Avatar size={40} status={chat.unread > 0} icon={chat.icon} /> */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-800 truncate">
-                      {chat.name}
-                    </p>
-                    <span className="text-[10px] text-slate-400">
-                      {chat.time}
-                    </span>
+                    {/* Name is removed from here */}
+                   
                   </div>
                   
-                  <p className="text-xs text-slate-500 truncate mt-0.5">
+                  <p className="text-xs text-slate-600 mt-1 line-clamp-2">
                     {chat.lastMessage}
                   </p>
                   
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-[10px] text-slate-400">
-                      {chat.date}
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                     
+                       {chat.date} • {chat.time}
                     </span>
+                    
                     {chat.unread > 0 && (
-                      <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[8px] font-bold">
-                        {chat.unread}
+                      <span className="px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px] font-bold">
+                        {chat.unread} new
                       </span>
                     )}
+                    
                   </div>
                 </div>
               </div>
@@ -174,15 +177,16 @@ const ChatSidebar = () => {
         {filteredHistory.length === 0 && (
           <div className="text-center py-8">
             <MessageSquare size={32} className="mx-auto text-slate-300 mb-2" />
-            <p className="text-sm text-slate-400">No chats found</p>
+            <p className="text-sm text-slate-400">No conversations found</p>
           </div>
         )}
       </div>
 
       {/* History Footer */}
       <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-blue-100">
-        <p className="text-[10px] text-slate-400 text-center">
-          {chatHistory.length} total conversations
+        <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1">
+          <Bot size={12} />
+          {chatHistory.length} AI conversations
         </p>
       </div>
     </motion.div>
