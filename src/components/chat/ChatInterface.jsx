@@ -15,9 +15,10 @@ import {
   Reply,
   Copy,
   Trash2,
-  Heart
+  Heart,
+  Brain
 } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
 
@@ -81,6 +82,7 @@ const ChatInterface = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
 
   const send = () => {
     if (!input.trim()) return;
@@ -267,14 +269,15 @@ const ChatInterface = () => {
                         >
                           <Copy size={14} />
                         </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="p-1 rounded-lg hover:bg-pink-50 text-slate-400 hover:text-pink-500 transition-colors"
-                          title="Heart"
-                        >
-                          <Heart size={14} />
-                        </motion.button>
+                       <motion.button
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+  onClick={() => navigate("/deepaskshare")}
+  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors"
+  title="Deep Ask Share"
+>
+  <Brain size={14} />
+</motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
