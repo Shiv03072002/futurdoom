@@ -1,44 +1,97 @@
-import React, { useState } from "react";
-import { MapPin, UserPlus, Check } from "lucide-react";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Star, Zap, ChevronRight } from 'lucide-react';
 
-const UserCard = ({ user, onUserClick }) => {
-  const [followed, setFollowed] = useState(false);
+const UserCard = ({ user, onUserClick, onInterestToggle }) => {
+  const getInterestButton = () => {
+    if (user.interest === "interested") {
+      return (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onInterestToggle(user.id, "interested");
+          }}
+          className="flex items-center gap-1 px-2 py-1 rounded-full bg-pink-50 border border-pink-200 text-pink-600 text-xs font-medium hover:bg-pink-100 transition-colors"
+        >
+          <Star size={12} className="fill-pink-500 text-pink-500" />
+          Interested
+        </button>
+      );
+    } else if (user.interest === "interesting") {
+      return (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onInterestToggle(user.id, "interesting");
+          }}
+          className="flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-600 text-xs font-medium hover:bg-amber-100 transition-colors"
+        >
+          <Zap size={12} className="fill-amber-500 text-amber-500" />
+          Interesting
+        </button>
+      );
+    } else {
+      return (
+        <div className="flex gap-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onInterestToggle(user.id, "interested");
+            }}
+            className="p-1 rounded-full bg-slate-50 border border-slate-200 text-slate-400 hover:text-pink-500 hover:border-pink-200 hover:bg-pink-50 transition-colors"
+            title="Mark as interested"
+          >
+            <Star size={14} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onInterestToggle(user.id, "interesting");
+            }}
+            className="p-1 rounded-full bg-slate-50 border border-slate-200 text-slate-400 hover:text-amber-500 hover:border-amber-200 hover:bg-amber-50 transition-colors"
+            title="Mark as interesting"
+          >
+            <Zap size={14} />
+          </button>
+        </div>
+      );
+    }
+  };
 
   return (
-    <div 
-      className="flex items-center gap-3 py-3 px-1 group cursor-pointer hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      whileHover={{ scale: 1.01, x: 4 }}
       onClick={() => onUserClick(user)}
+      className="group flex items-center justify-between py-3 px-2 rounded-lg cursor-pointer hover:bg-blue-50/50 transition-all duration-200"
     >
-      {/* Avatar */}
-      <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
-        {user.initials}
+      <div className="flex items-center gap-3">
+        {/* Avatar with gradient */}
+        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center text-white font-semibold text-sm shadow-md`}>
+          {user.initials}
+        </div>
+        
+        {/* User info */}
+        <div>
+          <div className="flex items-center gap-2 mb-0.5">
+            <h3 className="font-semibold text-slate-800 text-sm">{user.name}</h3>
+            {getInterestButton()}
+          </div>
+          <p className="text-xs text-slate-400">{user.location}</p>
+          <p className="text-xs text-slate-500 mt-1 line-clamp-1">{user.bio}</p>
+          
+          {/* Stats */}
+          {/* <div className="flex items-center gap-3 mt-1">
+            <span className="text-xs text-slate-400">{user.followers} followers</span>
+            <span className="text-xs text-slate-400">{user.posts} posts</span>
+          </div> */}
+        </div>
       </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-blue-600 transition-colors">
-          {user.name}
-        </p>
-        <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-          <MapPin size={10} /> {user.location}
-        </p>
-      </div>
-
-      {/* Follow button */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setFollowed((v) => !v);
-        }}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200
-          ${followed
-            ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
-            : "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-300/30 hover:shadow-lg hover:shadow-blue-400/40 hover:-translate-y-0.5"
-          }`}
-      >
-        {followed ? <><Check size={12} /> Following</> : <><UserPlus size={12} /> Follow</>}
-      </button>
-    </div>
+      
+      <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all duration-200" />
+    </motion.div>
   );
 };
 

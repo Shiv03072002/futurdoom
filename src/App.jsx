@@ -42,11 +42,9 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "chatbotmain", element: <Chatbotmain /> },
       { path: "discussion", element: <DiscussionMain /> },
-      { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
-      { path: "discussion/new", element: <DiscussionChatMain /> },
+      
       { path: "groups", element: <Groups /> },
-      { path: "group-chat/:groupId", element: <GroupChat /> },
-      { path: "group-chat/new", element: <GroupChat /> },
+      
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <PrivacyPolicy /> },
       { path: "disclaimer", element: <Disclaimer /> },
@@ -65,6 +63,10 @@ const router = createBrowserRouter([
       { path: "edit", element: <EditProfile /> },
       { path: "share", element: <Share /> },
       { path: "notification", element: <Notification /> },
+      { path: "group-chat/:groupId", element: <GroupChat /> },
+      { path: "group-chat/new", element: <GroupChat /> },
+      { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
+      { path: "discussion/new", element: <DiscussionChatMain /> },
        {path:"deepaskshare", element:<AIChat />}
     ],
   },

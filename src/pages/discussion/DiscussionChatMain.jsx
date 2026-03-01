@@ -212,7 +212,7 @@ const DiscussionChatMain = () => {
   );
 
   return (
-    <div className=" bg-gray-50 p-2 sm:p-4">
+    <div className=" bg-gray-50 p-2 sm:p-0">
       <div className="max-w-7xl mx-auto">
         
         {/* Main Chat - Discussion Version */}
