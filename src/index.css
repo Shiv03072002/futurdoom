@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.heading-font {
+  font-family: 'DM Sans', sans-serif;
+
+}
