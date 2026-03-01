@@ -154,18 +154,7 @@ const SimpleChat = () => {
             </button>
           </div>
           
-          {/* Quick suggestions */}
-          <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
-            {["React help", "Custom hook", "State management", "Next.js"].map((suggestion, i) => (
-              <button
-                key={i}
-                onClick={() => setInput(suggestion)}
-                className="px-3 py-1.5 text-xs bg-blue-50 text-[#1a3aad] rounded-full border border-blue-200 hover:bg-blue-100 whitespace-nowrap transition-colors"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
+         
 
           <div className="flex items-center  justify-center mt-3">
             <div className="flex items-center gap-1">
