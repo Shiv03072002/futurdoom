@@ -165,18 +165,8 @@ const Navbar = () => {
                                     </p>
                                     <p className="text-blue-200 text-xs">@futurdoom</p>
                                     
-                                    {/* Stats row */}
-                                    <div className="flex items-center gap-3 mt-2">
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-white font-bold text-sm">128</span>
-                                        <span className="text-[9px] text-blue-200">posts</span>
-                                      </div>
-                                      <span className="text-blue-300/30">|</span>
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-white font-bold text-sm">2.1k</span>
-                                        <span className="text-[9px] text-blue-200">followers</span>
-                                      </div>
-                                    </div>
+                                    
+                                   
                                   </div>
                                 </div>
                                 

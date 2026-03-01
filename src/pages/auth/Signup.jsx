@@ -283,30 +283,6 @@ const Signup = () => {
                   <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                 )}
               </div>
-
-              {/* Phone */}
-              <div>
-                <label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mb-1.5">
-                  <Phone size={12} /> Phone Number <span className="text-red-400">*</span>
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
-                      errors.phone ? 'border-red-300 bg-red-50' : 'border-blue-200'
-                    } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
-                    placeholder="+91 98765 43210"
-                  />
-                </div>
-                {errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
-                )}
-              </div>
-
               {/* Location */}
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mb-1.5">
