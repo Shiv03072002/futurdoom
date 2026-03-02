@@ -41,7 +41,7 @@ const users = [
     followers: 890,
     following: 234,
     posts: 56,
-    interest: null
+    interest: "interesting" // This person is interesting to the user
   },
   { 
     id: 4, 
