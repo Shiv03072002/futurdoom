@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   MapPin, Facebook, Instagram, Twitter, Linkedin,
   Accessibility, Headphones, MessageCircle,
-  MoreHorizontal, Sparkles, Heart, X, UserPlus, UserCheck
+  MoreHorizontal, Sparkles, Heart, X, UserPlus, UserCheck,Info,Home,Calendar,User,Mail
 } from "lucide-react";
 
 const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAmInterestedIn = [] }) => {
@@ -174,15 +174,7 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
               },
             }}
           >
-            {/* <motion.button
-              variants={buttonHover}
-              whileHover="hover"
-              whileTap={buttonTap}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-300/30"
-            >
-              <Heart size={12} />
-              Interest
-            </motion.button> */}
+            
             
             <motion.button
               variants={buttonHover}
@@ -206,40 +198,121 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
         </div>
 
         {/* Name & bio */}
-        <motion.div 
-          className="mb-4"
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                type: "spring",
-                stiffness: 300,
-                damping: 24,
-              },
-            },
-          }}
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-xl font-bold text-slate-800">{user.name}</h2>
-            
-          </div>
-          <p className="text-xs text-slate-400 mb-2">@{user.username}</p>
-          <motion.div 
-            className="flex items-center gap-1 text-slate-400 mb-3"
-            whileHover={{ x: 5 }}
-          >
-            <MapPin size={11} />
-            <span className="text-xs">{user.location}</span>
-          </motion.div>
-          <motion.p 
-            className="text-sm text-slate-600 leading-relaxed bg-blue-50/50 p-3 rounded-xl border border-blue-100"
-            whileHover={{ scale: 1.01 }}
-          >
-            {user.bio}
-          </motion.p>
-        </motion.div>
+      {/* Name & Info */}
+<motion.div 
+  className="mb-4"
+  variants={{
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  }}
+>
+  {/* Name and Username */}
+  <div className="flex items-center justify-between mb-2">
+    <div>
+      <h2 className="text-xl font-bold text-slate-800">{user.name}</h2>
+      
+    </div>
+    
+  </div>
+
+  {/* Info Grid - 2 columns on larger screens */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+   
+    
+    {/* Current Location */}
+    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+          <MapPin size={12} className="text-blue-500" />
+        </div>
+        <div>
+          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Location</p>
+          <p className="text-xs font-medium text-slate-700">{user.currentLocation || "San Francisco, CA"}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Home Address */}
+    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+          <Home size={12} className="text-blue-500" />
+        </div>
+        <div>
+          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Home</p>
+          <p className="text-xs font-medium text-slate-700">{user.homeAddress || "New York, NY"}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Birthday */}
+    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+          <Calendar size={12} className="text-blue-500" />
+        </div>
+        <div>
+          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Birthday</p>
+          <p className="text-xs font-medium text-slate-700">{user.birthday || "15.05.1995"}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Gender */}
+    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+          <User size={12} className="text-blue-500" />
+        </div>
+        <div>
+          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Gender</p>
+          <p className="text-xs font-medium text-slate-700">{user.gender || "Male"}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Email - Full width */}
+    <div className="sm:col-span-2 bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+          <Mail size={12} className="text-blue-500" />
+        </div>
+        <div className="flex-1">
+          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Email</p>
+          <p className="text-xs font-medium text-slate-700 truncate">{user.email || "shiv.kumar@email.com"}</p>
+        </div>
+        <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium px-2 py-1 bg-blue-50 rounded-lg">
+          Copy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Bio Section */}
+  <motion.div 
+    className="relative group"
+    whileHover={{ scale: 1.01 }}
+  >
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
+    <div className="relative bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-blue-100">
+      <p className="text-[10px] text-blue-500 font-medium uppercase tracking-wider mb-2 flex items-center gap-1">
+        <Sparkles size={10} />
+        Bio
+      </p>
+      <p className="text-sm text-slate-600 leading-relaxed">
+        {user.bio}
+      </p>
+    </div>
+  </motion.div>
+</motion.div>
 
         {/* Stats */}
         <motion.div 

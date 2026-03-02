@@ -252,27 +252,49 @@ const Home = () => {
               >
                 <div className="flex items-baseline gap-1 flex-wrap">
                   <span className="text-white/90 text-xs font-medium">A new space where</span>
+
+                  {/* Continuous typing animation for Intelligence */}
+                  <div className="flex items-center">
+                    <motion.span
+                      animate={{
+                        width: ["0%", "100%", "100%", "0%"],
+                      }}
+                      transition={{
+                        duration: 4,
+                        times: [0, 0.3, 0.7, 1],
+                        repeat: Infinity,
+                        repeatDelay: 1,
+                        ease: "easeInOut",
+                      }}
+                      className="text-xs font-bold overflow-hidden whitespace-nowrap inline-block"
+                      style={{
+                        background: "linear-gradient(90deg, #93c5fd, #ffffff, #bfdbfe)",
+                        backgroundSize: "200% auto",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      Intelligence
+                    </motion.span>
+                    <motion.span
+                      animate={{ opacity: [0, 1, 0] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      className="w-0.5 h-3 bg-white ml-0.5"
+                    />
+                  </div>
+
+                  <motion.span
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="text-blue-200/70 text-[10px] font-medium italic"
+                  >
+                    meets
+                  </motion.span>
+
                   <motion.span
                     animate={{
                       backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                      opacity: [0.9, 1, 0.9]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    className="text-xs font-bold"
-                    style={{
-                      background: "linear-gradient(90deg, #93c5fd, #ffffff, #bfdbfe)",
-                      backgroundSize: "200% auto",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    Intelligence
-                  </motion.span>
-                  <span className="text-blue-200/70 text-[10px] font-medium italic">meets</span>
-                  <motion.span
-                    animate={{
-                      backgroundPosition: ["100% 50%", "0% 50%", "100% 50%"],
                       opacity: [0.9, 1, 0.9]
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "linear" }}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapPin, Github, Twitter, Linkedin, Heart, MessageSquare, Sparkles, Send, X, UserPlus, UserCheck,Instagram } from "lucide-react";
+import { MapPin, Github, Twitter, Linkedin, Heart, MessageSquare, Sparkles, Send, X, UserPlus, UserCheck,Instagram, Facebook } from "lucide-react";
 
 const Sidebar = () => {
   const [showInterestedList, setShowInterestedList] = useState(false);
@@ -97,7 +97,7 @@ const Sidebar = () => {
             {/* Interested Button - Shows who are interested in Shiv */}
             <button
               onClick={handleInterestedClick}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer
                 ${showInterestedList 
                   ? "bg-pink-50 text-pink-600 border border-pink-200" 
                   : "bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-md shadow-pink-300/30 hover:shadow-lg hover:shadow-pink-400/40 hover:-translate-y-0.5"
@@ -115,7 +115,7 @@ const Sidebar = () => {
             {/* Interesting Button - Shows who Shiv is interested in */}
             <button
               onClick={handleInterestingClick}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200  cursor-pointer
                 ${showInterestingList 
                   ? "bg-blue-50 text-blue-600 border border-blue-200" 
                   : "bg-gradient-to-r from-blue-500 to-blue-900 text-white shadow-md shadow-blue-300/30 hover:shadow-lg hover:shadow-blue-400/40 hover:-translate-y-0.5"
@@ -225,7 +225,7 @@ const Sidebar = () => {
 
           {/* Social icons */}
         <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-slate-100">
-  {[Github, Twitter, Linkedin, Instagram].map((Icon, i) => (
+  {[Github, Twitter, Linkedin, Instagram,Facebook].map((Icon, i) => (
     <a
       key={i}
       href="#"
