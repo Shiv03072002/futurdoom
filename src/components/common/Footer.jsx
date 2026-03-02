@@ -83,31 +83,31 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
           {/* Left Section - Brand */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex-1 min-w-[200px]"
           >
             <Link to="/" className="inline-block mb-3">
-  <span className="text-3xl tracking-tight leading-none">
-    <span className="font-light text-slate-800">
-      futur
-    </span>
-    <span className="font-bold text-[#2563eb]">
-      DooM
-    </span>
-  </span>
-</Link>
-            
+              <span className="text-3xl tracking-tight leading-none">
+                <span className="font-light text-slate-800">
+                  futur
+                </span>
+                <span className="font-bold text-[#2563eb]">
+                  DooM
+                </span>
+              </span>
+            </Link>
+
             <p className="text-sm text-slate-500 mb-3 max-w-xs">
               Where emotions meet AI. Connect, share, and express yourself freely.
             </p>
-            
+
             {/* Trust Badge */}
-            
+
           </motion.div>
 
           {/* Center Section - Navigation Links */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex-1"
           >
@@ -137,14 +137,14 @@ const Footer = () => {
           </motion.div>
 
           {/* Right Section - Social & Contact */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex-1"
           >
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Connect With Us
             </h3>
-            
+
             {/* Social Icons */}
             <div className="flex flex-wrap gap-2 mb-4">
               {socialLinks.map((social, index) => {
@@ -176,7 +176,7 @@ const Footer = () => {
               <Mail size={12} className="group-hover:text-blue-600" />
               <span>feedbackfuturdoom@gmail.com</span>
             </motion.a>
-            
+
             <motion.a
               href="https://www.futurdoom.com"
               className="flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition-colors group mt-2"
@@ -189,13 +189,13 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent my-6"
         />
 
         {/* Bottom Bar */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="flex flex-col md:flex-row justify-between items-center gap-4"
         >
@@ -221,7 +221,7 @@ const Footer = () => {
         </motion.div>
 
         {/* Trust Badges */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="mt-4 flex flex-wrap items-center justify-center gap-4 text-[10px] text-slate-400"
         >

@@ -73,11 +73,10 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled 
-            ? "bg-white/90 backdrop-blur-xl shadow-lg shadow-blue-500/10 border-b border-blue-100" 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+            ? "bg-white/90 backdrop-blur-xl shadow-lg shadow-blue-500/10 border-b border-blue-100"
             : "bg-white border-b border-blue-50"
-        }`}
+          }`}
       >
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -92,7 +91,7 @@ const Navbar = () => {
 
               {/* Logo Text - hidden on mobile, visible on md and up */}
               <h1 className="hidden md:block text-3xl tracking-wide leading-none font-medium">
-                <span className="text-slate-800 font-medium">futur</span>
+                <span className="text-slate-800 font-light">futur</span>
                 <span className="bg-[#2364eb] bg-clip-text text-transparent inline-block font-bold">
                   DooM
                 </span>
@@ -103,24 +102,22 @@ const Navbar = () => {
             <div className="hidden md:flex items-center h-full">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.to;
-                
+
                 if (item.isProfile) {
                   return (
                     <div key={item.to} className="relative h-full">
                       <button
                         ref={profileButtonRef}
                         onClick={() => setProfileOpen(!profileOpen)}
-                        className={`flex items-center gap-1.5 px-5 h-full transition-all duration-200 relative group ${
-                          isActive || profileOpen ? "text-[#1a3aad]" : "text-slate-600 hover:text-[#2563eb]"
-                        }`}
+                        className={`flex items-center gap-1.5 px-5 h-full transition-all duration-200 relative group ${isActive || profileOpen ? "text-[#1a3aad]" : "text-slate-600 hover:text-[#2563eb]"
+                          }`}
                       >
                         {/* Active indicator */}
-                        <span 
-                          className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#1a3aad] to-[#2563eb] transition-opacity duration-200 ${
-                            isActive || profileOpen ? "opacity-100" : "opacity-0 group-hover:opacity-50"
-                          }`} 
+                        <span
+                          className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#1a3aad] to-[#2563eb] transition-opacity duration-200 ${isActive || profileOpen ? "opacity-100" : "opacity-0 group-hover:opacity-50"
+                            }`}
                         />
-                        
+
                         <div className="relative">
                           <User size={20} strokeWidth={1.75} />
                           {item.badge && (
@@ -129,11 +126,10 @@ const Navbar = () => {
                         </div>
                         <span className="text-sm font-medium flex items-center gap-0.5">
                           {item.tooltip}
-                          <ChevronDown 
-                            size={14} 
-                            className={`transition-transform duration-200 ${
-                              profileOpen ? "rotate-180" : ""
-                            }`}
+                          <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${profileOpen ? "rotate-180" : ""
+                              }`}
                           />
                         </span>
                       </button>
@@ -152,40 +148,34 @@ const Navbar = () => {
                             left: profileButtonRef.current?.getBoundingClientRect().right - 384,
                           }}
                         >
-                          <div className="bg-white rounded-2xl shadow-2xl shadow-blue-500/20 border border-blue-100 overflow-hidden">
+                          <div className="bg-white rounded-xl shadow-2xl shadow-blue-500/20 border border-blue-100 overflow-hidden">
                             {/* Header with gradient */}
                             <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-5 relative">
                               <div className="absolute inset-0 bg-grid-pattern opacity-10" />
                               <div className="relative">
                                 <div className="flex items-center gap-4">
-                                  <motion.div 
-                                    className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white font-bold text-2xl"
+                                  <motion.div
+                                    className="w-12 h-12 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white font-bold text-2xl"
                                     whileHover={{ scale: 1.1, rotate: 5 }}
                                   >
                                     FD
                                   </motion.div>
                                   <div className="flex-1">
-                                    <p className="text-white font-semibold flex items-center gap-1 text-lg">
-                                      futurDooM User
-                                      <Sparkles size={14} className="text-blue-200" />
+                                    <p className="text-white flex items-center gap-1 text-xl leading-none">
+                                      <span className="font-light">
+                                        futur
+                                      </span>
+                                      <span className="font-bold ">
+                                        DooM
+                                      </span>
                                     </p>
                                     <p className="text-blue-200 text-xs">@futurdoom</p>
-                                    
+
                                     {/* Stats row */}
-                                    <div className="flex items-center gap-3 mt-2">
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-white font-bold text-sm">128</span>
-                                        <span className="text-[9px] text-blue-200">posts</span>
-                                      </div>
-                                      <span className="text-blue-300/30">|</span>
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-white font-bold text-sm">2.1k</span>
-                                        <span className="text-[9px] text-blue-200">Interested</span>
-                                      </div>
-                                    </div>
+
                                   </div>
                                 </div>
-                                
+
                                 <motion.div
                                   whileHover={{ scale: 1.02 }}
                                   whileTap={{ scale: 0.98 }}
@@ -194,7 +184,7 @@ const Navbar = () => {
                                   <Link
                                     to="/profile"
                                     onClick={() => setProfileOpen(false)}
-                                    className="block text-center py-2 rounded-xl text-xs font-semibold bg-white/20 text-white border border-white/30 hover:bg-white/30 transition-all"
+                                    className="block text-center py-2 rounded-lg text-xs font-semibold bg-white/20 text-white border border-white/30 hover:bg-white/30 transition-all"
                                   >
                                     View Full Profile
                                   </Link>
@@ -257,14 +247,12 @@ const Navbar = () => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className={`flex items-center gap-1.5 px-5 h-full transition-all duration-200 relative group ${
-                      isActive ? "text-[#1a3aad]" : "text-slate-600 hover:text-[#2563eb]"
-                    }`}
+                    className={`flex items-center gap-1.5 px-5 h-full transition-all duration-200 relative group ${isActive ? "text-[#1a3aad]" : "text-slate-600 hover:text-[#2563eb]"
+                      }`}
                   >
-                    <span 
-                      className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#1a3aad] to-[#2563eb] transition-opacity duration-200 ${
-                        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
-                      }`} 
+                    <span
+                      className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#1a3aad] to-[#2563eb] transition-opacity duration-200 ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
+                        }`}
                     />
                     <div className="relative">
                       <item.icon size={20} strokeWidth={1.75} />
@@ -280,105 +268,96 @@ const Navbar = () => {
 
             {/* Mobile Center Navigation with Text - Improved for better fit */}
             <div className="flex md:hidden items-center justify-center flex-1 gap-2 sm:gap-4">
-  <Link 
-    to="/searchpeople" 
-    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
-      location.pathname === "/searchpeople" 
-        ? "text-[#2563eb]" 
-        : "text-slate-500 hover:text-[#2563eb]"
-    }`}
-  >
-    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
-      location.pathname === "/searchpeople" 
-        ? "bg-blue-50" 
-        : "group-hover:bg-blue-50/50"
-    }`}>
-      <Search size={20} className="transition-transform duration-200 group-hover:scale-110" />
-      {location.pathname === "/searchpeople" && (
-        <motion.div 
-          layoutId="mobileActiveIndicator"
-          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
-    </div>
-    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
-      location.pathname === "/searchpeople" 
-        ? "text-[#2563eb] font-semibold" 
-        : "text-slate-500 group-hover:text-[#2563eb]"
-    }`}>
-      Search
-    </span>
-  </Link>
+              <Link
+                to="/searchpeople"
+                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/searchpeople"
+                    ? "text-[#2563eb]"
+                    : "text-slate-500 hover:text-[#2563eb]"
+                  }`}
+              >
+                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/searchpeople"
+                    ? "bg-blue-50"
+                    : "group-hover:bg-blue-50/50"
+                  }`}>
+                  <Search size={20} className="transition-transform duration-200 group-hover:scale-110" />
+                  {location.pathname === "/searchpeople" && (
+                    <motion.div
+                      layoutId="mobileActiveIndicator"
+                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </div>
+                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/searchpeople"
+                    ? "text-[#2563eb] font-semibold"
+                    : "text-slate-500 group-hover:text-[#2563eb]"
+                  }`}>
+                  Search
+                </span>
+              </Link>
 
-  <Link 
-    to="/groups" 
-    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
-      location.pathname === "/groups" 
-        ? "text-[#2563eb]" 
-        : "text-slate-500 hover:text-[#2563eb]"
-    }`}
-  >
-    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
-      location.pathname === "/groups" 
-        ? "bg-blue-50" 
-        : "group-hover:bg-blue-50/50"
-    }`}>
-      <Users size={20} className="transition-transform duration-200 group-hover:scale-110" />
-      {location.pathname === "/groups" && (
-        <motion.div 
-          layoutId="mobileActiveIndicator"
-          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
-    </div>
-    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
-      location.pathname === "/groups" 
-        ? "text-[#2563eb] font-semibold" 
-        : "text-slate-500 group-hover:text-[#2563eb]"
-    }`}>
-      Groups
-    </span>
-  </Link>
+              <Link
+                to="/groups"
+                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/groups"
+                    ? "text-[#2563eb]"
+                    : "text-slate-500 hover:text-[#2563eb]"
+                  }`}
+              >
+                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/groups"
+                    ? "bg-blue-50"
+                    : "group-hover:bg-blue-50/50"
+                  }`}>
+                  <Users size={20} className="transition-transform duration-200 group-hover:scale-110" />
+                  {location.pathname === "/groups" && (
+                    <motion.div
+                      layoutId="mobileActiveIndicator"
+                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </div>
+                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/groups"
+                    ? "text-[#2563eb] font-semibold"
+                    : "text-slate-500 group-hover:text-[#2563eb]"
+                  }`}>
+                  Groups
+                </span>
+              </Link>
 
-  <Link 
-    to="/discussion" 
-    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
-      location.pathname === "/discussion" 
-        ? "text-[#2563eb]" 
-        : "text-slate-500 hover:text-[#2563eb]"
-    }`}
-  >
-    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
-      location.pathname === "/discussion" 
-        ? "bg-blue-50" 
-        : "group-hover:bg-blue-50/50"
-    }`}>
-      <MessageCircle size={20} className="transition-transform duration-200 group-hover:scale-110" />
-      {location.pathname === "/discussion" && (
-        <motion.div 
-          layoutId="mobileActiveIndicator"
-          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
-    </div>
-    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
-      location.pathname === "/discussion" 
-        ? "text-[#2563eb] font-semibold" 
-        : "text-slate-500 group-hover:text-[#2563eb]"
-    }`}>
-      Discussion
-    </span>
-  </Link>
-</div>
+              <Link
+                to="/discussion"
+                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/discussion"
+                    ? "text-[#2563eb]"
+                    : "text-slate-500 hover:text-[#2563eb]"
+                  }`}
+              >
+                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/discussion"
+                    ? "bg-blue-50"
+                    : "group-hover:bg-blue-50/50"
+                  }`}>
+                  <MessageCircle size={20} className="transition-transform duration-200 group-hover:scale-110" />
+                  {location.pathname === "/discussion" && (
+                    <motion.div
+                      layoutId="mobileActiveIndicator"
+                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </div>
+                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/discussion"
+                    ? "text-[#2563eb] font-semibold"
+                    : "text-slate-500 group-hover:text-[#2563eb]"
+                  }`}>
+                  Discussion
+                </span>
+              </Link>
+            </div>
 
             {/* Right Section - Improved mobile layout */}
             <div className="flex items-center gap-1 sm:gap-2">
@@ -393,7 +372,7 @@ const Navbar = () => {
 
               {/* Mobile Actions */}
               <div className="flex md:hidden items-center gap-1">
-               
+
 
                 {/* Menu Toggle - Shows X when open, Menu when closed */}
                 <button
@@ -413,16 +392,16 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="fixed inset-0 top-16 z-40 md:hidden">
           {/* Backdrop with blur */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
-          
+
           {/* Menu Panel */}
-          <motion.div 
+          <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -430,7 +409,7 @@ const Navbar = () => {
             className="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl shadow-blue-500/20 overflow-y-auto"
           >
             <div className="p-5">
-              
+
               {/* Mobile User Card */}
               <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-[#0f1f6e] to-[#2563eb] relative overflow-hidden">
                 <div className="absolute inset-0 bg-grid-pattern opacity-10" />
@@ -465,11 +444,10 @@ const Navbar = () => {
                           key={item.to}
                           to={item.to}
                           onClick={() => setMobileMenuOpen(false)}
-                          className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${
-                            isActive
+                          className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${isActive
                               ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md"
                               : "text-slate-600 hover:bg-blue-50"
-                          }`}
+                            }`}
                         >
                           <div className="relative">
                             <item.icon size={18} />
