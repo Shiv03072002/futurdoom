@@ -224,7 +224,7 @@ const SimpleChat = () => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="text-base font-bold text-slate-800">
-                {deepAskMode ? "Deep Ask" : "fD Assistant"}
+                {deepAskMode ? "DeepAsk" : "fD Assistant"}
                 {deepAskMode && <span className="ml-2 text-xs font-normal text-blue-600">(Deep Mode)</span>}
               </p>
               <Sparkles size={14} className="text-blue-500" />
