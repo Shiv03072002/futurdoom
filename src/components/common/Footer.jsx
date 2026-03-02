@@ -201,7 +201,7 @@ const Footer = () => {
         >
           {/* Copyright */}
           <p className="text-xs text-slate-400 flex items-center gap-2">
-            <span>© 2025 futurdoom</span>
+            <span>© 2026 futurdoom</span>
             <span className="w-1 h-1 rounded-full bg-slate-300" />
             <span className="flex items-center gap-1">
               Made with <Heart size={10} className="text-pink-500" /> for the community
