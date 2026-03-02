@@ -25,7 +25,7 @@ const navItems = [
   { to: "/profile", icon: User, tooltip: "Me", isProfile: true },
 
   { to: "/notification", icon: Bell, tooltip: "Notifications", badge: true },
-  { to: "/logout", icon: LogOut, tooltip: "Logout" },
+  { to: "/", icon: LogOut, tooltip: "Close" },
 
 ];
 

@@ -358,23 +358,25 @@ const Home = () => {
                   className="block group"
                 >
                   <motion.div
-                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex flex-col p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200"
+                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200"
                   >
-                    <div className="flex items-center justify-center mb-2">
-                      <motion.div
-                        className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200"
-                        whileHover={{ rotate: 5 }}
-                      >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200">
                         <Info size={14} className="text-blue-600 group-hover:text-white transition-colors duration-200" />
-                      </motion.div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-slate-800 text-sm">About Us</p>
+                        <p className="text-xs text-slate-400">Learn our story</p>
+                      </div>
                     </div>
-                    <p className="font-semibold text-slate-800 text-xs text-center mb-0.5">About Us</p>
-                    <p className="text-[10px] text-slate-400 text-center mb-2">Learn our story</p>
-                    <div className="flex justify-end mt-auto">
-                      <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-500 transition-colors duration-200" />
-                    </div>
+                    <motion.div
+                      animate={{ x: 0 }}
+                      whileHover={{ x: 5 }}
+                    >
+                      <ArrowRight size={14} className="text-slate-400 group-hover:text-blue-500" />
+                    </motion.div>
                   </motion.div>
                 </Link>
               </motion.div>
@@ -389,23 +391,25 @@ const Home = () => {
                   className="block group"
                 >
                   <motion.div
-                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex flex-col p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200"
+                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200"
                   >
-                    <div className="flex items-center justify-center mb-2">
-                      <motion.div
-                        className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200"
-                        whileHover={{ rotate: 5 }}
-                      >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200">
                         <Mail size={14} className="text-blue-600 group-hover:text-white transition-colors duration-200" />
-                      </motion.div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-slate-800 text-sm">Contact Us</p>
+                        <p className="text-xs text-slate-400">Get in touch</p>
+                      </div>
                     </div>
-                    <p className="font-semibold text-slate-800 text-xs text-center mb-0.5">Contact Us</p>
-                    <p className="text-[10px] text-slate-400 text-center mb-2">Get in touch</p>
-                    <div className="flex justify-end mt-auto">
-                      <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-500 transition-colors duration-200" />
-                    </div>
+                    <motion.div
+                      animate={{ x: 0 }}
+                      whileHover={{ x: 5 }}
+                    >
+                      <ArrowRight size={14} className="text-slate-400 group-hover:text-blue-500" />
+                    </motion.div>
                   </motion.div>
                 </Link>
               </motion.div>
@@ -415,8 +419,30 @@ const Home = () => {
           {/* Footer */}
           <motion.div
             variants={footerVariants}
-            className="px-5 pb-4"
+            className="px-5 pt-4 pb-4 border-t border-blue-100/60"
           >
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Link
+                to="/terms"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+              >
+                Terms
+              </Link>
+              <span className="text-slate-300 text-xs">•</span>
+              <Link
+                to="/privacy"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+              >
+                Privacy
+              </Link>
+              <span className="text-slate-300 text-xs">•</span>
+              <Link
+                to="/disclaimer"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+              >
+                Disclaimer
+              </Link>
+            </div>
             <p className="text-xs text-slate-300 text-center">© 2026 futurdoom · All rights reserved</p>
           </motion.div>
         </motion.div>

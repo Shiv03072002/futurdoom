@@ -24,7 +24,7 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [githubLoading, setGithubLoading] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,7 +35,7 @@ const Signup = () => {
     dob: "",
     acceptTerms: false
   });
-  
+
   const [errors, setErrors] = useState({});
   const [signupSuccess, setSignupSuccess] = useState(false);
 
@@ -45,7 +45,7 @@ const Signup = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value
     }));
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: "" }));
@@ -54,28 +54,28 @@ const Signup = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Name validation
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     } else if (formData.name.length < 3) {
       newErrors.name = "Name must be at least 3 characters";
     }
-    
+
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    
+
     // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(formData.phone)) {
       newErrors.phone = "Invalid phone number";
     }
-    
+
     // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
@@ -88,17 +88,17 @@ const Signup = () => {
     } else if (!/(?=.*[!@#$%^&*])/.test(formData.password)) {
       newErrors.password = "Password must contain a special character";
     }
-    
+
     // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-    
+
     // Terms validation
     if (!formData.acceptTerms) {
       newErrors.acceptTerms = "You must accept terms and conditions";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -134,13 +134,13 @@ const Signup = () => {
   const getPasswordStrength = () => {
     const password = formData.password;
     if (!password) return { score: 0, label: "None", color: "bg-slate-200" };
-    
+
     let score = 0;
     if (password.length >= 8) score++;
     if (/(?=.*[A-Z])/.test(password)) score++;
     if (/(?=.*[0-9])/.test(password)) score++;
     if (/(?=.*[!@#$%^&*])/.test(password)) score++;
-    
+
     const strengths = {
       0: { label: "Very Weak", color: "bg-red-500" },
       1: { label: "Weak", color: "bg-orange-500" },
@@ -148,7 +148,7 @@ const Signup = () => {
       3: { label: "Good", color: "bg-blue-500" },
       4: { label: "Strong", color: "bg-green-500" },
     };
-    
+
     return { score, ...strengths[score] };
   };
 
@@ -212,15 +212,15 @@ const Signup = () => {
                 backgroundSize: "32px 32px"
               }}
             />
-            
+
             <div className="relative text-center">
               <motion.div
-               
+
                 className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center mx-auto mb-4"
               >
                 <UserPlus className="w-8 h-8 text-white" />
               </motion.div>
-              
+
               <h1 className="text-3xl font-black text-white tracking-tight mb-2">
                 Create Account
               </h1>
@@ -250,9 +250,8 @@ const Signup = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
-                      errors.name ? 'border-red-300 bg-red-50' : 'border-blue-200'
-                    } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 rounded-xl border ${errors.name ? 'border-red-300 bg-red-50' : 'border-blue-200'
+                      } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
                     placeholder="John Doe"
                   />
                 </div>
@@ -273,9 +272,8 @@ const Signup = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
-                      errors.email ? 'border-red-300 bg-red-50' : 'border-blue-200'
-                    } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 rounded-xl border ${errors.email ? 'border-red-300 bg-red-50' : 'border-blue-200'
+                      } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
                     placeholder="your@email.com"
                   />
                 </div>
@@ -325,9 +323,8 @@ const Signup = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-12 py-3 rounded-xl border ${
-                      errors.password ? 'border-red-300 bg-red-50' : 'border-blue-200'
-                    } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
+                    className={`w-full pl-10 pr-12 py-3 rounded-xl border ${errors.password ? 'border-red-300 bg-red-50' : 'border-blue-200'
+                      } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
                     placeholder="••••••••"
                   />
                   <button
@@ -355,9 +352,8 @@ const Signup = () => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-12 py-3 rounded-xl border ${
-                      errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-blue-200'
-                    } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
+                    className={`w-full pl-10 pr-12 py-3 rounded-xl border ${errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-blue-200'
+                      } bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all`}
                     placeholder="••••••••"
                   />
                   <button
@@ -379,7 +375,7 @@ const Signup = () => {
               <div className="mt-4">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full ${passwordStrength.color} transition-all duration-300`}
                       style={{ width: `${(passwordStrength.score / 4) * 100}%` }}
                     />
@@ -419,15 +415,15 @@ const Signup = () => {
 
             {/* Terms & Conditions */}
             <div className="mt-6">
-              <label className="flex items-start gap-3">
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   name="acceptTerms"
                   checked={formData.acceptTerms}
                   onChange={handleChange}
-                  className="mt-1 w-4 h-4 rounded border-blue-300 text-blue-600 focus:ring-blue-500"
+                  className="w-4 h-4 rounded border-blue-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                 />
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-500 leading-tight">
                   I agree to the{" "}
                   <Link to="/terms" className="text-blue-600 hover:text-blue-700 font-medium">
                     Terms of Service
@@ -439,7 +435,7 @@ const Signup = () => {
                 </span>
               </label>
               {errors.acceptTerms && (
-                <p className="text-red-500 text-xs mt-1">{errors.acceptTerms}</p>
+                <p className="text-red-500 text-xs mt-1 ml-7">{errors.acceptTerms}</p>
               )}
             </div>
 
@@ -525,7 +521,7 @@ const Signup = () => {
             <div className="text-center mt-6">
               <p className="text-xs text-slate-500">
                 Already have an account?{" "}
-                <Link to="/login" className="text-blue-600 font-semibold hover:text-blue-700">
+                <Link to="/signin" className="text-blue-600 font-semibold hover:text-blue-700">
                   Sign in
                 </Link>
               </p>
@@ -533,9 +529,9 @@ const Signup = () => {
           </form>
         </motion.div>
 
-     
+
         {/* Footer */}
-        <motion.p 
+        <motion.p
           variants={itemVariants}
           className="text-xs text-slate-400 text-center mt-6"
         >
