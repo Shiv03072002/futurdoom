@@ -21,12 +21,12 @@ import {
 
 const navItems = [
   { to: "/chatbotmain", icon: Home, tooltip: "Home" },
-   { to: "/notification", icon: Bell, tooltip: "Notifications", badge: true },
-  
-  { to: "/profile", icon: User, tooltip: "Me", isProfile: true },
   { to: "/share", icon: PlayCircle, tooltip: "Share" },
-  {to: "/logout", icon: LogOut, tooltip: "Logout" },
- 
+  { to: "/profile", icon: User, tooltip: "Me", isProfile: true },
+
+  { to: "/notification", icon: Bell, tooltip: "Notifications", badge: true },
+  { to: "/logout", icon: LogOut, tooltip: "Logout" },
+
 ];
 
 const profileMenuItems = [
@@ -49,8 +49,8 @@ const MobileTabBar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target) && 
-          profileRef.current && !profileRef.current.contains(e.target)) {
+      if (menuRef.current && !menuRef.current.contains(e.target) &&
+        profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileMenuOpen(false);
         setExpanded(false);
       }
@@ -87,11 +87,10 @@ const MobileTabBar = () => {
                   className="flex flex-col items-center justify-center relative flex-1"
                 >
                   <div className="relative">
-                    <div className={`p-1.5 rounded-lg transition-all duration-200 ${
-                      profileMenuOpen || isProfileActive
-                        ? "text-blue-600" 
+                    <div className={`p-1.5 rounded-lg transition-all duration-200 ${profileMenuOpen || isProfileActive
+                        ? "text-blue-600"
                         : "text-slate-400 hover:text-blue-500"
-                    }`}>
+                      }`}>
                       <User size={22} strokeWidth={profileMenuOpen || isProfileActive ? 2.2 : 1.8} />
                     </div>
                     {item.badge && (
@@ -100,15 +99,13 @@ const MobileTabBar = () => {
                       </span>
                     )}
                   </div>
-                  <span className={`text-[9px] mt-0.5 font-medium flex items-center gap-0.5 ${
-                    profileMenuOpen || isProfileActive ? "text-blue-600" : "text-slate-400"
-                  }`}>
+                  <span className={`text-[9px] mt-0.5 font-medium flex items-center gap-0.5 ${profileMenuOpen || isProfileActive ? "text-blue-600" : "text-slate-400"
+                    }`}>
                     {item.tooltip}
-                    <ChevronUp 
-                      size={10} 
-                      className={`transition-transform duration-200 ${
-                        profileMenuOpen ? "rotate-180" : ""
-                      }`} 
+                    <ChevronUp
+                      size={10}
+                      className={`transition-transform duration-200 ${profileMenuOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </span>
                   {(profileMenuOpen || isProfileActive) && (
@@ -126,11 +123,10 @@ const MobileTabBar = () => {
                 className="flex flex-col items-center justify-center relative flex-1"
               >
                 <div className="relative">
-                  <div className={`p-1.5 rounded-lg transition-all duration-200 ${
-                    isActive 
-                      ? "text-blue-600" 
+                  <div className={`p-1.5 rounded-lg transition-all duration-200 ${isActive
+                      ? "text-blue-600"
                       : "text-slate-400 hover:text-blue-500"
-                  }`}>
+                    }`}>
                     <item.icon size={22} strokeWidth={isActive ? 2.2 : 1.8} />
                   </div>
                   {item.badge && (
@@ -139,9 +135,8 @@ const MobileTabBar = () => {
                     </span>
                   )}
                 </div>
-                <span className={`text-[9px] mt-0.5 font-medium ${
-                  isActive ? "text-blue-600" : "text-slate-400"
-                }`}>
+                <span className={`text-[9px] mt-0.5 font-medium ${isActive ? "text-blue-600" : "text-slate-400"
+                  }`}>
                   {item.tooltip}
                 </span>
                 {isActive && (
@@ -157,13 +152,13 @@ const MobileTabBar = () => {
       {profileMenuOpen && (
         <>
           {/* Backdrop */}
-          <div 
+          <div
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
             onClick={() => setProfileMenuOpen(false)}
           />
-          
+
           {/* Profile Menu Panel */}
-          <div 
+          <div
             ref={menuRef}
             className="fixed bottom-20 left-4 right-4 bg-white rounded-2xl shadow-2xl shadow-blue-500/20 border border-blue-100 z-50 md:hidden animate-in slide-in-from-bottom duration-300 max-h-[70vh] overflow-y-auto"
           >
@@ -186,7 +181,7 @@ const MobileTabBar = () => {
                   </p>
                   <p className="text-blue-200 text-xs">@futurdoom · Online</p>
                 </div>
-                <button 
+                <button
                   onClick={() => setProfileMenuOpen(false)}
                   className="w-8 h-8 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center text-white"
                 >
@@ -224,17 +219,16 @@ const MobileTabBar = () => {
                     onClick={() => setProfileMenuOpen(false)}
                     className="flex flex-col items-center gap-2 p-3 rounded-xl hover:shadow-md transition-all duration-200 group"
                     style={{
-                      background: location.pathname === item.to 
-                        ? "linear-gradient(135deg, #1a3aad, #2563eb)" 
+                      background: location.pathname === item.to
+                        ? "linear-gradient(135deg, #1a3aad, #2563eb)"
                         : "#f8fafc",
                     }}
                   >
                     <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform`}>
                       <item.icon size={16} />
                     </div>
-                    <span className={`text-[9px] font-medium text-center ${
-                      location.pathname === item.to ? "text-white" : "text-slate-600"
-                    }`}>
+                    <span className={`text-[9px] font-medium text-center ${location.pathname === item.to ? "text-white" : "text-slate-600"
+                      }`}>
                       {item.tooltip}
                     </span>
                   </Link>

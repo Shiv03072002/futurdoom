@@ -79,16 +79,16 @@ const Footer = () => {
         background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
       }}
     >
-      <div className="max-w-9xl mx-auto px-6 py-8">
-        {/* Main Footer Content */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Footer Content - Stack on mobile, equal columns on md and up */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8 md:gap-6 lg:gap-8">
           {/* Left Section - Brand */}
           <motion.div
             variants={itemVariants}
-            className="flex-1 min-w-[200px]"
+            className="w-full md:w-1/3 lg:w-1/3"
           >
             <Link to="/" className="inline-block mb-3">
-              <span className="text-3xl tracking-tight leading-none">
+              <span className="text-2xl sm:text-3xl tracking-tight leading-none">
                 <span className="font-light text-slate-800">
                   futur
                 </span>
@@ -98,23 +98,20 @@ const Footer = () => {
               </span>
             </Link>
 
-            <p className="text-sm text-slate-500 mb-3 max-w-xs">
+            <p className="text-xs sm:text-sm text-slate-500 mb-3 max-w-xs">
               Where emotions meet AI. Connect, share, and express yourself freely.
             </p>
-
-            {/* Trust Badge */}
-
           </motion.div>
 
           {/* Center Section - Navigation Links */}
           <motion.div
             variants={itemVariants}
-            className="flex-1"
+            className="w-full md:w-1/3 lg:w-1/3"
           >
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Quick Links
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2">
               {links.map((link) => {
                 const Icon = link.icon;
                 return (
@@ -125,10 +122,10 @@ const Footer = () => {
                   >
                     <Link
                       to={link.to}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group"
+                      className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group"
                     >
-                      <Icon size={14} className="text-slate-400 group-hover:text-blue-600" />
-                      <span className="text-xs font-medium">{link.label}</span>
+                      <Icon size={12} sm:size={14} className="text-slate-400 group-hover:text-blue-600 flex-shrink-0" />
+                      <span className="text-[10px] sm:text-xs font-medium truncate">{link.label}</span>
                     </Link>
                   </motion.div>
                 );
@@ -139,7 +136,7 @@ const Footer = () => {
           {/* Right Section - Social & Contact */}
           <motion.div
             variants={itemVariants}
-            className="flex-1"
+            className="w-full md:w-1/3 lg:w-1/3"
           >
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Connect With Us
@@ -155,13 +152,13 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-white border border-blue-200 flex items-center justify-center text-slate-500 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white border border-blue-200 flex items-center justify-center text-slate-500 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200"
                     variants={buttonHover}
                     whileHover="hover"
                     whileTap={buttonTap}
                     aria-label={social.label}
                   >
-                    <Icon size={16} />
+                    <Icon size={14} sm:size={16} />
                   </motion.a>
                 );
               })}
@@ -170,20 +167,20 @@ const Footer = () => {
             {/* Contact Info */}
             <motion.a
               href="mailto:feedbackfuturdoom@gmail.com"
-              className="flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition-colors group"
+              className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-500 hover:text-blue-600 transition-colors group"
               whileHover={{ x: 3 }}
             >
-              <Mail size={12} className="group-hover:text-blue-600" />
-              <span>feedbackfuturdoom@gmail.com</span>
+              <Mail size={10} sm:size={12} className="group-hover:text-blue-600 flex-shrink-0" />
+              <span className="truncate">feedbackfuturdoom@gmail.com</span>
             </motion.a>
 
             <motion.a
               href="https://www.futurdoom.com"
-              className="flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition-colors group mt-2"
+              className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-500 hover:text-blue-600 transition-colors group mt-2"
               whileHover={{ x: 3 }}
             >
-              <Globe size={12} className="group-hover:text-blue-600" />
-              <span>www.futurdoom.com</span>
+              <Globe size={10} sm:size={12} className="group-hover:text-blue-600 flex-shrink-0" />
+              <span className="truncate">www.futurdoom.com</span>
             </motion.a>
           </motion.div>
         </div>
@@ -197,24 +194,24 @@ const Footer = () => {
         {/* Bottom Bar */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col md:flex-row justify-between items-center gap-4"
+          className="flex flex-col sm:flex-row justify-between items-center gap-4"
         >
           {/* Copyright */}
-          <p className="text-xs text-slate-400 flex items-center gap-2">
+          <p className="text-[10px] sm:text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2">
             <span>© 2026 futurdoom</span>
-            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="w-1 h-1 rounded-full bg-slate-300 hidden sm:inline-block" />
             <span className="flex items-center gap-1">
-              Made with <Heart size={10} className="text-pink-500" /> for the community
+              Made with <Heart size={8} sm:size={10} className="text-pink-500" /> for the community
             </span>
           </p>
 
           {/* Version */}
           <div className="flex items-center gap-3">
-            <span className="text-[10px] px-2 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
+            <span className="text-[8px] sm:text-[10px] px-2 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
               v2.0.0
             </span>
-            <span className="text-[10px] px-2 py-1 rounded-full bg-purple-50 text-purple-600 border border-purple-200 flex items-center gap-1">
-              <Sparkles size={8} />
+            <span className="text-[8px] sm:text-[10px] px-2 py-1 rounded-full bg-purple-50 text-purple-600 border border-purple-200 flex items-center gap-1">
+              <Sparkles size={6} sm:size={8} />
               AI-Powered
             </span>
           </div>
@@ -223,18 +220,18 @@ const Footer = () => {
         {/* Trust Badges */}
         <motion.div
           variants={itemVariants}
-          className="mt-4 flex flex-wrap items-center justify-center gap-4 text-[10px] text-slate-400"
+          className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[8px] sm:text-[10px] text-slate-400"
         >
           <span className="flex items-center gap-1">
-            <Shield size={10} /> SSL Secure
+            <Shield size={8} sm:size={10} /> SSL Secure
           </span>
           <span className="w-1 h-1 rounded-full bg-slate-300" />
           <span className="flex items-center gap-1">
-            <MessageCircle size={10} /> 24/7 Support
+            <MessageCircle size={8} sm:size={10} /> 24/7 Support
           </span>
           <span className="w-1 h-1 rounded-full bg-slate-300" />
           <span className="flex items-center gap-1">
-            <Globe size={10} /> Global Community
+            <Globe size={8} sm:size={10} /> Global Community
           </span>
         </motion.div>
       </div>
