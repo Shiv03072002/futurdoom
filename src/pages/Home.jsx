@@ -225,7 +225,7 @@ const Home = () => {
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  Est. 2025
+                  Est. 2026
                 </motion.span>
               </motion.div>
 
@@ -417,7 +417,7 @@ const Home = () => {
             variants={footerVariants}
             className="px-5 pb-4"
           >
-            <p className="text-xs text-slate-300 text-center">© 2025 futurdoom · All rights reserved</p>
+            <p className="text-xs text-slate-300 text-center">© 2026 futurdoom · All rights reserved</p>
           </motion.div>
         </motion.div>
       </motion.div>
