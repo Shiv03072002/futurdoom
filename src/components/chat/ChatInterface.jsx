@@ -295,18 +295,29 @@ const ChatInterface = () => {
                           <Copy size={14} />
                         </motion.button>
 
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => navigate("/deepaskshare")}
-                          className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
-                          title="Deep Ask Share"
-                        >
-                          <Brain size={14} />
-                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                            4
-                          </span>
-                        </motion.button>
+                      <motion.button
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+  onClick={() => navigate("/deepaskshare", { 
+    state: { 
+      thread: {
+        userMessage: "how to do frontend in html", // The user's message
+        aiResponse: "To create a frontend in HTML, follow these steps: start with a basic HTML structure, add CSS for styling, and use JavaScript for interactivity.", // The AI's response
+        time: "2:10 PM", // Time of user message
+        responseTime: "2:11 PM", // Time of AI response
+        conversationId: msg.id, // Optional: pass the message ID
+        context: "full-conversation" // Optional: additional context
+      }
+    } 
+  })}
+  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
+  title="Deep Ask Share - 4 notifications"
+>
+  <Brain size={14} />
+  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+    4
+  </span>
+</motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
