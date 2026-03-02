@@ -6,14 +6,15 @@ import {
   User,
   PlayCircle,
   Bell,
-  X,
+  LogOut,
   Settings,
   MessageCircle,
   Users,
   HelpCircle,
+  Menu,
+  X,
   ChevronDown,
   Sparkles,
-  LogOut
 } from "lucide-react";
 import ReactDOM from "react-dom";
 import { motion } from "framer-motion";
@@ -37,6 +38,7 @@ const profileMenuItems = [
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const profileRef = useRef();
   const profileButtonRef = useRef();
@@ -65,6 +67,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setProfileOpen(false);
+    setMobileMenuOpen(false);
   }, [location]);
 
   return (
@@ -78,16 +81,19 @@ const Navbar = () => {
       >
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+            {/* Logo - hides text on mobile, shows on desktop */}
             <Link to="/" className="flex items-center gap-2">
+              {/* Logo Image */}
               <img
                 src="https://futurdoom.com/assets/gemini242-B2wd8wXY.png"
                 alt="FuturDoom Logo"
-                className="w-10 h-10 object-contain"
+                className="w-12 h-12 md:w-10 md:h-10 object-contain"
               />
-              <h1 className="text-3xl tracking-wide leading-none font-medium">
-                <span className="text-slate-800 font-extralight">futur</span>
-                <span className="bg-[#2364eb] bg-clip-text text-transparent inline-block font-extrabold">
+
+              {/* Logo Text - hidden on mobile, visible on md and up */}
+              <h1 className="hidden md:block text-3xl tracking-wide leading-none font-medium">
+                <span className="text-slate-800 font-medium">futur</span>
+                <span className="bg-[#2364eb] bg-clip-text text-transparent inline-block font-bold">
                   DooM
                 </span>
               </h1>
@@ -165,8 +171,18 @@ const Navbar = () => {
                                     </p>
                                     <p className="text-blue-200 text-xs">@futurdoom</p>
                                     
-                                    
-                                   
+                                    {/* Stats row */}
+                                    <div className="flex items-center gap-3 mt-2">
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-white font-bold text-sm">128</span>
+                                        <span className="text-[9px] text-blue-200">posts</span>
+                                      </div>
+                                      <span className="text-blue-300/30">|</span>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-white font-bold text-sm">2.1k</span>
+                                        <span className="text-[9px] text-blue-200">Interested</span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                                 
@@ -262,19 +278,258 @@ const Navbar = () => {
               })}
             </div>
 
-            {/* Right Section - Only Close Icon */}
-            <div className="flex items-center gap-2">
+            {/* Mobile Center Navigation with Text - Improved for better fit */}
+            <div className="flex md:hidden items-center justify-center flex-1 gap-2 sm:gap-4">
+  <Link 
+    to="/searchpeople" 
+    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
+      location.pathname === "/searchpeople" 
+        ? "text-[#2563eb]" 
+        : "text-slate-500 hover:text-[#2563eb]"
+    }`}
+  >
+    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
+      location.pathname === "/searchpeople" 
+        ? "bg-blue-50" 
+        : "group-hover:bg-blue-50/50"
+    }`}>
+      <Search size={20} className="transition-transform duration-200 group-hover:scale-110" />
+      {location.pathname === "/searchpeople" && (
+        <motion.div 
+          layoutId="mobileActiveIndicator"
+          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      )}
+    </div>
+    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
+      location.pathname === "/searchpeople" 
+        ? "text-[#2563eb] font-semibold" 
+        : "text-slate-500 group-hover:text-[#2563eb]"
+    }`}>
+      Search
+    </span>
+  </Link>
+
+  <Link 
+    to="/groups" 
+    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
+      location.pathname === "/groups" 
+        ? "text-[#2563eb]" 
+        : "text-slate-500 hover:text-[#2563eb]"
+    }`}
+  >
+    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
+      location.pathname === "/groups" 
+        ? "bg-blue-50" 
+        : "group-hover:bg-blue-50/50"
+    }`}>
+      <Users size={20} className="transition-transform duration-200 group-hover:scale-110" />
+      {location.pathname === "/groups" && (
+        <motion.div 
+          layoutId="mobileActiveIndicator"
+          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      )}
+    </div>
+    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
+      location.pathname === "/groups" 
+        ? "text-[#2563eb] font-semibold" 
+        : "text-slate-500 group-hover:text-[#2563eb]"
+    }`}>
+      Groups
+    </span>
+  </Link>
+
+  <Link 
+    to="/discussion" 
+    className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${
+      location.pathname === "/discussion" 
+        ? "text-[#2563eb]" 
+        : "text-slate-500 hover:text-[#2563eb]"
+    }`}
+  >
+    <div className={`relative p-1 rounded-lg transition-all duration-200 ${
+      location.pathname === "/discussion" 
+        ? "bg-blue-50" 
+        : "group-hover:bg-blue-50/50"
+    }`}>
+      <MessageCircle size={20} className="transition-transform duration-200 group-hover:scale-110" />
+      {location.pathname === "/discussion" && (
+        <motion.div 
+          layoutId="mobileActiveIndicator"
+          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      )}
+    </div>
+    <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
+      location.pathname === "/discussion" 
+        ? "text-[#2563eb] font-semibold" 
+        : "text-slate-500 group-hover:text-[#2563eb]"
+    }`}>
+      Discussion
+    </span>
+  </Link>
+</div>
+
+            {/* Right Section - Improved mobile layout */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              {/* Desktop Logout */}
               <Link
                 to="/close"
-                className="flex items-center gap-1.5 px-3 md:px-4 h-9 rounded-lg text-slate-600 hover:text-[#2563eb] hover:bg-blue-50 transition-all duration-200"
+                className="hidden md:flex items-center gap-1.5 px-4 h-9 rounded-lg text-slate-600 hover:text-[#2563eb] hover:bg-blue-50 transition-all duration-200"
               >
                 <LogOut size={18} strokeWidth={1.75} />
-                <span className="hidden md:inline text-sm font-medium">Logout</span>
+                <span className="text-sm font-medium">Logout</span>
               </Link>
+
+              {/* Mobile Actions */}
+              <div className="flex md:hidden items-center gap-1">
+               
+
+                {/* Menu Toggle - Shows X when open, Menu when closed */}
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="w-9 h-9 rounded-lg bg-blue-50 text-[#2563eb] flex items-center justify-center hover:bg-blue-100 transition-colors"
+                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                >
+                  {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu - Improved design */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 top-16 z-40 md:hidden">
+          {/* Backdrop with blur */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          
+          {/* Menu Panel */}
+          <motion.div 
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl shadow-blue-500/20 overflow-y-auto"
+          >
+            <div className="p-5">
+              
+              {/* Mobile User Card */}
+              <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-[#0f1f6e] to-[#2563eb] relative overflow-hidden">
+                <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+                <div className="relative">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white font-bold">
+                      FD
+                    </div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">futurDooM User</p>
+                      <p className="text-blue-200 text-[10px]">@futurdoom</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[8px] text-blue-200">128 posts</span>
+                        <span className="text-blue-300/30">•</span>
+                        <span className="text-[8px] text-blue-200">2.1k interested</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Navigation Sections */}
+              <div className="space-y-4">
+                {/* Main Menu */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Main Menu</p>
+                  <div className="space-y-1">
+                    {navItems.map((item) => {
+                      const isActive = location.pathname === item.to;
+                      return (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${
+                            isActive
+                              ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md"
+                              : "text-slate-600 hover:bg-blue-50"
+                          }`}
+                        >
+                          <div className="relative">
+                            <item.icon size={18} />
+                            {item.badge && (
+                              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
+                            )}
+                          </div>
+                          <span className="text-sm font-medium">{item.tooltip}</span>
+                          {isActive && (
+                            <motion.div
+                              layoutId="activeIndicator"
+                              className="ml-auto w-1.5 h-1.5 rounded-full bg-white"
+                            />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* More Options */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">More</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {profileMenuItems.map((item) => (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex flex-col items-center gap-2 p-3 rounded-lg bg-slate-50 hover:bg-blue-50 transition-colors group"
+                      >
+                        <span className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-blue-600 shadow-sm group-hover:shadow">
+                          <item.icon size={14} />
+                        </span>
+                        <span className="text-[10px] font-medium text-slate-600 group-hover:text-blue-600 text-center">
+                          {item.tooltip}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Footer */}
+              <div className="mt-8 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <span className="text-[9px] text-slate-500">Active now</span>
+                  </div>
+                  <span className="text-[9px] text-slate-400">v2.0</span>
+                </div>
+                <p className="text-[9px] text-slate-400 text-center">
+                  © 2025 futurDooM · All rights reserved
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Spacer */}
       <div className="h-16" />

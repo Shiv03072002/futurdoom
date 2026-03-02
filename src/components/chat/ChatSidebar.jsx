@@ -185,8 +185,8 @@ const ChatSidebar = () => {
       {/* History Footer */}
       <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-blue-100">
         <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1">
-          <Bot size={12} />
-          {chatHistory.length} AI conversations
+          
+          {chatHistory.length}  conversations
         </p>
       </div>
     </motion.div>
