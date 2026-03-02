@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { 
   Send, 
@@ -7,10 +8,62 @@ import {
   Brain,
   MessageSquare,
   Sparkles,
-  Zap,
-  Cpu
+  Copy,
+  Heart,
+  Trash2,
+  Share2,
+  MoreHorizontal
 } from "lucide-react";
-import { motion } from "framer-motion";
+
+const BLUE = "#2563eb";
+const DARK_BLUE = "#1a3aad";
+
+const Avatar = ({ size = 36, status = true, type = "user" }) => {
+  let initials = "DP";
+  let gradient = "from-purple-500 to-pink-500";
+
+  if (type === "ai") {
+    initials = "fD";
+    gradient = "from-[#1a3aad] to-[#2563eb]";
+  }
+
+  return (
+    <div className="relative flex-shrink-0">
+      <div
+        className={`flex items-center justify-center rounded-xl text-white font-bold bg-gradient-to-r ${gradient}`}
+        style={{
+          width: size,
+          height: size,
+          fontSize: size * 0.35,
+          boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
+        }}
+      >
+        {initials}
+      </div>
+      {status && (
+        <motion.span
+          className="absolute rounded-full ring-2 ring-white"
+          style={{
+            width: size * 0.25,
+            height: size * 0.25,
+            background: "#22c55e",
+            bottom: 0,
+            right: 0
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 const SimpleChat = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,21 +81,25 @@ const SimpleChat = () => {
       const threadMessages = [
         {
           id: 1,
-          role: "user",
-          content: location.state.thread.userMessage,
+          from: "user",
+          text: location.state.thread.userMessage,
           time: location.state.thread.time,
+          read: true
         },
         {
           id: 2,
-          role: "assistant",
-          content: location.state.thread.aiResponse,
+          from: "ai",
+          text: location.state.thread.aiResponse,
           time: location.state.thread.responseTime,
+          read: true,
+          isDeepAsk: true
         },
         {
           id: 3,
-          role: "assistant",
-          content: `I see you're asking about "${location.state.thread.userMessage}". Let me provide a more detailed explanation with examples. What specific aspect would you like to dive deeper into?`,
+          from: "ai",
+          text: `I see you're asking about "${location.state.thread.userMessage}". Let me provide a more detailed explanation with examples. What specific aspect would you like to dive deeper into?`,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          read: false,
           isDeepAsk: true
         }
       ];
@@ -51,9 +108,10 @@ const SimpleChat = () => {
       setMessages([
         {
           id: 1,
-          role: "assistant",
-          content: "Hello! I'm fD, your AI assistant. Select a message with the brain icon to deep dive into a specific topic, or ask me anything!",
-          time: "10:30 AM"
+          from: "ai",
+          text: "Hello! I'm fD, your AI assistant. Select a message with the brain icon to deep dive into a specific topic, or ask me anything!",
+          time: "10:30 AM",
+          read: true
         }
       ]);
     }
@@ -64,9 +122,10 @@ const SimpleChat = () => {
 
     const userMessage = {
       id: Date.now(),
-      role: "user",
-      content: input,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      from: "user",
+      text: input,
+      time: "Just now",
+      read: false,
     };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
@@ -78,7 +137,7 @@ const SimpleChat = () => {
       let response = "";
       if (threadContext) {
         response = `**Deep Analysis:**\n\nBased on your question about "${threadContext.userMessage}", here's a comprehensive breakdown:\n\n${input.toLowerCase().includes("example") 
-          ? "**Practical Example:**\n\n```html\n<!DOCTYPE html>\n<html>\n<head>\n  <title>DeepAsk Example</title>\n  <style>\n    .container { max-width: 800px; margin: 0 auto; }\n    .highlight { background: #f0f4ff; padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class='container'>\n    <h1>Deep Learning Example</h1>\n    <div class='highlight'>\n      <p>This is a detailed explanation with code.</p>\n    </div>\n  </div>\n</body>\n</html>\n```" 
+          ? "**Practical Example:**\n\n<!DOCTYPE html>\n<html>\n<head>\n  <title>DeepAsk Example</title>\n  <style>\n    .container { max-width: 800px; margin: 0 auto; }\n    .highlight { background: #f0f4ff; padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class='container'>\n    <h1>Deep Learning Example</h1>\n    <div class='highlight'>\n      <p>This is a detailed explanation with code.</p>\n    </div>\n  </div>\n</body>\n</html>" 
           : "**Key Insights:**\n\n• Advanced concepts explained\n• Best practices and patterns\n• Performance considerations\n• Common pitfalls to avoid"}`
       } else {
         response = "I understand your question. Let me help you with that.";
@@ -86,258 +145,326 @@ const SimpleChat = () => {
       
       const aiMessage = {
         id: Date.now() + 1,
-        role: "assistant",
-        content: response,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        from: "ai",
+        text: response,
+        time: "Just now",
+        read: false,
         isDeepAsk: deepAskMode
       };
       setMessages(prev => [...prev, aiMessage]);
     }, 2000);
   };
 
+  const removeMsg = (id) => setMessages((prev) => prev.filter((m) => m.id !== id));
+
   const handleGoBack = () => {
     navigate(-1);
   };
 
+  // Animation variants
+  const messageVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 500,
+        damping: 30,
+      },
+    },
+  };
+
+  const typingAnimation = {
+    animate: {
+      y: [0, -5, 0],
+      transition: {
+        duration: 0.8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full  bg-white/80 backdrop-blur-sm rounded-xl border border-blue-200/50 overflow-hidden ">
-        {/* Header with glass morphism */}
-        <div className="relative overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-indigo-600/5" />
-          <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-400/10 rounded-full blur-3xl" />
-          
-          <div className="relative border-b border-blue-200/50 bg-white/50 backdrop-blur-sm">
-            <div className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={handleGoBack}
-                    className="w-8 h-8 rounded-xl flex items-center justify-center text-blue-600 hover:bg-blue-100/50 transition-all hover:scale-110"
-                  >
-                    <ArrowLeft size={18} />
-                  </button>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className={`relative ${
-                      deepAskMode ? "animate-pulse" : ""
-                    }`}>
-                      <div className={`w-10 h-10 rounded-xl ${
-                        deepAskMode 
-                          ? "bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30"
-                          : "bg-gradient-to-br from-blue-500 to-blue-600 shadow-md shadow-blue-500/20"
-                      } flex items-center justify-center transform hover:scale-105 transition-transform`}>
-                        {deepAskMode ? (
-                          <Brain size={20} className="text-white" />
-                        ) : (
-                          <Sparkles size={20} className="text-white" />
-                        )}
-                      </div>
-                      {deepAskMode && (
-                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-400 rounded-full ring-2 ring-white animate-ping" />
-                      )}
-                    </div>
-                    
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h1 className="text-gray-800 font-semibold text-base">
-                          {deepAskMode ? "Deep Ask" : "fD Assistant"}
-                        </h1>
-                        {deepAskMode && (
-                          <span className="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 border border-blue-200">
-                            <Zap size={8} />
-                            Deep
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        <p className="text-blue-600 text-xs font-medium flex items-center gap-1">
-                          {deepAskMode ? "Deep learning mode" : "Online"}
-                          {deepAskMode && <Cpu size={10} className="text-blue-500" />}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {threadContext && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200/50 shadow-sm"
-                  >
-                    <MessageSquare size={14} className="text-blue-500" />
-                    <span className="text-xs text-blue-700 font-medium max-w-[200px] truncate">
-                      "{threadContext.userMessage.substring(0, 30)}..."
-                    </span>
-                  </motion.div>
-                )}
-              </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      className="flex items-center justify-center "
+    >
+      <div
+        className="w-full flex flex-col overflow-hidden bg-white rounded-xl border border-blue-50"
+        style={{
+          height: 700,
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        }}
+      >
+        {/* Header */}
+        <motion.div
+          initial={{ y: -50 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          className="flex items-center gap-3 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 px-5 py-3"
+        >
+          {/* Back button */}
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleGoBack}
+            className="flex items-center justify-center rounded-xl hover:bg-white w-9 h-9 text-blue-600 transition-all"
+          >
+            <ArrowLeft size={18} strokeWidth={1.8} />
+          </motion.button>
+
+          {/* AI Avatar */}
+          <Avatar size={48} status={true} type="ai" />
+
+          {/* AI Name + status */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-base font-bold text-slate-800">
+                {deepAskMode ? "Deep Ask" : "fD Assistant"}
+                {deepAskMode && <span className="ml-2 text-xs font-normal text-blue-600">(Deep Mode)</span>}
+              </p>
+              <Sparkles size={14} className="text-blue-500" />
+            </div>
+            <div className="flex items-center gap-1.5 mt-1">
+              <motion.span
+                className="w-2 h-2 bg-green-400 rounded-full"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <p className="text-xs font-semibold text-green-500">
+                {deepAskMode ? "Deep learning mode" : "Online"}
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Messages with modern styling */}
-        <div className="h-[500px] overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-blue-50/30 to-white">
-          {messages.map((msg, index) => (
-            <motion.div
-              key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={`flex gap-2 ${msg.role === "user" ? "justify-start" : "justify-end"}`}
-            >
-              {/* User Avatar */}
-              {msg.role === "user" && (
-                <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/30">
-                  <span className="text-xs font-medium text-white">U</span>
-                </div>
-              )}
+          {/* Thread context badge */}
+          {threadContext && (
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl border border-blue-200 shadow-sm">
+              <MessageSquare size={14} className="text-blue-500" />
+              <span className="text-xs text-blue-700 font-medium max-w-[200px] truncate">
+                "{threadContext.userMessage.substring(0, 30)}..."
+              </span>
+            </div>
+          )}
 
-              {/* Message Bubble */}
-              <div className={`max-w-[75%] ${msg.role === "user" ? "order-2" : "order-1"}`}>
-                <div
-                  className={`px-4 py-2.5 text-sm whitespace-pre-wrap ${
-                    msg.role === "user"
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl rounded-tl-none shadow-lg shadow-blue-500/30"
-                      : msg.isDeepAsk
-                      ? "bg-gradient-to-r from-indigo-50 to-blue-50 text-gray-800 rounded-2xl rounded-tr-none border border-blue-200/50 shadow-md shadow-blue-500/10"
-                      : "bg-white text-gray-800 rounded-2xl rounded-tr-none border border-blue-100/50 shadow-sm hover:shadow-md transition-shadow"
-                  }`}
+          {/* More button */}
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center justify-center rounded-xl hover:bg-white w-9 h-9 text-blue-600 transition-all"
+          >
+            <MoreHorizontal size={18} strokeWidth={1.8} />
+          </motion.button>
+        </motion.div>
+
+        {/* Messages */}
+        <div
+          className="flex-1 overflow-y-auto p-5 space-y-4"
+          style={{ background: "#fafcff" }}
+        >
+          {/* Date pill */}
+          <motion.div
+            className="flex justify-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">
+              {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </span>
+          </motion.div>
+
+          {/* Messages */}
+          <AnimatePresence mode="popLayout">
+            {messages.map((msg, i) => {
+              const isAI = msg.from === "ai";
+              const isUser = msg.from === "user";
+              const prevSame = i > 0 && messages[i - 1].from === msg.from;
+
+              return (
+                <motion.div
+                  key={msg.id}
+                  variants={messageVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  layout
+                  className="flex flex-col"
                 >
-                  {msg.role === "assistant" && msg.isDeepAsk && (
-                    <div className="flex items-center gap-1 mb-1.5 text-xs font-medium text-blue-700">
-                      <Brain size={11} className="text-blue-600" />
-                      <span>Deep analysis</span>
+                  {/* Action Icons - for user messages only */}
+                  {isUser && (
+                    <div className="flex items-center gap-1 mb-1 justify-start">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => removeMsg(msg.id)}
+                        className="p-1 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
+                        title="Like"
+                      >
+                        <Heart size={14} />
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
+                        title="Copy"
+                      >
+                        <Copy size={14} />
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
+                        title="Share"
+                      >
+                        <Share2 size={14} />
+                      </motion.button>
                     </div>
                   )}
-                  <div className="text-xs leading-relaxed">
-                    {msg.content}
+
+                  {/* Message bubble with avatar */}
+                  <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
+                    {/* Avatar for user messages */}
+                    {isUser && !prevSame && (
+                      <Avatar size={36} status={true} type="user" />
+                    )}
+                    {isUser && prevSame && <div className="w-9" />}
+
+                    {/* Message bubble */}
+                    <div className={`flex flex-col max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
+                      <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        className={`px-4 py-2.5 text-sm whitespace-pre-wrap ${
+                          isAI
+                            ? msg.isDeepAsk
+                              ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
+                              : 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
+                            : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
+                        }`}
+                        style={{
+                          boxShadow: isAI
+                            ? '0 4px 15px rgba(37,99,235,0.3)'
+                            : '0 2px 8px rgba(0,0,0,0.03)',
+                        }}
+                      >
+                        {isAI && msg.isDeepAsk && (
+                          <div className="flex items-center gap-1 mb-1 text-xs text-blue-200">
+                            <Brain size={12} />
+                            <span>Deep analysis</span>
+                          </div>
+                        )}
+                        {msg.text}
+                      </motion.div>
+
+                      {/* Time + read receipt */}
+                      <div className={`flex items-center gap-1.5 mt-1 text-xs ${isAI ? 'justify-end' : 'justify-start'}`}>
+                        <span className="text-slate-400">{msg.time}</span>
+                        {isAI && (
+                          <CheckCheck
+                            size={14}
+                            className={msg.read ? "text-blue-600" : "text-slate-300"}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Avatar for AI messages */}
+                    {isAI && !prevSame && (
+                      <Avatar size={36} status={true} type="ai" />
+                    )}
+                    {isAI && prevSame && <div className="w-9" />}
                   </div>
-                </div>
-                
-                <div className={`flex items-center gap-1 mt-1.5 ${msg.role === "user" ? "justify-start" : "justify-end"}`}>
-                  <p className="text-[10px] text-gray-400">{msg.time}</p>
-                  {msg.role === "user" && (
-                    <CheckCheck size={10} className="text-blue-500" />
-                  )}
-                  {msg.role === "assistant" && msg.isDeepAsk && (
-                    <span className="text-[9px] text-blue-400 flex items-center gap-0.5">
-                      <Brain size={8} />
-                      deep
-                    </span>
-                  )}
-                </div>
-              </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
 
-              {/* AI Avatar */}
-              {msg.role === "assistant" && (
-                <div className={`w-7 h-7 rounded-xl ${
-                  msg.isDeepAsk
-                    ? "bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30"
-                    : "bg-gradient-to-br from-blue-500 to-blue-600 shadow-md shadow-blue-500/20"
-                } flex items-center justify-center flex-shrink-0 order-2 transform hover:scale-105 transition-transform`}>
-                  <span className="text-xs font-medium text-white">fD</span>
-                </div>
-              )}
-            </motion.div>
-          ))}
-
-          {/* Stylish typing indicator */}
-          {isTyping && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex gap-2 justify-end"
-            >
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-2xl rounded-tr-none px-5 py-3.5 order-1 shadow-md shadow-blue-500/5">
-                <div className="flex gap-1.5">
+          {/* Typing indicator */}
+          <AnimatePresence>
+            {isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="flex items-center gap-2 justify-end"
+              >
+                <div className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] px-4 py-3 rounded-2xl rounded-br-sm flex items-center gap-1">
                   {[0, 1, 2].map((i) => (
-                    <motion.div
+                    <motion.span
                       key={i}
-                      animate={{ 
-                        y: [0, -5, 0],
-                        scale: [1, 1.1, 1]
-                      }}
-                      transition={{
-                        duration: 0.8,
-                        repeat: Infinity,
-                        delay: i * 0.2,
-                        ease: "easeInOut"
-                      }}
-                      className={`w-2 h-2 rounded-full ${
-                        i === 0 ? 'bg-blue-400' : i === 1 ? 'bg-blue-500' : 'bg-blue-600'
-                      }`}
+                      variants={typingAnimation}
+                      animate="animate"
+                      className="w-1.5 h-1.5 bg-white rounded-full"
                     />
                   ))}
                 </div>
-              </div>
-              <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center order-2 shadow-md shadow-blue-500/30">
-                <span className="text-xs font-medium text-white">fD</span>
-              </div>
-            </motion.div>
-          )}
+                <Avatar size={30} status={true} type="ai" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Modern input area */}
-        <div className="p-4 border-t border-blue-200/50 bg-white/50 backdrop-blur-sm">
-          <div className="flex gap-2">
-            <div className="flex-1 relative group">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                placeholder={deepAskMode ? "Ask a deeper question..." : "Type your message..."}
-                className="w-full px-4 py-3 text-sm bg-white border border-blue-200/50 rounded-xl focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all pr-10 shadow-sm hover:border-blue-300"
-              />
-              {input.trim() && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 text-xs">
-                  ↵
-                </span>
-              )}
-            </div>
-            <button
-              onClick={handleSend}
-              disabled={!input.trim()}
-              className={`px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
-                input.trim()
-                  ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              <Send size={16} />
-            </button>
+        {/* Input bar */}
+        <motion.div
+          initial={{ y: 50 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
+          className="flex items-center gap-2 flex-shrink-0 px-4 py-3 border-t border-slate-200 bg-white"
+        >
+          {/* Input */}
+          <div className="flex-1">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              placeholder={deepAskMode ? "Ask a deeper question..." : "Ask fD something..."}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
+            />
           </div>
-          
-          <div className="flex items-center justify-between mt-3">
-            <p className="text-xs text-gray-500 flex items-center gap-1">
-              <span className="w-1 h-1 bg-blue-500 rounded-full"></span>
-              {deepAskMode ? "Deep mode • Enhanced responses" : "fD assistant"}
+
+          {/* Send */}
+          <motion.button
+            onClick={handleSend}
+            whileHover={{ scale: input.trim() ? 1.1 : 1 }}
+            whileTap={{ scale: input.trim() ? 0.95 : 1 }}
+            className={`flex items-center justify-center rounded-xl w-10 h-10 transition-all ${
+              input.trim()
+                ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-500/30'
+                : 'bg-slate-200 text-slate-400'
+            }`}
+            disabled={!input.trim()}
+          >
+            <Send size={16} strokeWidth={2} />
+          </motion.button>
+        </motion.div>
+
+        {/* Mobile thread context */}
+        {threadContext && (
+          <div className="sm:hidden px-4 py-2 bg-blue-50 border-t border-blue-100">
+            <p className="text-xs text-blue-700 flex items-center gap-1">
+              <MessageSquare size={10} className="text-blue-500" />
+              <span className="truncate">Context: "{threadContext.userMessage.substring(0, 25)}..."</span>
             </p>
-            
-            {threadContext && (
-              <motion.p 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xs text-gray-500 flex items-center gap-1 bg-blue-50/50 px-2 py-0.5 rounded-full"
-              >
-                <MessageSquare size={10} className="text-blue-500" />
-                <span className="text-blue-600 font-medium truncate max-w-[150px]">
-                  {threadContext.userMessage.substring(0, 15)}...
-                </span>
-              </motion.p>
-            )}
           </div>
-        </div>
+        )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
