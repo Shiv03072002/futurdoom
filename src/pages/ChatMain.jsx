@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import ChatInterface from "../components/chat/ChatInterface";
 import ChatSidebar from "../components/chat/ChatSidebar";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatMain = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true); // Default to true to show history first
 
   return (
     <div className="">
       {/* Desktop Layout */}
-      <div className="hidden lg:flex gap-4 ">
+      <div className="hidden lg:flex gap-4">
         <div className="flex-1">
           <ChatInterface />
         </div>
@@ -21,18 +21,14 @@ const ChatMain = () => {
 
       {/* Mobile Layout */}
       <div className="lg:hidden flex flex-col h-full">
-        {/* Chat Interface */}
-        <div className="flex-1  pb-2">
-          <ChatInterface />
-        </div>
-
-        {/* Toggle Button for Sidebar */}
-        <div className="px-4 mb-2">
+        {/* Toggle Button for Chat */}
+        <div className="px-4  pb-2">
           <button
             onClick={() => setShowSidebar(!showSidebar)}
             className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
           >
             <div className="flex items-center gap-2">
+              <MessageSquare size={16} className="text-blue-600" />
               <span className="text-sm font-semibold text-slate-700">Chat History</span>
               <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">
                 5
@@ -47,7 +43,7 @@ const ChatMain = () => {
           </button>
         </div>
 
-        {/* Sidebar - Expandable Section */}
+        {/* Sidebar - Expandable Section (on top) */}
         <AnimatePresence>
           {showSidebar && (
             <motion.div
@@ -55,12 +51,17 @@ const ChatMain = () => {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden px-4 pb-4"
+              className="overflow-hidden px-4"
             >
               <ChatSidebar />
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Chat Interface (below) */}
+        <div className="flex-1 px-4 pb-4 pt-2">
+          <ChatInterface />
+        </div>
       </div>
     </div>
   );

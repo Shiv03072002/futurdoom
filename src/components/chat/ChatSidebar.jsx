@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Search, Bot, Sparkles, Cpu, Zap, Globe, Brain } from "lucide-react";
+import { 
+  MessageSquare, 
+  Search, 
+  Bot, 
+  Sparkles, 
+  Cpu, 
+  Zap, 
+  Globe, 
+  Brain,
+  Plus,
+  MessageCircle
+} from "lucide-react";
 
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
@@ -98,12 +109,18 @@ const ChatSidebar = () => {
     chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleNewChat = () => {
+    // Handle new chat creation
+    console.log("Starting new chat...");
+    // You can add navigation or state management here
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-      className="w-80 bg-white rounded-xl border border-blue-50 overflow-hidden flex flex-col"
+      className="w-full bg-white rounded-xl border border-blue-50 overflow-hidden flex flex-col"
       style={{ height: 700 }}
     >
       {/* History Header */}
@@ -119,7 +136,7 @@ const ChatSidebar = () => {
         </div>
         
         {/* Search */}
-        <div className="relative">
+        <div className="relative mb-3">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
@@ -129,6 +146,17 @@ const ChatSidebar = () => {
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-200 bg-white text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
+
+        {/* Start New Chat Button */}
+        <motion.button
+          onClick={handleNewChat}
+          whileHover={{ scale: 1.02, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white text-sm font-semibold shadow-md shadow-blue-500/30 hover:shadow-lg transition-all duration-200"
+        >
+          <Plus size={16} />
+          Start New Chat
+        </motion.button>
       </div>
 
       {/* History List */}
@@ -146,10 +174,7 @@ const ChatSidebar = () => {
               <div className="flex items-start gap-3">
                 {/* <Avatar size={40} status={chat.unread > 0} icon={chat.icon} /> */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    {/* Name is removed from here */}
-                   
-                  </div>
+                 
                   
                   <p className="text-xs text-slate-600 mt-1 line-clamp-2">
                     {chat.lastMessage}
@@ -157,8 +182,7 @@ const ChatSidebar = () => {
                   
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                     
-                       {chat.date} • {chat.time}
+                      {chat.date}.{chat.time}
                     </span>
                     
                     {chat.unread > 0 && (
@@ -166,7 +190,6 @@ const ChatSidebar = () => {
                         {chat.unread} new
                       </span>
                     )}
-                    
                   </div>
                 </div>
               </div>
@@ -178,6 +201,15 @@ const ChatSidebar = () => {
           <div className="text-center py-8">
             <MessageSquare size={32} className="mx-auto text-slate-300 mb-2" />
             <p className="text-sm text-slate-400">No conversations found</p>
+            <motion.button
+              onClick={handleNewChat}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-3 px-4 py-2 bg-blue-500 text-white text-xs rounded-lg inline-flex items-center gap-1"
+            >
+              <Plus size={12} />
+              Start a new chat
+            </motion.button>
           </div>
         )}
       </div>
@@ -185,8 +217,8 @@ const ChatSidebar = () => {
       {/* History Footer */}
       <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-blue-100">
         <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1">
-          
-          {chatHistory.length}  conversations
+          <MessageCircle size={10} />
+          {chatHistory.length} conversations • AI Powered
         </p>
       </div>
     </motion.div>

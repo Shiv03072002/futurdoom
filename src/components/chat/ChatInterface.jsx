@@ -1,81 +1,99 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Send, 
-  Share2, 
-  Settings, 
-  Phone, 
-  Video, 
-  Info, 
-  Smile, 
-  Paperclip, 
-  MoreHorizontal, 
+import {
+  Send,
+  Share2,
+  Settings,
+  Phone,
+  Video,
+  Info,
+  Smile,
+  Paperclip,
+  MoreHorizontal,
   CheckCheck,
   Sparkles,
-  Reply,
   Copy,
   Trash2,
   Heart,
-  Brain
+  Brain,
+  User
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
 
 const initialMessages = [
-  { id: 1, from: "them", text: "how to do frontend in html", time: "2:10 PM", read: true },
+  {
+    id: 1,
+    from: "user", // Dipankar's message (left side)
+    text: "how to do frontend in html",
+    time: "2:10 PM",
+    read: true
+  },
   {
     id: 2,
-    from: "me",
+    from: "ai", // fD's reply (right side)
     text: "To create a frontend in HTML, follow these steps: start with a basic HTML structure, add CSS for styling, and use JavaScript for interactivity.",
     time: "2:11 PM",
     read: true,
   },
   {
     id: 3,
-    from: "them",
+    from: "user", // Dipankar's message (left side)
     text: "Can you give me a simple example?",
     time: "2:13 PM",
     read: false,
   },
 ];
 
-const Avatar = ({ size = 36, status = true }) => (
-  <div className="relative flex-shrink-0">
-    <div
-      className="flex items-center justify-center rounded-xl text-white font-bold"
-      style={{
-        width: size,
-        height: size,
-        background: `linear-gradient(135deg, ${DARK_BLUE}, ${BLUE})`,
-        fontSize: size * 0.35,
-        boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
-      }}
-    >
-      DP
+const Avatar = ({ size = 36, status = true, type = "user" }) => {
+  // Different based on who it is
+  let initials = "DP"; // Default for user (Dipankar)
+  let gradient = "from-purple-500 to-pink-500"; // Purple for user
+  let icon = null;
+
+  if (type === "ai") {
+    initials = "fD"; // AI uses fD
+    gradient = "from-[#1a3aad] to-[#2563eb]"; // Blue for AI
+  }
+
+  return (
+    <div className="relative flex-shrink-0">
+      <div
+        className={`flex items-center justify-center rounded-xl text-white font-bold bg-gradient-to-r ${gradient}`}
+        style={{
+          width: size,
+          height: size,
+          fontSize: size * 0.35,
+          boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
+        }}
+      >
+        {icon || initials}
+      </div>
+      {status && (
+        <motion.span
+          className="absolute rounded-full ring-2 ring-white"
+          style={{
+            width: size * 0.25,
+            height: size * 0.25,
+            background: "#22c55e",
+            bottom: 0,
+            right: 0
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      )}
     </div>
-    {status && (
-      <motion.span
-        className="absolute rounded-full ring-2 ring-white"
-        style={{ 
-          width: size * 0.25, 
-          height: size * 0.25, 
-          background: "#22c55e", 
-          bottom: 0, 
-          right: 0 
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-    )}
-  </div>
-);
+  );
+};
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState(initialMessages);
@@ -86,30 +104,32 @@ const ChatInterface = () => {
 
   const send = () => {
     if (!input.trim()) return;
+
+    // Add Dipankar's message (left side)
     setMessages((prev) => [
       ...prev,
-      { 
-        id: Date.now(), 
-        from: "me", 
-        text: input.trim(), 
-        time: "Just now", 
+      {
+        id: Date.now(),
+        from: "user",
+        text: input.trim(),
+        time: "Just now",
         read: false,
       },
     ]);
     setInput("");
-    
-    // Simulate typing response
+
+    // Simulate fD typing response (right side)
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
       setMessages((prev) => [
         ...prev,
-        { 
-          id: Date.now() + 1, 
-          from: "them", 
-          text: "Thanks for the info! 😊", 
-          time: "Just now", 
-          read: false 
+        {
+          id: Date.now() + 1,
+          from: "ai",
+          text: "I understand you're asking about frontend development. Here's a simple HTML example:\n\n<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World!</h1>\n</body>\n</html>",
+          time: "Just now",
+          read: false
         },
       ]);
     }, 2000);
@@ -163,14 +183,14 @@ const ChatInterface = () => {
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           className="flex items-center gap-3 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 px-5 py-3"
         >
-          {/* Avatar + status */}
-          <Avatar size={48} status={true} />
+          {/* AI Avatar */}
+          <Avatar size={48} status={true} type="ai" />
 
-          {/* Name + status */}
+          {/* AI Name + status */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="text-base font-bold text-slate-800">
-                Dipankar Porey
+                futurDooM <span className="text-xs font-normal text-slate-500">(Assistant)</span>
               </p>
               <Sparkles size={14} className="text-blue-500" />
             </div>
@@ -181,7 +201,7 @@ const ChatInterface = () => {
                 transition={{ duration: 2, repeat: Infinity }}
               />
               <p className="text-xs font-semibold text-green-500">
-                Active now
+                Online
               </p>
             </div>
           </div>
@@ -212,7 +232,7 @@ const ChatInterface = () => {
           style={{ background: "#fafcff" }}
         >
           {/* Date pill */}
-          <motion.div 
+          <motion.div
             className="flex justify-center"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -226,7 +246,8 @@ const ChatInterface = () => {
           {/* Messages */}
           <AnimatePresence mode="popLayout">
             {messages.map((msg, i) => {
-              const isMe = msg.from === "me";
+              const isAI = msg.from === "ai";
+              const isUser = msg.from === "user";
               const prevSame = i > 0 && messages[i - 1].from === msg.from;
 
               return (
@@ -240,9 +261,9 @@ const ChatInterface = () => {
                   className="flex flex-col"
                 >
                   {/* Action Icons - Always visible above message */}
-                  <div className={`flex items-center gap-1 mb-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                    {/* Left side icons for their messages */}
-                    {!isMe && (
+                  <div className={`flex items-center gap-1 mb-1 ${isAI ? 'justify-end' : 'justify-start'}`}>
+                    {/* Left side icons for user messages (Dipankar) */}
+                    {isUser && (
                       <>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
@@ -253,14 +274,18 @@ const ChatInterface = () => {
                         >
                           <Trash2 size={14} />
                         </motion.button>
+
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                          title="Reply"
+                          title="Like"
                         >
                           <Heart size={14} />
                         </motion.button>
+
+
+
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
@@ -269,20 +294,19 @@ const ChatInterface = () => {
                         >
                           <Copy size={14} />
                         </motion.button>
-                       <motion.button
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }}
-  onClick={() => navigate("/deepaskshare")}
-  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
-  title="Deep Ask Share - 4 notifications"
->
-  <Brain size={14} />
-  
-  {/* Static "4" notification badge */}
-  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-    4
-  </span>
-</motion.button>
+
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => navigate("/deepaskshare")}
+                          className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
+                          title="Deep Ask Share"
+                        >
+                          <Brain size={14} />
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                            4
+                          </span>
+                        </motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
@@ -294,65 +318,27 @@ const ChatInterface = () => {
                       </>
                     )}
 
-                    {/* Right side icons for my messages */}
-                    {isMe && (
-                      <>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => removeMsg(msg.id)}
-                          className="p-1 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 size={14} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                          title="Edit"
-                        >
-                          <Settings size={14} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                          title="Copy"
-                        >
-                          <Copy size={14} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                          title="Share"
-                        >
-                          <Share2 size={14} />
-                        </motion.button>
-                      </>
-                    )}
+
                   </div>
 
                   {/* Message bubble with avatar */}
-                  <div className={`flex items-end gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                    {/* Avatar for them messages */}
-                    {!isMe && !prevSame && (
-                      <Avatar size={36} status={false} />
+                  <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
+                    {/* Avatar for user messages (Dipankar - left side) */}
+                    {isUser && !prevSame && (
+                      <Avatar size={36} status={true} type="user" />
                     )}
-                    {!isMe && prevSame && <div className="w-9" />}
+                    {isUser && prevSame && <div className="w-9" />}
 
                     {/* Message bubble */}
-                    <div className={`flex flex-col max-w-[70%] ${isMe ? 'items-end' : 'items-start'}`}>
+                    <div className={`flex flex-col max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
                       <motion.div
                         whileHover={{ scale: 1.01 }}
-                        className={`px-4 py-2.5 text-sm ${
-                          isMe 
-                            ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm' 
+                        className={`px-4 py-2.5 text-sm whitespace-pre-wrap ${isAI
+                            ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
                             : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
-                        }`}
+                          }`}
                         style={{
-                          boxShadow: isMe 
+                          boxShadow: isAI
                             ? '0 4px 15px rgba(37,99,235,0.3)'
                             : '0 2px 8px rgba(0,0,0,0.03)',
                         }}
@@ -361,9 +347,9 @@ const ChatInterface = () => {
                       </motion.div>
 
                       {/* Time + read receipt */}
-                      <div className={`flex items-center gap-1.5 mt-1 text-xs ${isMe ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`flex items-center gap-1.5 mt-1 text-xs ${isAI ? 'justify-end' : 'justify-start'}`}>
                         <span className="text-slate-400">{msg.time}</span>
-                        {isMe && (
+                        {isAI && (
                           <CheckCheck
                             size={14}
                             className={msg.read ? "text-blue-600" : "text-slate-300"}
@@ -372,37 +358,37 @@ const ChatInterface = () => {
                       </div>
                     </div>
 
-                    {/* Spacer for alignment */}
-                    {isMe && <div className="w-9" />}
+                    {/* Avatar for AI messages (fD - right side) */}
+                    {isAI && !prevSame && (
+                      <Avatar size={36} status={true} type="ai" />
+                    )}
+                    {isAI && prevSame && <div className="w-9" />}
                   </div>
                 </motion.div>
               );
             })}
           </AnimatePresence>
 
-          {/* Typing indicator */}
+          {/* Typing indicator (fD typing - right side) */}
           <AnimatePresence>
             {isTyping && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 justify-end"
               >
-                <Avatar size={30} status={false} />
-                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm border border-blue-100 flex items-center gap-1">
+                <div className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] px-4 py-3 rounded-2xl rounded-br-sm flex items-center gap-1">
                   {[0, 1, 2].map((i) => (
                     <motion.span
                       key={i}
                       variants={typingAnimation}
                       animate="animate"
-                      className="w-1.5 h-1.5 bg-blue-600 rounded-full"
-                      style={{
-                        animationDelay: `${i * 0.2}s`,
-                      }}
+                      className="w-1.5 h-1.5 bg-white rounded-full"
                     />
                   ))}
                 </div>
+                <Avatar size={30} status={true} type="ai" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -436,7 +422,7 @@ const ChatInterface = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Write a message…"
+              placeholder="Ask fD something..."
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
             />
           </div>
@@ -446,11 +432,10 @@ const ChatInterface = () => {
             onClick={send}
             whileHover={{ scale: input.trim() ? 1.1 : 1 }}
             whileTap={{ scale: input.trim() ? 0.95 : 1 }}
-            className={`flex items-center justify-center rounded-xl w-10 h-10 transition-all ${
-              input.trim() 
-                ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-500/30' 
+            className={`flex items-center justify-center rounded-xl w-10 h-10 transition-all ${input.trim()
+                ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-500/30'
                 : 'bg-slate-200 text-slate-400'
-            }`}
+              }`}
             disabled={!input.trim()}
           >
             <Send size={16} strokeWidth={2} />
