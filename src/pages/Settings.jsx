@@ -11,27 +11,27 @@ const sections = [
   {
     title: "Profile Information",
     icon: User,
-    color: "from-blue-400 to-indigo-400",
+    color: "from-orange-400 to-orange-500",
     items: [
       { label: "Edit Profile", icon: User, description: "Update your personal info", to: "/edit" },
       { label: "User Credentials", icon: EyeOff, description: "Change password & security", to: "/credentials" },
     ],
   },
-  {
-    title: "Preferences",
-    icon: Settings,
-    color: "from-purple-400 to-pink-400",
-    items: [
-      { label: "Appearance", icon: Sun, description: "Theme & display settings", to: "/appearance" },
-      { label: "Language", icon: Globe, description: "English (US)", to: "/language" },
-      { label: "Privacy", icon: Lock, description: "Control your data", to: "/privacy-settings" },
-      { label: "Notifications", icon: Bell, description: "Manage alerts", to: "/notifications" },
-    ],
-  },
+  // {
+  //   title: "Preferences",
+  //   icon: Settings,
+  //   color: "from-purple-400 to-pink-400",
+  //   items: [
+  //     { label: "Appearance", icon: Sun, description: "Theme & display settings", to: "/appearance" },
+  //     { label: "Language", icon: Globe, description: "English (US)", to: "/language" },
+  //     { label: "Privacy", icon: Lock, description: "Control your data", to: "/privacy-settings" },
+  //     { label: "Notifications", icon: Bell, description: "Manage alerts", to: "/notifications" },
+  //   ],
+  // },
   {
     title: "About Us",
     icon: Globe,
-    color: "from-green-400 to-teal-400",
+    color: "from-blue-400 to-blue-600",
     items: [
       { label: "Visit Us", icon: Globe, description: "Learn about futurdoom", to: "/about" },
       { label: "Contacts", icon: Phone, description: "Get in touch", to: "/contact" },
@@ -138,7 +138,7 @@ const Setting = () => {
               </div>
               <div className="flex items-center gap-3">
                 <motion.div
-                  animate={{ rotate: 360 }}
+                 
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                   className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center"
                 >
@@ -239,30 +239,7 @@ const Setting = () => {
           </motion.div>
         ))}
 
-        {/* User Info Card */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-200 mt-4"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1a3aad] to-[#2563eb] flex items-center justify-center text-white font-bold text-lg shadow-md">
-              FD
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-slate-800">futurdoom User</p>
-              <p className="text-xs text-slate-500 mt-0.5">@futurdoom · Member since 2025</p>
-            </div>
-            <Link to="/profile">
-              <motion.div
-                className="px-3 py-1.5 bg-white rounded-lg border border-blue-200 text-xs font-medium text-blue-600 cursor-pointer hover:bg-blue-50 transition-colors"
-                whileHover={{ scale: 1.02 }}
-              >
-                Account Info
-              </motion.div>
-            </Link>
-          </div>
-        </motion.div>
-
+       
         {/* Footer */}
         <motion.p 
           variants={itemVariants}
