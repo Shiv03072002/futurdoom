@@ -31,7 +31,7 @@ export default function Share() {
             {/* Main Card Container */}
             <div className="w-full">
                 {/* Header Card */}
-                <div className="bg-white rounded-xl shadow-xl shadow-blue-200/50 border border-blue-50 overflow-hidden mb-6">
+                <div className="bg-white rounded-t-xl shadow-xl shadow-blue-200/50 border border-blue-50 overflow-hidden mb-6">
                     <ShareHeader totalConversations={shareData.length} />
                 </div>
 

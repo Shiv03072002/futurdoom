@@ -281,17 +281,7 @@ const ProfileHeader = ({ isLoggedInUser = false }) => {
             </motion.a>
           ))}
           <div className="h-4 w-px bg-slate-100 mx-1" />
-          {[Accessibility, Headphones].map((Icon, i) => (
-            <motion.button 
-              key={i}
-              variants={socialIconHover}
-              whileHover="hover"
-              whileTap={{ scale: 0.95 }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-400 hover:bg-blue-100 transition-all duration-150"
-            >
-              <Icon size={14} />
-            </motion.button>
-          ))}
+          
         </motion.div>
       </div>
     </motion.div>

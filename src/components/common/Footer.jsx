@@ -88,13 +88,15 @@ const Footer = () => {
             className="flex-1 min-w-[200px]"
           >
             <Link to="/" className="inline-block mb-3">
-              <span className="text-xl font-black tracking-tight">
-                <span className="">
-                  futur
-                </span>
-                <span className="text-[#2563eb]">DooM</span>
-              </span>
-            </Link>
+  <span className="text-3xl tracking-tight leading-none">
+    <span className="font-light text-slate-800">
+      futur
+    </span>
+    <span className="font-bold text-[#2563eb]">
+      DooM
+    </span>
+  </span>
+</Link>
             
             <p className="text-sm text-slate-500 mb-3 max-w-xs">
               Where emotions meet AI. Connect, share, and express yourself freely.

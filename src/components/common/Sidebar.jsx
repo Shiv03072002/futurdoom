@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapPin, Github, Twitter, Linkedin, Heart, MessageSquare, Sparkles, Send, X, UserPlus, UserCheck } from "lucide-react";
+import { MapPin, Github, Twitter, Linkedin, Heart, MessageSquare, Sparkles, Send, X, UserPlus, UserCheck,Instagram } from "lucide-react";
 
 const Sidebar = () => {
   const [showInterestedList, setShowInterestedList] = useState(false);
@@ -80,7 +80,7 @@ const Sidebar = () => {
           {/* Name */}
           <div className="flex items-center justify-center gap-1.5 mb-1">
             <h2 className="font-bold text-slate-800 text-lg">Shiv Kumar</h2>
-            <Sparkles size={14} className="text-blue-500" />
+          
           </div>
 
           {/* Location */}
@@ -97,7 +97,7 @@ const Sidebar = () => {
             {/* Interested Button - Shows who are interested in Shiv */}
             <button
               onClick={handleInterestedClick}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
                 ${showInterestedList 
                   ? "bg-pink-50 text-pink-600 border border-pink-200" 
                   : "bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-md shadow-pink-300/30 hover:shadow-lg hover:shadow-pink-400/40 hover:-translate-y-0.5"
@@ -115,7 +115,7 @@ const Sidebar = () => {
             {/* Interesting Button - Shows who Shiv is interested in */}
             <button
               onClick={handleInterestingClick}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
                 ${showInterestingList 
                   ? "bg-blue-50 text-blue-600 border border-blue-200" 
                   : "bg-gradient-to-r from-blue-500 to-blue-900 text-white shadow-md shadow-blue-300/30 hover:shadow-lg hover:shadow-blue-400/40 hover:-translate-y-0.5"
@@ -224,17 +224,17 @@ const Sidebar = () => {
           )}
 
           {/* Social icons */}
-          <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-slate-100">
-            {[Github, Twitter, Linkedin].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-200"
-              >
-                <Icon size={16} />
-              </a>
-            ))}
-          </div>
+        <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-slate-100">
+  {[Github, Twitter, Linkedin, Instagram].map((Icon, i) => (
+    <a
+      key={i}
+      href="#"
+      className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-200"
+    >
+      <Icon size={16} />
+    </a>
+  ))}
+</div>
         </div>
       </div>
     </div>
