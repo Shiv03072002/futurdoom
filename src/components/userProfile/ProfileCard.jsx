@@ -184,7 +184,7 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
               Interest
             </motion.button> */}
             
-            {/* <motion.button
+            <motion.button
               variants={buttonHover}
               whileHover="hover"
               whileTap={buttonTap}
@@ -192,7 +192,7 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
             >
               <MessageCircle size={12} />
               Message
-            </motion.button> */}
+            </motion.button>
             
             <motion.button
               variants={buttonHover}
