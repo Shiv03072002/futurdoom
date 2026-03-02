@@ -36,6 +36,24 @@ const profileMenuItems = [
   { to: "/about", icon: PlayCircle, tooltip: "Visit Us" },
 ];
 
+const mobileNavItems = [
+  {
+    to: "/searchpeople",
+    icon: Search,
+    label: "Search",
+  },
+  {
+    to: "/groups",
+    icon: Users,
+    label: "Groups",
+  },
+  {
+    to: "/discussion",
+    icon: MessageCircle,
+    label: "Discussion",
+  },
+];
+
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -86,7 +104,7 @@ const Navbar = () => {
               <img
                 src="https://futurdoom.com/assets/gemini242-B2wd8wXY.png"
                 alt="FuturDoom Logo"
-                className="w-12 h-12 md:w-10 md:h-10 object-contain"
+                className="w-10 h-10 md:w-10 md:h-10 object-contain"
               />
 
               {/* Logo Text - hidden on mobile, visible on md and up */}
@@ -267,97 +285,53 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Center Navigation with Text - Improved for better fit */}
-            <div className="flex md:hidden items-center justify-center flex-1 gap-2 sm:gap-4">
-              <Link
-                to="/searchpeople"
-                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/searchpeople"
-                    ? "text-[#2563eb]"
-                    : "text-slate-500 hover:text-[#2563eb]"
-                  }`}
-              >
-                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/searchpeople"
-                    ? "bg-blue-50"
-                    : "group-hover:bg-blue-50/50"
-                  }`}>
-                  <Search size={20} className="transition-transform duration-200 group-hover:scale-110" />
-                  {location.pathname === "/searchpeople" && (
-                    <motion.div
-                      layoutId="mobileActiveIndicator"
-                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </div>
-                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/searchpeople"
-                    ? "text-[#2563eb] font-semibold"
-                    : "text-slate-500 group-hover:text-[#2563eb]"
-                  }`}>
-                  Search
-                </span>
-              </Link>
-
-              <Link
-                to="/groups"
-                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/groups"
-                    ? "text-[#2563eb]"
-                    : "text-slate-500 hover:text-[#2563eb]"
-                  }`}
-              >
-                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/groups"
-                    ? "bg-blue-50"
-                    : "group-hover:bg-blue-50/50"
-                  }`}>
-                  <Users size={20} className="transition-transform duration-200 group-hover:scale-110" />
-                  {location.pathname === "/groups" && (
-                    <motion.div
-                      layoutId="mobileActiveIndicator"
-                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </div>
-                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/groups"
-                    ? "text-[#2563eb] font-semibold"
-                    : "text-slate-500 group-hover:text-[#2563eb]"
-                  }`}>
-                  Groups
-                </span>
-              </Link>
-
-              <Link
-                to="/discussion"
-                className={`flex flex-col items-center px-1 sm:px-2 transition-all duration-200 group ${location.pathname === "/discussion"
-                    ? "text-[#2563eb]"
-                    : "text-slate-500 hover:text-[#2563eb]"
-                  }`}
-              >
-                <div className={`relative p-1 rounded-lg transition-all duration-200 ${location.pathname === "/discussion"
-                    ? "bg-blue-50"
-                    : "group-hover:bg-blue-50/50"
-                  }`}>
-                  <MessageCircle size={20} className="transition-transform duration-200 group-hover:scale-110" />
-                  {location.pathname === "/discussion" && (
-                    <motion.div
-                      layoutId="mobileActiveIndicator"
-                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </div>
-                <span className={`text-[9px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${location.pathname === "/discussion"
-                    ? "text-[#2563eb] font-semibold"
-                    : "text-slate-500 group-hover:text-[#2563eb]"
-                  }`}>
-                  Discussion
-                </span>
-              </Link>
-            </div>
+          {/* Mobile Center Navigation with Text - Improved responsive gaps */}
+<div className="flex md:hidden items-center justify-between  max-w-xs mx-auto gap-8">
+  {mobileNavItems.map((item) => {
+    const isActive = location.pathname === item.to;
+    
+    return (
+      <Link
+        key={item.to}
+        to={item.to}
+        className={`flex flex-col items-center transition-all duration-200 group flex-1 ${
+          isActive ? "text-[#2563eb]" : "text-slate-500 hover:text-[#2563eb]"
+        }`}
+      >
+        <div
+          className={`relative p-1.5 rounded-lg transition-all duration-200 ${
+            isActive
+              ? "bg-blue-50"
+              : "group-hover:bg-blue-50/50"
+          }`}
+        >
+          <item.icon
+            size={20}
+            className="transition-transform duration-200 group-hover:scale-110"
+          />
+          {isActive && (
+            <motion.div
+              layoutId="mobileActiveIndicator"
+              className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#2563eb] rounded-full"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            />
+          )}
+        </div>
+        <span
+          className={`text-[10px] sm:text-xs font-medium mt-1 transition-colors duration-200 ${
+            isActive
+              ? "text-[#2563eb] font-semibold"
+              : "text-slate-500 group-hover:text-[#2563eb]"
+          }`}
+        >
+          {item.label}
+        </span>
+      </Link>
+    );
+  })}
+</div>
 
             {/* Right Section - Improved mobile layout */}
             <div className="flex items-center gap-1 sm:gap-2">
