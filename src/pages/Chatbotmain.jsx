@@ -140,7 +140,7 @@ const Chatbotmain = () => {
       `}</style>
 
       {/* Page Container */}
-      <div className="relative w-full flex items-center justify-center overflow-hidden px-4 mt-6">
+      <div className="relative w-full flex items-center justify-center overflow-hidden  mt-6">
 
         {/* Animated Background Elements */}
         <motion.div

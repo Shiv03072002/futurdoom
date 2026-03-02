@@ -20,11 +20,13 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { to: "/searchpeople", icon: Search, tooltip: "Search" },
   { to: "/chatbotmain", icon: Home, tooltip: "Home" },
+   { to: "/notification", icon: Bell, tooltip: "Notifications", badge: true },
+  
   { to: "/profile", icon: User, tooltip: "Me", isProfile: true },
   { to: "/share", icon: PlayCircle, tooltip: "Share" },
-  { to: "/notification", icon: Bell, tooltip: "Notifications", badge: true },
+  {to: "/logout", icon: LogOut, tooltip: "Logout" },
+ 
 ];
 
 const profileMenuItems = [
