@@ -74,7 +74,7 @@ const Footer = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="bg-white border-t border-blue-100 shadow-lg shadow-blue-500/5"
+      className="bg-white border-t border-blue-100 shadow-lg shadow-blue-500/5 px-4"
       style={{
         background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
       }}
