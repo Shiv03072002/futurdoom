@@ -209,11 +209,7 @@ const SimpleChat = () => {
                 <p className="text-sm font-extrabold text-slate-800 truncate tracking-tight">
                   {threadContext ? "DeepAsk" : "fD Assistant"}
                 </p>
-                <span className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 flex-shrink-0"
-                  style={{ background: "rgba(37,99,235,0.10)", border: "1px solid rgba(37,99,235,0.22)" }}>
-                  <Sparkles size={9} className="text-blue-500" />
-                  <span className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">AI</span>
-                </span>
+                
               </div>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <motion.span className="w-1.5 h-1.5 rounded-full bg-green-400"

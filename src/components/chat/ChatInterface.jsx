@@ -211,11 +211,7 @@ const ChatInterface = () => {
           <div className="flex-1 min-w-0 relative z-10">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <p className="text-sm sm:text-base font-extrabold text-slate-800 truncate tracking-tight">futurDooM</p>
-              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5"
-                style={{ background: "rgba(37,99,235,0.10)", border: "1px solid rgba(37,99,235,0.22)" }}>
-                <Sparkles size={9} className="text-blue-500" />
-                <span className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">AI</span>
-              </span>
+              
             </div>
             <div className="flex items-center gap-1.5 mt-0.5">
               <motion.span className="w-1.5 h-1.5 rounded-full bg-green-400"
