@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   MapPin, Facebook, Instagram, Twitter, Linkedin,
   Accessibility, Headphones, MessageCircle,
-  MoreHorizontal, Sparkles, Heart, X, UserPlus, UserCheck,Info,Home,Calendar,User,Mail
+  MoreHorizontal, Sparkles, Heart, X, UserPlus, UserCheck,Info,Home,Calendar,User,Mail,Phone,Briefcase
 } from "lucide-react";
 
 const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAmInterestedIn = [] }) => {
@@ -198,7 +198,7 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
         </div>
 
         {/* Name & bio */}
-      {/* Name & Info */}
+      
 <motion.div 
   className="mb-4"
   variants={{
@@ -214,106 +214,142 @@ const ProfileCard = ({ user, interested, setInterested, interestedInMe = [], iAm
     },
   }}
 >
-  {/* Name and Username */}
-  <div className="flex items-center justify-between mb-2">
-    <div>
-      <h2 className="text-xl font-bold text-slate-800">{user.name}</h2>
-      
+  {/* Name and Email Row */}
+  <div className="mb-4">
+    <h2 className="text-xl font-bold text-slate-800">{user.name || "Shiv Kumar"}</h2>
+    <div className="flex items-center gap-2 mt-1">
+      <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
+        <Mail size={10} className="text-blue-500" />
+      </div>
+      <p className="text-xs text-slate-500">{user.email || "shiv.kumar@email.com"}</p>
+      <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium px-1.5 py-0.5 bg-blue-50 rounded">
+        Copy
+      </button>
     </div>
-    
   </div>
 
-  {/* Info Grid - 2 columns on larger screens */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-   
-    
-    {/* Current Location */}
-    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
-          <MapPin size={12} className="text-blue-500" />
-        </div>
-        <div>
-          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Location</p>
-          <p className="text-xs font-medium text-slate-700">{user.currentLocation || "San Francisco, CA"}</p>
-        </div>
-      </div>
-    </div>
-
+  {/* Address Section - Side by Side */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
     {/* Home Address */}
-    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
-          <Home size={12} className="text-blue-500" />
-        </div>
-        <div>
-          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Home</p>
-          <p className="text-xs font-medium text-slate-700">{user.homeAddress || "New York, NY"}</p>
-        </div>
-      </div>
-    </div>
-
-    {/* Birthday */}
-    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
-          <Calendar size={12} className="text-blue-500" />
-        </div>
-        <div>
-          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Birthday</p>
-          <p className="text-xs font-medium text-slate-700">{user.birthday || "15.05.1995"}</p>
-        </div>
-      </div>
-    </div>
-
-    {/* Gender */}
-    <div className="bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
-          <User size={12} className="text-blue-500" />
-        </div>
-        <div>
-          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Gender</p>
-          <p className="text-xs font-medium text-slate-700">{user.gender || "Male"}</p>
-        </div>
-      </div>
-    </div>
-
-    {/* Email - Full width */}
-    <div className="sm:col-span-2 bg-white border border-blue-100 rounded-xl p-3 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
-          <Mail size={12} className="text-blue-500" />
+    <motion.div 
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300"
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200">
+          <Home size={14} className="text-white" />
         </div>
         <div className="flex-1">
-          <p className="text-[9px] text-slate-400 uppercase tracking-wider">Email</p>
-          <p className="text-xs font-medium text-slate-700 truncate">{user.email || "shiv.kumar@email.com"}</p>
+          <p className="text-[8px] text-blue-400 uppercase tracking-wider font-semibold mb-1">Home Address</p>
+          <p className="text-sm font-medium text-slate-700">{user.homeAddress || "42 Park Avenue, New York, NY 10022"}</p>
+          
         </div>
-        <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium px-2 py-1 bg-blue-50 rounded-lg">
-          Copy
-        </button>
       </div>
-    </div>
+    </motion.div>
+
+    {/* Current Location */}
+    <motion.div 
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300"
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200">
+          <MapPin size={14} className="text-white" />
+        </div>
+        <div className="flex-1">
+          <p className="text-[8px] text-purple-400 uppercase tracking-wider font-semibold mb-1">Current Location</p>
+          <p className="text-sm font-medium text-slate-700">{user.currentLocation || "123 Market Street, San Francisco, CA 94105"}</p>
+          
+        </div>
+      </div>
+    </motion.div>
   </div>
 
-  {/* Bio Section */}
+  {/* Personal Details Grid - 4 columns on larger screens */}
+  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+    {/* Gender */}
+    <motion.div 
+      whileHover={{ scale: 1.02 }}
+      className="bg-white border border-slate-100 rounded-xl p-3 hover:border-blue-200 transition-all duration-200"
+    >
+      <div className="flex flex-col items-center text-center">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center mb-2">
+          <User size={14} className="text-blue-600" />
+        </div>
+        <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">Gender</p>
+        <p className="text-xs font-semibold text-slate-700">{user.gender || "Male"}</p>
+      </div>
+    </motion.div>
+
+    {/* Date of Birth */}
+    <motion.div 
+      whileHover={{ scale: 1.02 }}
+      className="bg-white border border-slate-100 rounded-xl p-3 hover:border-purple-200 transition-all duration-200"
+    >
+      <div className="flex flex-col items-center text-center">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center mb-2">
+          <Calendar size={14} className="text-purple-600" />
+        </div>
+        <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">Birthday</p>
+        <p className="text-xs font-semibold text-slate-700">{user.birthday || "15.05.1995"}</p>
+        <p className="text-[8px] text-slate-400 mt-1">Age: 29 years</p>
+      </div>
+    </motion.div>
+
+    {/* Phone */}
+    <motion.div 
+      whileHover={{ scale: 1.02 }}
+      className="bg-white border border-slate-100 rounded-xl p-3 hover:border-green-200 transition-all duration-200"
+    >
+      <div className="flex flex-col items-center text-center">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center mb-2">
+          <Phone size={14} className="text-green-600" />
+        </div>
+        <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">Phone</p>
+        <p className="text-xs font-semibold text-slate-700">{user.phone || "+1 (555) 123-4567"}</p>
+        <span className="text-[8px] text-green-600 mt-1">Verified</span>
+      </div>
+    </motion.div>
+
+    {/* Occupation */}
+    <motion.div 
+      whileHover={{ scale: 1.02 }}
+      className="bg-white border border-slate-100 rounded-xl p-3 hover:border-orange-200 transition-all duration-200"
+    >
+      <div className="flex flex-col items-center text-center">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center mb-2">
+          <Briefcase size={14} className="text-orange-600" />
+        </div>
+        <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">Occupation</p>
+        <p className="text-xs font-semibold text-slate-700">{user.occupation || "Product Designer"}</p>
+        <p className="text-[8px] text-slate-400 mt-1">at TechCorp Inc.</p>
+      </div>
+    </motion.div>
+  </div>
+
+  {/* Bio Section with Enhanced Design */}
   <motion.div 
     className="relative group"
     whileHover={{ scale: 1.01 }}
   >
-    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
-    <div className="relative bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-blue-100">
-      <p className="text-[10px] text-blue-500 font-medium uppercase tracking-wider mb-2 flex items-center gap-1">
-        <Sparkles size={10} />
-        Bio
-      </p>
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
+    <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+          <Sparkles size={12} className="text-white" />
+        </div>
+        <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">
+          About Me
+        </p>
+        <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
+      </div>
       <p className="text-sm text-slate-600 leading-relaxed">
-        {user.bio}
+        {user.bio || "Passionate product designer with 5+ years of experience creating meaningful digital experiences. Love solving complex problems and making things simple and beautiful."}
       </p>
+      
     </div>
   </motion.div>
 </motion.div>
-
         {/* Stats */}
         <motion.div 
           className="flex gap-8 mb-4"
