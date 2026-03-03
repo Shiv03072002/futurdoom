@@ -112,26 +112,23 @@ const Notification = () => {
     );
   };
 
-  // Filter tabs configuration
-  const filterTabs = [
-    { id: "all", label: "All", getCount: () => notifications.length },
-    { id: "unread", label: "Unread", getCount: () => unreadCount },
-    { id: "comments", label: "Comments", getCount: () => notifications.filter(n => n.category === "comments").length },
-    { id: "likes", label: "Likes", getCount: () => notifications.filter(n => n.category === "likes").length },
-    { id: "discussion", label: "Discussion", getCount: () => notifications.filter(n => n.category === "discussion").length },
-    { id: "mentions", label: "Mentions", getCount: () => notifications.filter(n => n.category === "mentions").length },
-    { id: "interested", label: "Interested", getCount: () => notifications.filter(n => n.category === "interested").length },
-    { id: "interesting", label: "Interesting", getCount: () => notifications.filter(n => n.category === "interesting").length }
-  ];
-
   const unreadCount = notifications.filter((n) => !n.read).length;
   
-  // Get unread count for each category
-  const getUnreadCount = (category) => {
-    if (category === "all") return unreadCount;
-    if (category === "unread") return 0;
-    return notifications.filter(n => n.category === category && !n.read).length;
-  };
+  // Get counts for each category
+  const commentsUnread = notifications.filter(n => n.category === "comments" && !n.read).length;
+  const likesUnread = notifications.filter(n => n.category === "likes" && !n.read).length;
+  const discussionUnread = notifications.filter(n => n.category === "discussion" && !n.read).length;
+  const mentionsUnread = notifications.filter(n => n.category === "mentions" && !n.read).length;
+  const interestedUnread = notifications.filter(n => n.category === "interested" && !n.read).length;
+  const interestingUnread = notifications.filter(n => n.category === "interesting" && !n.read).length;
+
+  // Total counts
+  const commentsCount = notifications.filter(n => n.category === "comments").length;
+  const likesCount = notifications.filter(n => n.category === "likes").length;
+  const discussionCount = notifications.filter(n => n.category === "discussion").length;
+  const mentionsCount = notifications.filter(n => n.category === "mentions").length;
+  const interestedCount = notifications.filter(n => n.category === "interested").length;
+  const interestingCount = notifications.filter(n => n.category === "interesting").length;
 
   const filteredNotifications = activeFilter === "all" 
     ? notifications 
@@ -141,46 +138,150 @@ const Notification = () => {
 
   return (
     <div className="min-h-screen flex items-start justify-center ">
-      <div className="bg-white rounded-xl border border-blue-100 w-full overflow-hidden ">
+      <div className="bg-white rounded-xl border border-blue-100 w-full  overflow-hidden shadow-sm">
         
         <NotificationHeader unreadCount={unreadCount} />
 
         <div className="p-4 sm:p-6">
           
-          {/* Filter Tabs - Using map */}
+          {/* Filter Tabs - All with red badges */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            {filterTabs.map((tab) => {
-              const unreadForTab = getUnreadCount(tab.id);
-              const totalCount = tab.getCount();
-              
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveFilter(tab.id)}
-                  className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                    activeFilter === tab.id
-                      ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                      : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-                  }`}
-                >
-                  {tab.label} {totalCount > 0 && `(${totalCount})`}
-                  
-                  {/* Red badge for unread */}
-                  {unreadForTab > 0 && activeFilter !== tab.id && tab.id !== "unread" && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                      {unreadForTab > 9 ? '9+' : unreadForTab}
-                    </span>
-                  )}
-                  
-                  {/* Special case for unread tab */}
-                  {tab.id === "unread" && unreadCount > 0 && activeFilter !== "unread" && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                      {unreadCount > 9 ? '9+' : unreadCount}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            
+            {/* All Tab */}
+            <button
+              onClick={() => setActiveFilter("all")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "all"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              All ({notifications.length})
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+            
+            {/* Unread Tab */}
+            <button
+              onClick={() => setActiveFilter("unread")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "unread"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Unread
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+            
+            {/* Comments Tab */}
+            <button
+              onClick={() => setActiveFilter("comments")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "comments"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Comments 
+              {commentsUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {commentsUnread > 9 ? '9+' : commentsUnread}
+                </span>
+              )}
+            </button>
+            
+            {/* Likes Tab */}
+            <button
+              onClick={() => setActiveFilter("likes")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "likes"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Likes 
+              {likesUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {likesUnread > 9 ? '9+' : likesUnread}
+                </span>
+              )}
+            </button>
+            
+            {/* Discussion Tab */}
+            <button
+              onClick={() => setActiveFilter("discussion")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "discussion"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Discussion 
+              {discussionUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {discussionUnread > 9 ? '9+' : discussionUnread}
+                </span>
+              )}
+            </button>
+            
+            {/* Mentions Tab */}
+            <button
+              onClick={() => setActiveFilter("mentions")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "mentions"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Mentions 
+              {mentionsUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {mentionsUnread > 9 ? '9+' : mentionsUnread}
+                </span>
+              )}
+            </button>
+            
+            {/* Interested Tab */}
+            <button
+              onClick={() => setActiveFilter("interested")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "interested"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Interested 
+              {interestedUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {interestedUnread > 9 ? '9+' : interestedUnread}
+                </span>
+              )}
+            </button>
+            
+            {/* Interesting Tab */}
+            <button
+              onClick={() => setActiveFilter("interesting")}
+              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                activeFilter === "interesting"
+                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+              }`}
+            >
+              Interesting 
+              {interestingUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                  {interestingUnread > 9 ? '9+' : interestingUnread}
+                </span>
+              )}
+            </button>
           </div>
 
           <div className="h-px bg-slate-100 mb-2" />
