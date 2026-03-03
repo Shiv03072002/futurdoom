@@ -17,6 +17,7 @@ const initialNotifications = [
     type: "comment",
     category: "comments",
     read: false,
+    unreadCount: 3
   },
   {
     id: 2,
@@ -31,6 +32,7 @@ const initialNotifications = [
     type: "like",
     category: "likes",
     read: false,
+    unreadCount: 1
   },
   {
     id: 3,
@@ -45,6 +47,7 @@ const initialNotifications = [
     type: "discussion",
     category: "discussion",
     read: true,
+    unreadCount: 0
   },
   {
     id: 4,
@@ -59,6 +62,7 @@ const initialNotifications = [
     type: "mention",
     category: "mentions",
     read: false,
+    unreadCount: 5
   },
   {
     id: 5,
@@ -73,6 +77,7 @@ const initialNotifications = [
     type: "interested",
     category: "interested",
     read: true,
+    unreadCount: 0
   },
   {
     id: 6,
@@ -87,21 +92,8 @@ const initialNotifications = [
     type: "interesting",
     category: "interesting",
     read: false,
-  },
-  {
-    id: 7,
-    initials: "DP",
-    avatarColor: "from-pink-400 to-red-400",
-    user: "Dipankar Porey",
-    action: "commented on",
-    target: "Shiv Kumar's",
-    suffix: "post with query",
-    preview: "Ok good, give in nextjs",
-    date: "Feb 20, 2026",
-    type: "comment",
-    category: "comments",
-    read: false,
-  },
+    unreadCount: 2
+  }
 ];
 
 const Notification = () => {
@@ -109,171 +101,92 @@ const Notification = () => {
   const [activeFilter, setActiveFilter] = useState("all");
 
   const remove = (id) => setNotifications((prev) => prev.filter((n) => n.id !== id));
-
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
   };
-
   const markAllAsRead = () => {
     setNotifications((prev) =>
       prev.map((n) => ({ ...n, read: true }))
     );
   };
 
-  const getFilteredNotifications = () => {
-    let filtered = [];
-    
-    switch (activeFilter) {
-      case "unread":
-        filtered = notifications.filter((n) => !n.read);
-        break;
-      case "comments":
-        filtered = notifications.filter((n) => n.category === "comments");
-        break;
-      case "likes":
-        filtered = notifications.filter((n) => n.category === "likes");
-        break;
-      case "discussion":
-        filtered = notifications.filter((n) => n.category === "discussion");
-        break;
-      case "mentions":
-        filtered = notifications.filter((n) => n.category === "mentions");
-        break;
-      case "interested":
-        filtered = notifications.filter((n) => n.category === "interested");
-        break;
-      case "interesting":
-        filtered = notifications.filter((n) => n.category === "interesting");
-        break;
-      case "all":
-      default:
-        filtered = notifications;
-        break;
-    }
-    
-    // Debug log to see what's being filtered
-    console.log(`Filter: ${activeFilter}`, filtered);
-    return filtered;
+  // Filter tabs configuration
+  const filterTabs = [
+    { id: "all", label: "All", getCount: () => notifications.length },
+    { id: "unread", label: "Unread", getCount: () => unreadCount },
+    { id: "comments", label: "Comments", getCount: () => notifications.filter(n => n.category === "comments").length },
+    { id: "likes", label: "Likes", getCount: () => notifications.filter(n => n.category === "likes").length },
+    { id: "discussion", label: "Discussion", getCount: () => notifications.filter(n => n.category === "discussion").length },
+    { id: "mentions", label: "Mentions", getCount: () => notifications.filter(n => n.category === "mentions").length },
+    { id: "interested", label: "Interested", getCount: () => notifications.filter(n => n.category === "interested").length },
+    { id: "interesting", label: "Interesting", getCount: () => notifications.filter(n => n.category === "interesting").length }
+  ];
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+  
+  // Get unread count for each category
+  const getUnreadCount = (category) => {
+    if (category === "all") return unreadCount;
+    if (category === "unread") return 0;
+    return notifications.filter(n => n.category === category && !n.read).length;
   };
 
-  const filteredNotifications = getFilteredNotifications();
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  // Get counts for each category
-  const commentsCount = notifications.filter(n => n.category === "comments").length;
-  const likesCount = notifications.filter(n => n.category === "likes").length;
-  const discussionCount = notifications.filter(n => n.category === "discussion").length;
-  const mentionsCount = notifications.filter(n => n.category === "mentions").length;
-  const interestedCount = notifications.filter(n => n.category === "interested").length;
-  const interestingCount = notifications.filter(n => n.category === "interesting").length;
+  const filteredNotifications = activeFilter === "all" 
+    ? notifications 
+    : activeFilter === "unread"
+      ? notifications.filter(n => !n.read)
+      : notifications.filter(n => n.category === activeFilter);
 
   return (
     <div className="min-h-screen flex items-start justify-center ">
-      {/* Card */}
-      <div className="bg-white rounded-xl border border-blue-100 w-full overflow-hidden shadow-sm">
+      <div className="bg-white rounded-xl border border-blue-100 w-full overflow-hidden ">
         
-        {/* Header Component */}
         <NotificationHeader unreadCount={unreadCount} />
 
-        {/* Card Body */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           
-          {/* Filter Tabs - Updated with new categories */}
-          <div className="grid grid-cols-4 gap-2 mb-4">
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "all"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              All ({notifications.length})
-            </button>
-            <button
-              onClick={() => setActiveFilter("unread")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "unread"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Unread
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveFilter("comments")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "comments"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Comments {commentsCount > 0 && `(${commentsCount})`}
-            </button>
-            <button
-              onClick={() => setActiveFilter("likes")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "likes"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Likes {likesCount > 0 && `(${likesCount})`}
-            </button>
-            <button
-              onClick={() => setActiveFilter("discussion")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "discussion"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Discussion {discussionCount > 0 && `(${discussionCount})`}
-            </button>
-            <button
-              onClick={() => setActiveFilter("mentions")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "mentions"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Mentions {mentionsCount > 0 && `(${mentionsCount})`}
-            </button>
-            <button
-              onClick={() => setActiveFilter("interested")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "interested"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Interested {interestedCount > 0 && `(${interestedCount})`}
-            </button>
-            <button
-              onClick={() => setActiveFilter("interesting")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-                activeFilter === "interesting"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Interesting {interestingCount > 0 && `(${interestingCount})`}
-            </button>
+          {/* Filter Tabs - Using map */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+            {filterTabs.map((tab) => {
+              const unreadForTab = getUnreadCount(tab.id);
+              const totalCount = tab.getCount();
+              
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveFilter(tab.id)}
+                  className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                    activeFilter === tab.id
+                      ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                      : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                  }`}
+                >
+                  {tab.label} {totalCount > 0 && `(${totalCount})`}
+                  
+                  {/* Red badge for unread */}
+                  {unreadForTab > 0 && activeFilter !== tab.id && tab.id !== "unread" && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                      {unreadForTab > 9 ? '9+' : unreadForTab}
+                    </span>
+                  )}
+                  
+                  {/* Special case for unread tab */}
+                  {tab.id === "unread" && unreadCount > 0 && activeFilter !== "unread" && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Divider */}
           <div className="h-px bg-slate-100 mb-2" />
 
-          {/* List */}
-          <div className="divide-y divide-slate-100 max-h-[400px] overflow-y-auto">
+          {/* Notifications List */}
+          <div className="divide-y divide-slate-100  overflow-y-auto">
             {filteredNotifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">
@@ -281,9 +194,7 @@ const Notification = () => {
                 </div>
                 <p className="text-sm text-slate-400 font-medium">No notifications</p>
                 <p className="text-xs text-slate-300 mt-1">
-                  {activeFilter === "all" 
-                    ? "You're all caught up!" 
-                    : `No ${activeFilter} notifications`}
+                  {activeFilter === "all" ? "You're all caught up!" : `No ${activeFilter} notifications`}
                 </p>
               </div>
             ) : (
@@ -302,7 +213,7 @@ const Notification = () => {
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="w-full mt-4 py-2.5 rounded-lg text-xs font-semibold text-blue-600 hover:bg-blue-50 border border-blue-200 transition-all duration-200"
+              className="w-full mt-4 py-2.5 rounded-lg text-xs font-semibold text-blue-600 hover:bg-blue-50 border border-blue-200 transition-all"
             >
               Mark all as read ({unreadCount})
             </button>

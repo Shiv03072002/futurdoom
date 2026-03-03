@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
-import { 
-  Send, 
-  CheckCheck, 
-  ArrowLeft, 
+import {
+  Send,
+  CheckCheck,
+  ArrowLeft,
   Brain,
   MessageSquare,
   Sparkles,
@@ -12,11 +12,112 @@ import {
   Heart,
   Trash2,
   Share2,
-  MoreHorizontal
+  MoreHorizontal,
+  Terminal,
+
 } from "lucide-react";
 
-const BLUE = "#2563eb";
-const DARK_BLUE = "#1a3aad";
+// Function to format message with code blocks and markdown (DeepSeek style)
+const formatMessage = (text) => {
+  if (!text) return text;
+
+  const parts = text.split(/(```[\s\S]*?```)/g);
+
+  return parts.map((part, index) => {
+    if (part.startsWith('```') && part.endsWith('```')) {
+      const firstLineEnd = part.indexOf('\n');
+      const language = part.substring(3, firstLineEnd).trim() || 'text';
+      const code = part.substring(firstLineEnd + 1, part.length - 3).trim();
+
+      return (
+        <div key={index} className="my-2 rounded-lg overflow-hidden border border-slate-700/50 w-full max-w-full">
+          {/* Code header */}
+          <div className="flex items-center justify-between bg-slate-800 px-3 py-1.5 sm:px-4 sm:py-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <Terminal size={12} className="text-slate-400 flex-shrink-0" />
+              <span className="text-[10px] sm:text-xs font-mono text-slate-300 truncate">{language}</span>
+            </div>
+            <button
+              onClick={() => navigator.clipboard.writeText(code)}
+              className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors flex-shrink-0"
+            >
+              <Copy size={12} className="sm:w-[14px] sm:h-[14px]" />
+            </button>
+          </div>
+
+          {/* Code content - FIXED for mobile */}
+          <pre className="bg-slate-900 p-2 sm:p-4 overflow-x-auto max-w-full" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <code className="text-[10px] sm:text-sm font-mono text-slate-300 whitespace-pre-wrap break-words">
+              {code}
+            </code>
+          </pre>
+        </div>
+      );
+    }
+
+    if (part) {
+      const inlineParts = part.split(/(`[^`]+`)/g);
+      return (
+        <div key={index} className="space-y-1 sm:space-y-2">
+          {inlineParts.map((inlinePart, inlineIndex) => {
+            if (inlinePart.startsWith('`') && inlinePart.endsWith('`')) {
+              return (
+                <code key={inlineIndex} className="px-1 py-0.5 bg-slate-100 rounded text-[10px] sm:text-sm font-mono text-blue-600 break-all">
+                  {inlinePart.slice(1, -1)}
+                </code>
+              );
+            }
+
+            const boldParts = inlinePart.split(/(\*\*[^*]+\*\*)/g);
+            return boldParts.map((boldPart, boldIndex) => {
+              if (boldPart.startsWith('**') && boldPart.endsWith('**')) {
+                return <strong key={boldIndex} className="font-bold text-xs sm:text-sm break-words">{boldPart.slice(2, -2)}</strong>;
+              }
+
+              const italicParts = boldPart.split(/(\*[^*]+\*)/g);
+              return italicParts.map((italicPart, italicIndex) => {
+                if (italicPart.startsWith('*') && italicPart.endsWith('*')) {
+                  return <em key={italicIndex} className="italic text-xs sm:text-sm break-words">{italicPart.slice(1, -1)}</em>;
+                }
+
+                const lines = italicPart.split('\n');
+                return lines.map((line, lineIndex) => {
+                  if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) {
+                    return (
+                      <div key={lineIndex} className="flex items-start gap-1 sm:gap-2 ml-2 sm:ml-4">
+                        <span className="text-blue-500 text-xs sm:text-sm">•</span>
+                        <span className="text-xs sm:text-sm break-words">{line.trim().substring(2)}</span>
+                      </div>
+                    );
+                  }
+
+                  if (/^\d+\.\s/.test(line.trim())) {
+                    const match = line.trim().match(/^(\d+)\.\s(.*)/);
+                    if (match) {
+                      return (
+                        <div key={lineIndex} className="flex items-start gap-1 sm:gap-2 ml-2 sm:ml-4">
+                          <span className="text-blue-500 font-mono text-[10px] sm:text-xs mt-0.5">{match[1]}.</span>
+                          <span className="text-xs sm:text-sm break-words">{match[2]}</span>
+                        </div>
+                      );
+                    }
+                  }
+
+                  return line ? (
+                    <span key={lineIndex} className="text-xs sm:text-sm break-words">
+                      {line}{lineIndex < lines.length - 1 ? <br /> : ''}
+                    </span>
+                  ) : <br key={lineIndex} />;
+                });
+              });
+            });
+          })}
+        </div>
+      );
+    }
+    return null;
+  });
+};
 
 const Avatar = ({ size = 36, status = true, type = "user" }) => {
   let initials = "DP";
@@ -50,14 +151,8 @@ const Avatar = ({ size = 36, status = true, type = "user" }) => {
             bottom: 0,
             right: 0
           }}
-          animate={{
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
         />
       )}
     </div>
@@ -71,14 +166,11 @@ const SimpleChat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [threadContext, setThreadContext] = useState(null);
-  const [deepAskMode, setDeepAskMode] = useState(false);
 
   useEffect(() => {
     if (location.state?.thread) {
       setThreadContext(location.state.thread);
-      setDeepAskMode(true);
-      
-      const threadMessages = [
+      setMessages([
         {
           id: 1,
           from: "user",
@@ -93,27 +185,16 @@ const SimpleChat = () => {
           time: location.state.thread.responseTime,
           read: true,
           isDeepAsk: true
-        },
-        {
-          id: 3,
-          from: "ai",
-          text: `I see you're asking about "${location.state.thread.userMessage}". Let me provide a more detailed explanation with examples. What specific aspect would you like to dive deeper into?`,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          read: false,
-          isDeepAsk: true
-        }
-      ];
-      setMessages(threadMessages);
-    } else {
-      setMessages([
-        {
-          id: 1,
-          from: "ai",
-          text: "Hello! I'm fD, your AI assistant. Select a message with the brain icon to deep dive into a specific topic, or ask me anything!",
-          time: "10:30 AM",
-          read: true
         }
       ]);
+    } else {
+      setMessages([{
+        id: 1,
+        from: "ai",
+        text: "Hello! I'm fD, your AI assistant. How can I help?",
+        time: "10:30 AM",
+        read: true
+      }]);
     }
   }, [location.state]);
 
@@ -133,140 +214,77 @@ const SimpleChat = () => {
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
-      
-      let response = "";
-      if (threadContext) {
-        response = `**Deep Analysis:**\n\nBased on your question about "${threadContext.userMessage}", here's a comprehensive breakdown:\n\n${input.toLowerCase().includes("example") 
-          ? "**Practical Example:**\n\n<!DOCTYPE html>\n<html>\n<head>\n  <title>DeepAsk Example</title>\n  <style>\n    .container { max-width: 800px; margin: 0 auto; }\n    .highlight { background: #f0f4ff; padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class='container'>\n    <h1>Deep Learning Example</h1>\n    <div class='highlight'>\n      <p>This is a detailed explanation with code.</p>\n    </div>\n  </div>\n</body>\n</html>" 
-          : "**Key Insights:**\n\n• Advanced concepts explained\n• Best practices and patterns\n• Performance considerations\n• Common pitfalls to avoid"}`
-      } else {
-        response = "I understand your question. Let me help you with that.";
-      }
-      
-      const aiMessage = {
+
+      const isCodeRequest = input.toLowerCase().includes("reverse a number") &&
+        input.toLowerCase().includes("cpp");
+
+      const response = isCodeRequest
+        ? `Here's a C++ program to reverse a number:\n\n\`\`\`cpp\n#include <iostream>\nusing namespace std;\n\nint reverseNumber(int num) {\n    int reversed = 0;\n    while (num > 0) {\n        int lastDigit = num % 10;\n        reversed = reversed * 10 + lastDigit;\n        num = num / 10;\n    }\n    return reversed;\n}\n\nint main() {\n    int n;\n    cout << "Enter number: ";\n    cin >> n;\n    cout << "Reversed: " << reverseNumber(n);\n    return 0;\n}\n\`\`\`\n\n**How it works:**\n• Extract last digit using % 10\n• Build reversed number\n• Remove last digit using / 10\n• Repeat until number becomes 0`
+        : "I understand your question. Let me help you with that.";
+
+      setMessages(prev => [...prev, {
         id: Date.now() + 1,
         from: "ai",
         text: response,
         time: "Just now",
         read: false,
-        isDeepAsk: deepAskMode
-      };
-      setMessages(prev => [...prev, aiMessage]);
-    }, 2000);
+        isDeepAsk: !!threadContext
+      }]);
+    }, 1500);
   };
 
   const removeMsg = (id) => setMessages((prev) => prev.filter((m) => m.id !== id));
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
-  // Animation variants
-  const messageVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-      },
-    },
-  };
-
-  const typingAnimation = {
-    animate: {
-      y: [0, -5, 0],
-      transition: {
-        duration: 0.8,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
+  const handleGoBack = () => navigate(-1);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className="flex items-center justify-center "
-    >
-      <div
-        className="w-full flex flex-col overflow-hidden bg-white rounded-xl border border-blue-50"
-        style={{
-          height: 700,
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        }}
-      >
-        {/* Header */}
-        <motion.div
-          initial={{ y: -50 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="flex items-center gap-3 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 px-5 py-3"
-        >
-          {/* Back button */}
-          <motion.button
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGoBack}
-            className="flex items-center justify-center rounded-xl hover:bg-white w-9 h-9 text-blue-600 transition-all"
-          >
-            <ArrowLeft size={18} strokeWidth={1.8} />
-          </motion.button>
+    <div className="flex items-center justify-center">
+      <div className="w-full flex flex-col overflow-hidden bg-white rounded-xl border border-blue-50 h-[650px]">
 
-          {/* AI Avatar */}
-          <Avatar size={48} status={true} type="ai" />
+        {/* Header - Mobile optimized with context */}
+        <div className="flex flex-col flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
 
-          {/* AI Name + status */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <p className="text-base font-bold text-slate-800">
-                {deepAskMode ? "DeepAsk" : "fD Assistant"}
-                {deepAskMode && <span className="ml-2 text-xs font-normal text-blue-600">(Deep Mode)</span>}
+          {/* Single row with everything */}
+          <div className="flex items-center gap-2 px-3 py-2">
+            <button
+              onClick={handleGoBack}
+              className="min-w-[36px] h-9 flex items-center justify-center rounded-xl hover:bg-white/80 text-blue-600 transition-all active:scale-95"
+            >
+              <ArrowLeft size={18} />
+            </button>
+
+            <Avatar size={40} status={true} type="ai" />
+
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-slate-800 truncate">
+                {threadContext ? "DeepAsk" : "fD Assistant"}
               </p>
-              <Sparkles size={14} className="text-blue-500" />
+              <div className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                <p className="text-[10px] font-semibold text-green-500">Online</p>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 mt-1">
-              <motion.span
-                className="w-2 h-2 bg-green-400 rounded-full"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <p className="text-xs font-semibold text-green-500">
-                {deepAskMode ? "Deep learning mode" : "Online"}
-              </p>
-            </div>
-          </div>
 
-          {/* Thread context badge */}
-          {threadContext && (
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl border border-blue-200 shadow-sm">
-              <MessageSquare size={14} className="text-blue-500" />
-              <span className="text-xs text-blue-700 font-medium max-w-[200px] truncate">
-                "{threadContext.userMessage.substring(0, 30)}..."
+            {/* Context pill - in same row */}
+            <div className="flex items-center gap-1.5 max-w-[40%] bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-200 shadow-sm">
+              <MessageSquare size={12} className="text-blue-500 flex-shrink-0" />
+              <span className="text-[11px] font-medium text-blue-700 truncate">
+                {threadContext ? threadContext.userMessage : "how to do frontend in html..."}
               </span>
+              {threadContext && (
+                <span className="w-1 h-1 bg-blue-400 rounded-full" />
+              )}
             </div>
-          )}
 
-          {/* More button */}
-          <motion.button
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center rounded-xl hover:bg-white w-9 h-9 text-blue-600 transition-all"
-          >
-            <MoreHorizontal size={18} strokeWidth={1.8} />
-          </motion.button>
-        </motion.div>
+            {/* More button - at the end */}
+            <button className="min-w-[36px] h-9 flex items-center justify-center rounded-xl hover:bg-white/80 text-blue-600 transition-all active:scale-95">
+              <MoreHorizontal size={18} />
+            </button>
+          </div>
+        </div>
+        {/* Messages - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fafcff]">
 
-        {/* Messages */}
-        <div
-          className="flex-1 overflow-y-auto p-5 space-y-4"
-          style={{ background: "#fafcff" }}
-        >
-          {/* Date pill */}
+          {/* Date pill in middle of chat - exactly like your example */}
           <motion.div
             className="flex justify-center"
             initial={{ opacity: 0, y: -10 }}
@@ -278,193 +296,93 @@ const SimpleChat = () => {
             </span>
           </motion.div>
 
-          {/* Messages */}
-          <AnimatePresence mode="popLayout">
-            {messages.map((msg, i) => {
-              const isAI = msg.from === "ai";
-              const isUser = msg.from === "user";
-              const prevSame = i > 0 && messages[i - 1].from === msg.from;
+          {messages.map((msg, i) => {
+            const isAI = msg.from === "ai";
+            const prevSame = i > 0 && messages[i - 1].from === msg.from;
 
-              return (
-                <motion.div
-                  key={msg.id}
-                  variants={messageVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  layout
-                  className="flex flex-col"
-                >
-                  {/* Action Icons - for user messages only */}
-                  {isUser && (
-                    <div className="flex items-center gap-1 mb-1 justify-start">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => removeMsg(msg.id)}
-                        className="p-1 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 size={14} />
-                      </motion.button>
-
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                        title="Like"
-                      >
-                        <Heart size={14} />
-                      </motion.button>
-
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                        title="Copy"
-                      >
-                        <Copy size={14} />
-                      </motion.button>
-
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                        title="Share"
-                      >
-                        <Share2 size={14} />
-                      </motion.button>
-                    </div>
-                  )}
-
-                  {/* Message bubble with avatar */}
-                  <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
-                    {/* Avatar for user messages */}
-                    {isUser && !prevSame && (
-                      <Avatar size={36} status={true} type="user" />
-                    )}
-                    {isUser && prevSame && <div className="w-9" />}
-
-                    {/* Message bubble */}
-                    <div className={`flex flex-col max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        className={`px-4 py-2.5 text-sm whitespace-pre-wrap ${
-                          isAI
-                            ? msg.isDeepAsk
-                              ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
-                              : 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
-                            : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
-                        }`}
-                        style={{
-                          boxShadow: isAI
-                            ? '0 4px 15px rgba(37,99,235,0.3)'
-                            : '0 2px 8px rgba(0,0,0,0.03)',
-                        }}
-                      >
-                        {isAI && msg.isDeepAsk && (
-                          <div className="flex items-center gap-1 mb-1 text-xs text-blue-200">
-                            <Brain size={12} />
-                            <span>Deep analysis</span>
-                          </div>
-                        )}
-                        {msg.text}
-                      </motion.div>
-
-                      {/* Time + read receipt */}
-                      <div className={`flex items-center gap-1.5 mt-1 text-xs ${isAI ? 'justify-end' : 'justify-start'}`}>
-                        <span className="text-slate-400">{msg.time}</span>
-                        {isAI && (
-                          <CheckCheck
-                            size={14}
-                            className={msg.read ? "text-blue-600" : "text-slate-300"}
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Avatar for AI messages */}
-                    {isAI && !prevSame && (
-                      <Avatar size={36} status={true} type="ai" />
-                    )}
-                    {isAI && prevSame && <div className="w-9" />}
+            return (
+              <div key={msg.id}>
+                {!isAI && (
+                  <div className="flex items-center mb-1">
+                    <button onClick={() => removeMsg(msg.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-400">
+                      <Trash2 size={14} />
+                    </button>
+                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
+                      <Heart size={14} />
+                    </button>
+                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
+                      <Copy size={14} />
+                    </button>
+                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
+                      <Share2 size={14} />
+                    </button>
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                )}
+                <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
+                  {!isAI && !prevSame && <Avatar size={32} status={true} type="user" />}
+                  {!isAI && prevSame && <div className="w-8" />}
 
-          {/* Typing indicator */}
-          <AnimatePresence>
-            {isTyping && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="flex items-center gap-2 justify-end"
-              >
-                <div className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] px-4 py-3 rounded-2xl rounded-br-sm flex items-center gap-1">
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      variants={typingAnimation}
-                      animate="animate"
-                      className="w-1.5 h-1.5 bg-white rounded-full"
-                    />
-                  ))}
+                  {/* Message bubble - FIXED width for mobile */}
+                  <div className={`flex flex-col max-w-[85%] sm:max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
+                    <div className={`px-3 py-2 text-xs sm:text-sm whitespace-pre-wrap break-words w-full ${isAI
+                      ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
+                      : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
+                      }`}>
+                      {isAI && msg.isDeepAsk && (
+                        <div className="flex items-center gap-1 mb-1 text-[10px] text-blue-200">
+                          <Brain size={10} />
+                          <span>Deep analysis</span>
+                        </div>
+                      )}
+                      {isAI ? formatMessage(msg.text) : msg.text}
+                    </div>
+
+                    <div className="flex items-center gap-1 mt-1 text-[10px]">
+                      <span className="text-slate-400">{msg.time}</span>
+                      {isAI && <CheckCheck size={12} className={msg.read ? "text-blue-600" : "text-slate-300"} />}
+                    </div>
+                  </div>
+
+                  {isAI && !prevSame && <Avatar size={32} status={true} type="ai" />}
+                  {isAI && prevSame && <div className="w-8" />}
                 </div>
-                <Avatar size={30} status={true} type="ai" />
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            );
+          })}
+
+          {isTyping && (
+            <div className="flex items-center gap-2 justify-end">
+              <div className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] px-4 py-3 rounded-2xl rounded-br-sm flex items-center gap-1">
+                {[0, 1, 2].map((i) => (
+                  <span key={i} className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: `${i * 0.2}s` }} />
+                ))}
+              </div>
+              <Avatar size={26} status={true} type="ai" />
+            </div>
+          )}
         </div>
 
-        {/* Input bar */}
-        <motion.div
-          initial={{ y: 50 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
-          className="flex items-center gap-2 flex-shrink-0 px-4 py-3 border-t border-slate-200 bg-white"
-        >
-          {/* Input */}
-          <div className="flex-1">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder={deepAskMode ? "Ask a deeper question..." : "Ask fD something..."}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
-            />
-          </div>
-
-          {/* Send */}
-          <motion.button
+        {/* Input - Mobile optimized */}
+        <div className="flex items-center gap-1 flex-shrink-0 px-2 py-2 border-t border-slate-200 bg-white">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Ask something... (try 'reverse a number in cpp')"
+            className="flex-1 px-3 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          />
+          <button
             onClick={handleSend}
-            whileHover={{ scale: input.trim() ? 1.1 : 1 }}
-            whileTap={{ scale: input.trim() ? 0.95 : 1 }}
-            className={`flex items-center justify-center rounded-xl w-10 h-10 transition-all ${
-              input.trim()
-                ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-500/30'
-                : 'bg-slate-200 text-slate-400'
-            }`}
             disabled={!input.trim()}
+            className={`min-w-[44px] h-11 flex items-center justify-center rounded-xl ${input.trim() ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white' : 'bg-slate-200 text-slate-400'
+              }`}
           >
-            <Send size={16} strokeWidth={2} />
-          </motion.button>
-        </motion.div>
-
-        {/* Mobile thread context */}
-        {threadContext && (
-          <div className="sm:hidden px-4 py-2 bg-blue-50 border-t border-blue-100">
-            <p className="text-xs text-blue-700 flex items-center gap-1">
-              <MessageSquare size={10} className="text-blue-500" />
-              <span className="truncate">Context: "{threadContext.userMessage.substring(0, 25)}..."</span>
-            </p>
-          </div>
-        )}
+            <Send size={16} />
+          </button>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
