@@ -276,24 +276,6 @@ const SignIn = () => {
             </div>
           </form>
         </motion.div>
-
-        {/* Features */}
-        <motion.div
-          variants={itemVariants}
-          className="grid grid-cols-3 gap-3 mt-6"
-        >
-          {[
-            { icon: Sparkles, label: "Secure Login" },
-            { icon: User, label: "Private" },
-            { icon: ArrowRight, label: "Fast Access" },
-          ].map((feature, index) => (
-            <div key={index} className="bg-white/80 backdrop-blur-sm rounded-lg p-3 text-center border border-blue-50">
-              <feature.icon className="w-4 h-4 text-blue-600 mx-auto mb-1" />
-              <p className="text-[10px] text-slate-500">{feature.label}</p>
-            </div>
-          ))}
-        </motion.div>
-
         {/* Footer */}
         <motion.p 
           variants={itemVariants}

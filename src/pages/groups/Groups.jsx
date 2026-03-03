@@ -12,7 +12,8 @@ import {
   Check,
   Clock,
   ChevronRight,
-  X
+  X,
+  Trash2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -130,6 +131,18 @@ const Groups = () => {
     // Navigate to specific group chat page
     navigate(`/group-chat/${groupId}`);
   };
+
+
+  const handleDeleteGroup = (groupId) => {
+  // Show confirmation dialog
+  if (window.confirm('Are you sure you want to remove this group from recent history?')) {
+    // Filter out the deleted group
+    setShowPreviousGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
+    
+   
+  }
+};
+
 
   // Animation variants
   const containerVariants = {
@@ -373,55 +386,74 @@ const Groups = () => {
 
             {/* Previous Groups List */}
             <AnimatePresence>
-              {showPreviousGroups && (
-                <motion.div
-                  variants={listVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="mt-4 overflow-hidden"
-                >
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-2">
-                    <div className="flex items-center gap-2">
-                      <Clock size={14} className="text-blue-600" />
-                      <span className="text-xs font-semibold text-slate-600">Recent Groups</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {previousGroups.map((group) => (
-                      <motion.div
-                        key={group.id}
-                       
-                        className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all"
-                        onClick={() => openPreviousGroup(group.id)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${group.color} flex items-center justify-center text-white font-bold shadow-md`}>
-                            {group.avatar}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slate-800">{group.name}</p>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-xs text-slate-400">{group.members} members</span>
-                              <span className="w-1 h-1 rounded-full bg-slate-300" />
-                              <span className="text-xs text-slate-400 truncate max-w-[120px]">{group.lastMessage}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[10px] text-slate-400">{group.time}</span>
-                          {group.unread > 0 && (
-                            <span className="mt-1 w-5 h-5 rounded-full bg-red-500 text-white text-[8px] flex items-center justify-center font-bold">
-                              {group.unread}
-                            </span>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+  {showPreviousGroups && (
+    <motion.div
+      variants={listVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="mt-4 overflow-hidden"
+    >
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-2">
+        <div className="flex items-center gap-2">
+          <Clock size={14} className="text-blue-600" />
+          <span className="text-xs font-semibold text-slate-600">Recent Groups</span>
+        </div>
+      </div>
+      <div className="space-y-2 max-h-60 overflow-y-auto">
+        {previousGroups.map((group) => (
+          <motion.div
+            key={group.id}
+            className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all group"
+            onClick={() => openPreviousGroup(group.id)}
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${group.color} flex items-center justify-center text-white font-bold shadow-md`}>
+                {group.avatar}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-800">{group.name}</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-xs text-slate-400">{group.members} members</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300" />
+                  <span className="text-xs text-slate-400 truncate max-w-[120px]">{group.lastMessage}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] text-slate-400">{group.time}</span>
+                {group.unread > 0 && (
+                  <span className="mt-1 w-5 h-5 rounded-full bg-red-500 text-white text-[8px] flex items-center justify-center font-bold">
+                    {group.unread}
+                  </span>
+                )}
+              </div>
+              
+              {/* Delete Icon - Appears on Hover */}
+              <motion.button
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add your delete function here
+                  handleDeleteGroup(group.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-all duration-200 ml-1"
+                aria-label="Delete group"
+              >
+                <Trash2 size={16} className="text-red-500 hover:text-red-600" />
+              </motion.button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
             {/* New Group - Select Members List */}
             <AnimatePresence>
@@ -444,7 +476,7 @@ const Groups = () => {
                           onClick={createNewGroup}
                           className="text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                          Create ({selectedUsers.length})
+                          Create Group ({selectedUsers.length})
                         </button>
                       )}
                     </div>

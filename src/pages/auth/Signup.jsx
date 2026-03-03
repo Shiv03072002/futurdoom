@@ -201,7 +201,7 @@ const Signup = () => {
         {/* Header Card */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl border border-blue-50 overflow-hidden mb-6 shadow-xl shadow-blue-100/50"
+          className="bg-white rounded-t-xl border border-blue-50 overflow-hidden  "
         >
           <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-8 relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5" />
@@ -231,10 +231,52 @@ const Signup = () => {
           </div>
         </motion.div>
 
+       <motion.div 
+  initial={{ y: -20, opacity: 0 }}
+  animate={{ y: 0, opacity: 1 }}
+  transition={{ delay: 0.2, duration: 0.4 }}
+  className="bg-gradient-to-r from-blue-50 to-indigo-50/80 px-6 py-3 flex items-center justify-between "
+>
+  <div className="flex items-center gap-2.5">
+    <div className="relative">
+      <Sparkles size={16} className="text-blue-600" />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+        className="absolute -inset-1 bg-blue-400/20 rounded-full blur-sm -z-10"
+      />
+    </div>
+    <span className="text-xs font-medium text-blue-700">Where ideas meet innovation</span>
+    <span className="w-1 h-1 rounded-full bg-blue-300" />
+    
+  </div>
+  
+  <motion.div
+    whileHover={{ x: 2 }}
+    transition={{ type: "spring", stiffness: 400 }}
+  >
+    <Link
+      to="/signin"
+      className="group flex items-center gap-2.5 bg-white/80 backdrop-blur-sm hover:bg-white px-4 py-2 rounded-lg border border-blue-200 hover:border-blue-300 shadow-sm hover:shadow transition-all"
+    >
+      <div className="flex items-center gap-1.5">
+        <span className="text-xs text-slate-600">Already registered?</span>
+        <span className="text-sm font-semibold text-blue-600">Sign in</span>
+      </div>
+      <motion.div
+        animate={{ x: [0, 3, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <ArrowRight size={14} className="text-blue-500" />
+      </motion.div>
+    </Link>
+  </motion.div>
+</motion.div>
+
         {/* Form Card */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl border border-blue-50 overflow-hidden shadow-xl shadow-blue-100/50"
+          className="bg-white rounded-b-xl border border-blue-50 overflow-hidden "
         >
           <form onSubmit={handleSubmit} className="p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -515,16 +557,6 @@ const Signup = () => {
                   )}
                 </motion.button>
               </div>
-            </div>
-
-            {/* Login Link */}
-            <div className="text-center mt-6">
-              <p className="text-xs text-slate-500">
-                Already have an account?{" "}
-                <Link to="/signin" className="text-blue-600 font-semibold hover:text-blue-700">
-                  Sign in
-                </Link>
-              </p>
             </div>
           </form>
         </motion.div>

@@ -246,71 +246,71 @@ const Home = () => {
               </motion.h1>
 
               {/* New tagline */}
-              <motion.div
-                variants={taglineVariants}
-                className="mt-3 space-y-1"
-              >
-                <div className="flex items-baseline gap-1 flex-wrap">
-                  <span className="text-white/90 text-xs font-medium">A new space where</span>
-
-                  {/* Continuous typing animation for Intelligence */}
-                  <div className="flex items-center">
-                    <motion.span
-                      animate={{
-                        width: ["0%", "100%", "100%", "0%"],
-                      }}
-                      transition={{
-                        duration: 4,
-                        times: [0, 0.3, 0.7, 1],
-                        repeat: Infinity,
-                        repeatDelay: 1,
-                        ease: "easeInOut",
-                      }}
-                      className="text-xs font-bold overflow-hidden whitespace-nowrap inline-block"
-                      style={{
-                        background: "linear-gradient(90deg, #93c5fd, #ffffff, #bfdbfe)",
-                        backgroundSize: "200% auto",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      Intelligence
-                    </motion.span>
-                    <motion.span
-                      animate={{ opacity: [0, 1, 0] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      className="w-0.5 h-3 bg-white ml-0.5"
-                    />
-                  </div>
-
-                  <motion.span
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="text-blue-200/70 text-[10px] font-medium italic"
-                  >
-                    meets
-                  </motion.span>
-
-                  <motion.span
-                    animate={{
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                      opacity: [0.9, 1, 0.9]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    className="text-xs font-bold"
-                    style={{
-                      background: "linear-gradient(90deg, #60a5fa, #bfdbfe, #ffffff, #93c5fd)",
-                      backgroundSize: "200% auto",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    Community
-                  </motion.span>
-                </div>
-              </motion.div>
+          <motion.div
+  variants={taglineVariants}
+  className="mt-3 space-y-1"
+>
+  <div className="flex items-baseline gap-1 flex-wrap">
+    <span className="text-white/90 text-xs font-medium">A new space where</span>
+    
+    {/* Continuous typing animation for Intelligence */}
+    <div className="flex items-center">
+      <motion.span
+        animate={{
+          width: ["0%", "100%", "100%", "0%"],
+        }}
+        transition={{
+          duration: 4,
+          times: [0, 0.3, 0.7, 1],
+          repeat: Infinity,
+          repeatDelay: 1,
+          ease: "easeInOut",
+        }}
+        className="text-xs font-bold overflow-hidden whitespace-nowrap inline-block"
+        style={{
+          background: "linear-gradient(90deg, #93c5fd, #ffffff, #bfdbfe)",
+          backgroundSize: "200% auto",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Intelligence
+      </motion.span>
+      <motion.span
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        className="w-0.5 h-3 bg-white ml-0.5"
+      />
+    </div>
+    
+    <motion.span 
+      animate={{ opacity: [0.5, 1, 0.5] }}
+      transition={{ duration: 2, repeat: Infinity }}
+      className="text-blue-200/70 text-[10px] font-medium italic"
+    >
+      meets
+    </motion.span>
+    
+    <motion.span
+      animate={{
+        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+        opacity: [0.9, 1, 0.9]
+      }}
+      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      className="text-xs font-bold"
+      style={{
+        background: "linear-gradient(90deg, #60a5fa, #bfdbfe, #ffffff, #93c5fd)",
+        backgroundSize: "200% auto",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }}
+    >
+      Community
+    </motion.span>
+  </div>
+</motion.div>
 
               <motion.p
                 variants={subtitleVariants}
@@ -369,73 +369,85 @@ const Home = () => {
             </motion.div>
 
             {/* Two cards grid */}
-            <div className="grid grid-cols-2 gap-3 mt-1">
-              {/* About Us Card */}
-              <motion.div
-                custom={2}
-                variants={itemVariants}
-              >
-                <Link
-                  to="/about"
-                  className="block group"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200">
-                        <Info size={14} className="text-blue-600 group-hover:text-white transition-colors duration-200" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-slate-800 text-sm">About Us</p>
-                        <p className="text-xs text-slate-400">Learn our story</p>
-                      </div>
-                    </div>
-                    <motion.div
-                      animate={{ x: 0 }}
-                      whileHover={{ x: 5 }}
-                    >
-                      <ArrowRight size={14} className="text-slate-400 group-hover:text-blue-500" />
-                    </motion.div>
-                  </motion.div>
-                </Link>
-              </motion.div>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-1">
+  {/* About Us Card */}
+  <motion.div
+    custom={2}
+    variants={itemVariants}
+    className="w-full"
+  >
+    <Link
+      to="/about"
+      className="block group"
+    >
+      <motion.div
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+      >
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
+            <Info size={12} className="text-blue-600 group-hover:text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-slate-800 text-[11px] sm:text-sm leading-tight sm:leading-normal line-clamp-1">
+              About Us
+            </p>
+            <p className="text-[10px] sm:text-xs text-slate-400 leading-tight line-clamp-1">
+              Learn our story
+            </p>
+          </div>
+        </div>
+        <motion.div
+          animate={{ x: 0 }}
+          whileHover={{ x: 3 }}
+          className="flex-shrink-0"
+        >
+          <ArrowRight size={12} className="text-slate-400 group-hover:text-blue-500 sm:w-3.5 sm:h-3.5" />
+        </motion.div>
+      </motion.div>
+    </Link>
+  </motion.div>
 
-              {/* Contact Us Card */}
-              <motion.div
-                custom={3}
-                variants={itemVariants}
-              >
-                <Link
-                  to="/contact"
-                  className="block group"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200">
-                        <Mail size={14} className="text-blue-600 group-hover:text-white transition-colors duration-200" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-slate-800 text-sm">Contact Us</p>
-                        <p className="text-xs text-slate-400">Get in touch</p>
-                      </div>
-                    </div>
-                    <motion.div
-                      animate={{ x: 0 }}
-                      whileHover={{ x: 5 }}
-                    >
-                      <ArrowRight size={14} className="text-slate-400 group-hover:text-blue-500" />
-                    </motion.div>
-                  </motion.div>
-                </Link>
-              </motion.div>
-            </div>
+  {/* Contact Us Card */}
+  <motion.div
+    custom={3}
+    variants={itemVariants}
+    className="w-full"
+  >
+    <Link
+      to="/contact"
+      className="block group"
+    >
+      <motion.div
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+      >
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
+            <Mail size={12} className="text-blue-600 group-hover:text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-slate-800 text-[11px] sm:text-sm leading-tight sm:leading-normal line-clamp-1">
+              Contact Us
+            </p>
+            <p className="text-[10px] sm:text-xs text-slate-400 leading-tight line-clamp-1">
+              Get in touch
+            </p>
+          </div>
+        </div>
+        <motion.div
+          animate={{ x: 0 }}
+          whileHover={{ x: 3 }}
+          className="flex-shrink-0"
+        >
+          <ArrowRight size={12} className="text-slate-400 group-hover:text-blue-500 sm:w-3.5 sm:h-3.5" />
+        </motion.div>
+      </motion.div>
+    </Link>
+  </motion.div>
+</div>
           </motion.div>
 
           {/* Footer */}

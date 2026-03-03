@@ -11,7 +11,8 @@ import {
   Check,
   Clock,
   ChevronRight,
-  X
+  X,
+  Trash2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -121,6 +122,17 @@ const DiscussionMain = () => {
     // Navigate to specific discussion page
     navigate(`/discussion/${chatId}`);
   };
+
+
+  const handleDeleteChat = (chatId) => {
+  // Add your delete logic here
+  // Example:
+  if (window.confirm('Remove this chat from recent?')) {
+    setShowPreviousChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
+    // Optional: Show toast notification
+    // toast.success('Chat removed from recent');
+  }
+};
 
   // Animation variants
   const containerVariants = {
@@ -365,51 +377,71 @@ const DiscussionMain = () => {
 
             {/* Previous Chats List */}
             <AnimatePresence>
-              {showPreviousChats && (
-                <motion.div
-                  variants={listVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="mt-4 overflow-hidden"
-                >
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-2">
-                    <div className="flex items-center gap-2">
-                      <Clock size={14} className="text-blue-600" />
-                      <span className="text-xs font-semibold text-slate-600">Recent Chats</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {previousChats.map((chat) => (
-                      <motion.div
-                        key={chat.id}
-                       
-                        className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all"
-                        onClick={() => openPreviousChat(chat.id)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${chat.color} flex items-center justify-center text-white font-bold shadow-md`}>
-                            {chat.avatar}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slate-800">{chat.name}</p>
-                            <p className="text-xs text-slate-400 mt-0.5 max-w-[180px] truncate">{chat.lastMessage}</p>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[10px] text-slate-400">{chat.time}</span>
-                          {chat.unread > 0 && (
-                            <span className="mt-1 w-5 h-5 rounded-full bg-red-500 text-white text-[8px] flex items-center justify-center font-bold">
-                              {chat.unread}
-                            </span>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+  {showPreviousChats && (
+    <motion.div
+      variants={listVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="mt-4 overflow-hidden"
+    >
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-2">
+        <div className="flex items-center gap-2">
+          <Clock size={14} className="text-blue-600" />
+          <span className="text-xs font-semibold text-slate-600">Recent Chats</span>
+        </div>
+      </div>
+      
+      <div className="space-y-2 max-h-60 overflow-y-auto">
+        {previousChats.map((chat) => (
+          <motion.div
+            key={chat.id}
+            className="group flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer transition-all"
+            onClick={() => openPreviousChat(chat.id)}
+          >
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${chat.color} flex items-center justify-center text-white font-bold shadow-md flex-shrink-0`}>
+                {chat.avatar}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-slate-800 truncate">{chat.name}</p>
+                <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[150px] sm:max-w-[200px]">
+                  {chat.lastMessage}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] text-slate-400 whitespace-nowrap">{chat.time}</span>
+                {chat.unread > 0 && (
+                  <span className="mt-1 w-5 h-5 rounded-full bg-red-500 text-white text-[8px] flex items-center justify-center font-bold">
+                    {chat.unread}
+                  </span>
+                )}
+              </div>
+              
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteChat(chat.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-all duration-200 p-1.5 hover:bg-red-50 rounded-full"
+                aria-label="Delete chat"
+              >
+                <Trash2 size={14} className="text-red-400 hover:text-red-600 transition-colors" />
+              </motion.button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
             {/* Recipient Selection List */}
             <AnimatePresence>
@@ -432,7 +464,7 @@ const DiscussionMain = () => {
                           onClick={startNewDiscussion}
                           className="text-xs bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                          Start ({selectedUsers.length})
+                          Start Discussion ({selectedUsers.length})
                         </button>
                       )}
                     </div>
