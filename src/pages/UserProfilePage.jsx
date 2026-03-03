@@ -522,7 +522,7 @@ const UserProfilePage = () => {
 
   return (
     <div className="min-h-screen ">
-      <div className=" px-4">
+      <div className="">
         <motion.div 
           className="space-y-6"
           variants={containerVariants}

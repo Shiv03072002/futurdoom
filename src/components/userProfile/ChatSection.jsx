@@ -187,7 +187,7 @@ const ChatSection = () => {
 
   return (
     <motion.div 
-      className="bg-white rounded-xl border border-blue-50 overflow-hidden w-full max-w-4xl mx-auto"
+      className="bg-white rounded-xl border border-blue-50 overflow-hidden w-full "
       variants={{
         hidden: { opacity: 0 },
         visible: {

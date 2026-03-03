@@ -151,25 +151,24 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f4ff] flex items-center justify-center p-6">
-
-      {/* Animated background elements (kept minimal) */}
+    <div className="min-h-screen bg-[#f0f4ff] flex items-center justify-center p-6 relative">
+      {/* FIX 1: Added pointer-events-none to background elements */}
       <motion.div
-        className="absolute top-20 left-20 w-64 h-64 rounded-full bg-blue-200/20 blur-3xl"
+        className="absolute top-20 left-20 w-64 h-64 rounded-full bg-blue-200/20 blur-3xl pointer-events-none"
         animate={floatAnimation}
       />
       <motion.div
-        className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-blue-300/20 blur-3xl"
+        className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-blue-300/20 blur-3xl pointer-events-none"
         animate={floatAnimation}
         transition={{ delay: 1 }}
       />
 
-      {/* Single Card */}
+      {/* FIX 2: Added relative and z-10 to main container */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-lg mx-auto"
+        className="w-full max-w-lg mx-auto relative z-10"
       >
         <motion.div
           variants={cardVariants}
@@ -180,9 +179,9 @@ const Home = () => {
             variants={headerVariants}
             className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-6 relative overflow-hidden"
           >
-            {/* Animated decorative elements */}
+            {/* Animated decorative elements - FIX 3: Added pointer-events-none to all decorative elements */}
             <motion.div
-              className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5"
+              className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 pointer-events-none"
               animate={{
                 scale: [1, 1.2, 1],
               }}
@@ -193,7 +192,7 @@ const Home = () => {
               }}
             />
             <motion.div
-              className="absolute bottom-0 left-1/2 w-24 h-24 rounded-full bg-blue-400/10"
+              className="absolute bottom-0 left-1/2 w-24 h-24 rounded-full bg-blue-400/10 pointer-events-none"
               animate={{
                 scale: [1, 1.2, 1],
               }}
@@ -203,7 +202,7 @@ const Home = () => {
                 ease: "easeInOut",
               }}
             />
-            <div className="absolute inset-0 opacity-10"
+            <div className="absolute inset-0 opacity-10 pointer-events-none"
               style={{
                 backgroundImage: "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
                 backgroundSize: "32px 32px"
@@ -342,12 +341,17 @@ const Home = () => {
             >
               <Link
                 to="/searchpeople"
-                className="block group w-auto"
+                className="block group w-auto cursor-pointer"
+                onClick={(e) => {
+                  // Optional: Add console log for debugging
+                  // console.log('CTA clicked');
+                }}
               >
                 <motion.div
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center justify-between gap-6 px-5 py-3.5 rounded-xl bg-gradient-to-r from-[#1a3aad] to-[#2563eb] shadow-md shadow-blue-300/30 hover:shadow-lg hover:shadow-blue-400/40 transition-all duration-200"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center">
@@ -378,12 +382,17 @@ const Home = () => {
   >
     <Link
       to="/about"
-      className="block group"
+      className="block group cursor-pointer"
+      onClick={(e) => {
+        // Optional: Add console log for debugging
+        // console.log('About clicked');
+      }}
     >
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
         className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
@@ -417,12 +426,17 @@ const Home = () => {
   >
     <Link
       to="/contact"
-      className="block group"
+      className="block group cursor-pointer"
+      onClick={(e) => {
+        // Optional: Add console log for debugging
+        // console.log('Contact clicked');
+      }}
     >
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
         className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
@@ -458,21 +472,21 @@ const Home = () => {
             <div className="flex items-center justify-center gap-3 mb-2">
               <Link
                 to="/terms"
-                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
               >
                 Terms
               </Link>
               <span className="text-slate-300 text-xs">•</span>
               <Link
                 to="/privacy"
-                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
               >
                 Privacy
               </Link>
               <span className="text-slate-300 text-xs">•</span>
               <Link
                 to="/disclaimer"
-                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200"
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
               >
                 Disclaimer
               </Link>
