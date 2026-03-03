@@ -340,7 +340,7 @@ const Home = () => {
               className="flex justify-center"
             >
               <Link
-                to="/searchpeople"
+                to="/share"
                 className="block group w-auto cursor-pointer"
                 onClick={(e) => {
                   // Optional: Add console log for debugging
