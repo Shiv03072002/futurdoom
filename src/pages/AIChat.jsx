@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -14,99 +14,73 @@ import {
   Share2,
   MoreHorizontal,
   Terminal,
-
 } from "lucide-react";
 
-// Function to format message with code blocks and markdown (DeepSeek style)
 const formatMessage = (text) => {
   if (!text) return text;
-
   const parts = text.split(/(```[\s\S]*?```)/g);
-
   return parts.map((part, index) => {
     if (part.startsWith('```') && part.endsWith('```')) {
       const firstLineEnd = part.indexOf('\n');
       const language = part.substring(3, firstLineEnd).trim() || 'text';
       const code = part.substring(firstLineEnd + 1, part.length - 3).trim();
-
       return (
-        <div key={index} className="my-2 rounded-lg overflow-hidden border border-slate-700/50 w-full max-w-full">
-          {/* Code header */}
+        <div key={index} className="my-2 rounded-xl overflow-hidden w-full" style={{ border: "1px solid rgba(71,85,105,0.4)" }}>
           <div className="flex items-center justify-between bg-slate-800 px-3 py-1.5 sm:px-4 sm:py-2">
-            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <Terminal size={12} className="text-slate-400 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
+              </div>
+              <Terminal size={11} className="text-slate-400 flex-shrink-0 ml-1" />
               <span className="text-[10px] sm:text-xs font-mono text-slate-300 truncate">{language}</span>
             </div>
-            <button
-              onClick={() => navigator.clipboard.writeText(code)}
-              className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors flex-shrink-0"
-            >
-              <Copy size={12} className="sm:w-[14px] sm:h-[14px]" />
+            <button onClick={() => navigator.clipboard.writeText(code)}
+              className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors flex-shrink-0">
+              <Copy size={12} />
             </button>
           </div>
-
-          {/* Code content - FIXED for mobile */}
           <pre className="bg-slate-900 p-2 sm:p-4 overflow-x-auto max-w-full" style={{ WebkitOverflowScrolling: 'touch' }}>
-            <code className="text-[10px] sm:text-sm font-mono text-slate-300 whitespace-pre-wrap break-words">
-              {code}
-            </code>
+            <code className="text-[10px] sm:text-sm font-mono text-slate-300 whitespace-pre-wrap break-words">{code}</code>
           </pre>
         </div>
       );
     }
-
     if (part) {
       const inlineParts = part.split(/(`[^`]+`)/g);
       return (
         <div key={index} className="space-y-1 sm:space-y-2">
           {inlineParts.map((inlinePart, inlineIndex) => {
-            if (inlinePart.startsWith('`') && inlinePart.endsWith('`')) {
-              return (
-                <code key={inlineIndex} className="px-1 py-0.5 bg-slate-100 rounded text-[10px] sm:text-sm font-mono text-blue-600 break-all">
-                  {inlinePart.slice(1, -1)}
-                </code>
-              );
-            }
-
+            if (inlinePart.startsWith('`') && inlinePart.endsWith('`'))
+              return <code key={inlineIndex} className="px-1 py-0.5 bg-white/20 rounded text-[10px] sm:text-sm font-mono text-blue-100 break-all">{inlinePart.slice(1, -1)}</code>;
             const boldParts = inlinePart.split(/(\*\*[^*]+\*\*)/g);
             return boldParts.map((boldPart, boldIndex) => {
-              if (boldPart.startsWith('**') && boldPart.endsWith('**')) {
+              if (boldPart.startsWith('**') && boldPart.endsWith('**'))
                 return <strong key={boldIndex} className="font-bold text-xs sm:text-sm break-words">{boldPart.slice(2, -2)}</strong>;
-              }
-
               const italicParts = boldPart.split(/(\*[^*]+\*)/g);
               return italicParts.map((italicPart, italicIndex) => {
-                if (italicPart.startsWith('*') && italicPart.endsWith('*')) {
+                if (italicPart.startsWith('*') && italicPart.endsWith('*'))
                   return <em key={italicIndex} className="italic text-xs sm:text-sm break-words">{italicPart.slice(1, -1)}</em>;
-                }
-
                 const lines = italicPart.split('\n');
                 return lines.map((line, lineIndex) => {
-                  if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) {
-                    return (
+                  if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) return (
+                    <div key={lineIndex} className="flex items-start gap-1 sm:gap-2 ml-2 sm:ml-4">
+                      <span className="text-blue-200 text-xs sm:text-sm">•</span>
+                      <span className="text-xs sm:text-sm break-words">{line.trim().substring(2)}</span>
+                    </div>
+                  );
+                  if (/^\d+\.\s/.test(line.trim())) {
+                    const match = line.trim().match(/^(\d+)\.\s(.*)/);
+                    if (match) return (
                       <div key={lineIndex} className="flex items-start gap-1 sm:gap-2 ml-2 sm:ml-4">
-                        <span className="text-blue-500 text-xs sm:text-sm">•</span>
-                        <span className="text-xs sm:text-sm break-words">{line.trim().substring(2)}</span>
+                        <span className="text-blue-200 font-mono text-[10px] sm:text-xs mt-0.5">{match[1]}.</span>
+                        <span className="text-xs sm:text-sm break-words">{match[2]}</span>
                       </div>
                     );
                   }
-
-                  if (/^\d+\.\s/.test(line.trim())) {
-                    const match = line.trim().match(/^(\d+)\.\s(.*)/);
-                    if (match) {
-                      return (
-                        <div key={lineIndex} className="flex items-start gap-1 sm:gap-2 ml-2 sm:ml-4">
-                          <span className="text-blue-500 font-mono text-[10px] sm:text-xs mt-0.5">{match[1]}.</span>
-                          <span className="text-xs sm:text-sm break-words">{match[2]}</span>
-                        </div>
-                      );
-                    }
-                  }
-
                   return line ? (
-                    <span key={lineIndex} className="text-xs sm:text-sm break-words">
-                      {line}{lineIndex < lines.length - 1 ? <br /> : ''}
-                    </span>
+                    <span key={lineIndex} className="text-xs sm:text-sm break-words">{line}{lineIndex < lines.length - 1 ? <br /> : ''}</span>
                   ) : <br key={lineIndex} />;
                 });
               });
@@ -120,39 +94,29 @@ const formatMessage = (text) => {
 };
 
 const Avatar = ({ size = 36, status = true, type = "user" }) => {
-  let initials = "DP";
-  let gradient = "from-purple-500 to-pink-500";
-
-  if (type === "ai") {
-    initials = "fD";
-    gradient = "from-[#1a3aad] to-[#2563eb]";
-  }
-
+  const isAI = type === "ai";
   return (
     <div className="relative flex-shrink-0">
       <div
-        className={`flex items-center justify-center rounded-xl text-white font-bold bg-gradient-to-r ${gradient}`}
+        className="flex items-center justify-center rounded-xl text-white font-bold"
         style={{
-          width: size,
-          height: size,
-          fontSize: size * 0.35,
-          boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
+          width: size, height: size, fontSize: size * 0.35,
+          background: isAI
+            ? "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)"
+            : "linear-gradient(135deg, #7c3aed 0%, #db2777 100%)",
+          boxShadow: isAI
+            ? "0 4px 12px rgba(37,99,235,0.35)"
+            : "0 4px 12px rgba(219,39,119,0.3)"
         }}
       >
-        {initials}
+        {isAI ? "fD" : "DP"}
       </div>
       {status && (
         <motion.span
           className="absolute rounded-full ring-2 ring-white"
-          style={{
-            width: size * 0.25,
-            height: size * 0.25,
-            background: "#22c55e",
-            bottom: 0,
-            right: 0
-          }}
+          style={{ width: size * 0.25, height: size * 0.25, background: "#22c55e", bottom: 0, right: 0 }}
           animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
       )}
     </div>
@@ -166,221 +130,282 @@ const SimpleChat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [threadContext, setThreadContext] = useState(null);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     if (location.state?.thread) {
       setThreadContext(location.state.thread);
       setMessages([
-        {
-          id: 1,
-          from: "user",
-          text: location.state.thread.userMessage,
-          time: location.state.thread.time,
-          read: true
-        },
-        {
-          id: 2,
-          from: "ai",
-          text: location.state.thread.aiResponse,
-          time: location.state.thread.responseTime,
-          read: true,
-          isDeepAsk: true
-        }
+        { id: 1, from: "user", text: location.state.thread.userMessage, time: location.state.thread.time, read: true },
+        { id: 2, from: "ai", text: location.state.thread.aiResponse, time: location.state.thread.responseTime, read: true, isDeepAsk: true }
       ]);
     } else {
-      setMessages([{
-        id: 1,
-        from: "ai",
-        text: "Hello! I'm fD, your AI assistant. How can I help?",
-        time: "10:30 AM",
-        read: true
-      }]);
+      setMessages([{ id: 1, from: "ai", text: "Hello! I'm fD, your AI assistant. How can I help?", time: "10:30 AM", read: true }]);
     }
   }, [location.state]);
 
   const handleSend = () => {
     if (!input.trim()) return;
-
-    const userMessage = {
-      id: Date.now(),
-      from: "user",
-      text: input,
-      time: "Just now",
-      read: false,
-    };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [...prev, { id: Date.now(), from: "user", text: input, time: "Just now", read: false }]);
+    const userInput = input.toLowerCase();
     setInput("");
-
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
-
-      const isCodeRequest = input.toLowerCase().includes("reverse a number") &&
-        input.toLowerCase().includes("cpp");
-
+      const isCodeRequest = userInput.includes("reverse a number") && userInput.includes("cpp");
       const response = isCodeRequest
         ? `Here's a C++ program to reverse a number:\n\n\`\`\`cpp\n#include <iostream>\nusing namespace std;\n\nint reverseNumber(int num) {\n    int reversed = 0;\n    while (num > 0) {\n        int lastDigit = num % 10;\n        reversed = reversed * 10 + lastDigit;\n        num = num / 10;\n    }\n    return reversed;\n}\n\nint main() {\n    int n;\n    cout << "Enter number: ";\n    cin >> n;\n    cout << "Reversed: " << reverseNumber(n);\n    return 0;\n}\n\`\`\`\n\n**How it works:**\n• Extract last digit using % 10\n• Build reversed number\n• Remove last digit using / 10\n• Repeat until number becomes 0`
         : "I understand your question. Let me help you with that.";
-
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        from: "ai",
-        text: response,
-        time: "Just now",
-        read: false,
-        isDeepAsk: !!threadContext
-      }]);
+      setMessages(prev => [...prev, { id: Date.now() + 1, from: "ai", text: response, time: "Just now", read: false, isDeepAsk: !!threadContext }]);
     }, 1500);
   };
 
-  const removeMsg = (id) => setMessages((prev) => prev.filter((m) => m.id !== id));
-  const handleGoBack = () => navigate(-1);
+  const removeMsg = (id) => setMessages(prev => prev.filter(m => m.id !== id));
+
+  const msgVariants = {
+    hidden: { opacity: 0, y: 14, scale: 0.97 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 340, damping: 26 } },
+    exit: { opacity: 0, scale: 0.95, transition: { duration: 0.15 } }
+  };
 
   return (
     <div className="flex items-center justify-center">
-      <div className="w-full flex flex-col overflow-hidden bg-white rounded-xl border border-blue-50 h-[650px]">
+      <div
+        className="w-full flex flex-col overflow-hidden bg-white h-[650px] rounded-xl"
+        style={{
+         
+          border: "1px solid #dbeafe",
+          
+        }}
+      >
 
-        {/* Header - Mobile optimized with context */}
-        <div className="flex flex-col flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+        {/* ── Header ── */}
+        <div
+          className="flex flex-col flex-shrink-0 relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%)", borderBottom: "1px solid #dbeafe" }}
+        >
+          {/* top shimmer */}
+          <div className="absolute top-0 inset-x-0 h-0.5"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.45), transparent)" }} />
+          {/* glow */}
+          <div className="absolute -top-8 -left-8 w-32 h-32 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, rgba(37,99,235,0.10) 0%, transparent 70%)" }} />
 
-          {/* Single row with everything */}
-          <div className="flex items-center gap-2 px-3 py-2">
-            <button
-              onClick={handleGoBack}
-              className="min-w-[36px] h-9 flex items-center justify-center rounded-xl hover:bg-white/80 text-blue-600 transition-all active:scale-95"
+          <div className="flex items-center gap-2 px-3 py-2.5 relative z-10">
+            {/* Back button */}
+            <motion.button
+              onClick={() => navigate(-1)}
+              whileHover={{ scale: 1.08, backgroundColor: "rgba(37,99,235,0.08)" }}
+              whileTap={{ scale: 0.92 }}
+              className="w-9 h-9 flex items-center justify-center rounded-xl text-blue-600 transition-all duration-150 flex-shrink-0"
             >
-              <ArrowLeft size={18} />
-            </button>
+              <ArrowLeft size={18} strokeWidth={2} />
+            </motion.button>
 
             <Avatar size={40} status={true} type="ai" />
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-800 truncate">
-                {threadContext ? "DeepAsk" : "fD Assistant"}
-              </p>
-              <div className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-extrabold text-slate-800 truncate tracking-tight">
+                  {threadContext ? "DeepAsk" : "fD Assistant"}
+                </p>
+                <span className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 flex-shrink-0"
+                  style={{ background: "rgba(37,99,235,0.10)", border: "1px solid rgba(37,99,235,0.22)" }}>
+                  <Sparkles size={9} className="text-blue-500" />
+                  <span className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">AI</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <motion.span className="w-1.5 h-1.5 rounded-full bg-green-400"
+                  animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
                 <p className="text-[10px] font-semibold text-green-500">Online</p>
               </div>
             </div>
 
-            {/* Context pill - in same row */}
-            <div className="flex items-center gap-1.5 max-w-[40%] bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-200 shadow-sm">
-              <MessageSquare size={12} className="text-blue-500 flex-shrink-0" />
-              <span className="text-[11px] font-medium text-blue-700 truncate">
-                {threadContext ? threadContext.userMessage : "how to do frontend in html..."}
+            {/* Context pill */}
+            <div className="flex items-center gap-1.5 max-w-[38%] px-2.5 py-1.5 rounded-full flex-shrink-0"
+              style={{ background: "white", border: "1px solid #bfdbfe", boxShadow: "0 1px 4px rgba(37,99,235,0.10)" }}>
+              <MessageSquare size={11} className="text-blue-500 flex-shrink-0" />
+              <span className="text-[10px] font-semibold text-blue-700 truncate">
+                {threadContext ? threadContext.userMessage : "how to do frontend..."}
               </span>
-              {threadContext && (
-                <span className="w-1 h-1 bg-blue-400 rounded-full" />
-              )}
+              {threadContext && <span className="w-1.5 h-1.5 bg-blue-400 rounded-full flex-shrink-0" />}
             </div>
 
-            {/* More button - at the end */}
-            <button className="min-w-[36px] h-9 flex items-center justify-center rounded-xl hover:bg-white/80 text-blue-600 transition-all active:scale-95">
-              <MoreHorizontal size={18} />
-            </button>
+            <motion.button
+              whileHover={{ scale: 1.08, backgroundColor: "rgba(37,99,235,0.08)" }}
+              whileTap={{ scale: 0.92 }}
+              className="w-9 h-9 flex items-center justify-center rounded-xl text-blue-500 transition-all duration-150 flex-shrink-0"
+            >
+              <MoreHorizontal size={18} strokeWidth={1.8} />
+            </motion.button>
           </div>
         </div>
-        {/* Messages - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fafcff]">
 
-          {/* Date pill in middle of chat - exactly like your example */}
-          <motion.div
-            className="flex justify-center"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">
+        {/* ── Messages ── */}
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3" style={{ background: "#f8faff" }}>
+
+          {/* Date pill */}
+          <motion.div className="flex justify-center" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+            <span className="text-[10px] sm:text-xs font-semibold text-blue-500 px-3 py-1 sm:py-1.5 rounded-full"
+              style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
               {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
           </motion.div>
 
-          {messages.map((msg, i) => {
-            const isAI = msg.from === "ai";
-            const prevSame = i > 0 && messages[i - 1].from === msg.from;
+          <AnimatePresence mode="popLayout">
+            {messages.map((msg, i) => {
+              const isAI = msg.from === "ai";
+              const prevSame = i > 0 && messages[i - 1].from === msg.from;
 
-            return (
-              <div key={msg.id}>
-                {!isAI && (
-                  <div className="flex items-center mb-1">
-                    <button onClick={() => removeMsg(msg.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-400">
-                      <Trash2 size={14} />
-                    </button>
-                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
-                      <Heart size={14} />
-                    </button>
-                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
-                      <Copy size={14} />
-                    </button>
-                    <button className="p-2 rounded-lg hover:bg-blue-50 text-slate-400">
-                      <Share2 size={14} />
-                    </button>
-                  </div>
-                )}
-                <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
-                  {!isAI && !prevSame && <Avatar size={32} status={true} type="user" />}
-                  {!isAI && prevSame && <div className="w-8" />}
+              return (
+                <motion.div key={msg.id} variants={msgVariants} initial="hidden" animate="visible" exit="exit" layout>
 
-                  {/* Message bubble - FIXED width for mobile */}
-                  <div className={`flex flex-col max-w-[85%] sm:max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
-                    <div className={`px-3 py-2 text-xs sm:text-sm whitespace-pre-wrap break-words w-full ${isAI
-                      ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
-                      : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
-                      }`}>
-                      {isAI && msg.isDeepAsk && (
-                        <div className="flex items-center gap-1 mb-1 text-[10px] text-blue-200">
-                          <Brain size={10} />
-                          <span>Deep analysis</span>
+                  {/* Action row */}
+                  {!isAI && (
+                    <div className="flex items-center gap-0.5 mb-1.5 ml-1">
+                      {[
+                        { I: Trash2, h: "hover:bg-red-50 hover:text-red-400", fn: () => removeMsg(msg.id) },
+                        { I: Heart, h: "hover:bg-pink-50 hover:text-pink-400", fn: () => {} },
+                        { I: Copy, h: "hover:bg-blue-50 hover:text-blue-500", fn: () => {} },
+                        { I: Share2, h: "hover:bg-indigo-50 hover:text-indigo-500", fn: () => {} },
+                      ].map(({ I, h, fn }, idx) => (
+                        <motion.button key={idx} onClick={fn}
+                          whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.88 }}
+                          className={`p-1.5 rounded-lg text-slate-400 transition-all duration-150 ${h}`}>
+                          <I size={11} />
+                        </motion.button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className={`flex items-end gap-1.5 sm:gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
+                    {!isAI && !prevSame && <Avatar size={window.innerWidth < 640 ? 28 : 34} status={true} type="user" />}
+                    {!isAI && prevSame && <div className="w-7 sm:w-8" />}
+
+                    <div className={`flex flex-col max-w-[84%] sm:max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
+                      <motion.div
+                        whileHover={{ scale: 1.008, transition: { duration: 0.15 } }}
+                        className="px-4 py-2.5 text-xs sm:text-sm whitespace-pre-wrap break-words w-full relative overflow-hidden"
+                        style={isAI ? {
+                          background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
+                          borderRadius: "20px 20px 6px 20px",
+                          boxShadow: "0 6px 22px rgba(37,99,235,0.32), 0 1px 4px rgba(37,99,235,0.18), inset 0 1px 0 rgba(255,255,255,0.14)",
+                          color: "white"
+                        } : {
+                          background: "white",
+                          borderRadius: "20px 20px 20px 6px",
+                          border: "1px solid #dbeafe",
+                          boxShadow: "0 2px 14px rgba(37,99,235,0.07), 0 1px 3px rgba(0,0,0,0.04)",
+                          color: "#1e293b"
+                        }}
+                      >
+                        {/* inner shine */}
+                        {isAI && (
+                          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ borderRadius: "20px 20px 6px 20px" }}>
+                            <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full"
+                              style={{ background: "radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%)" }} />
+                          </div>
+                        )}
+                        {/* DeepAsk badge */}
+                        {isAI && msg.isDeepAsk && (
+                          <div className="flex items-center gap-1 mb-1.5 relative">
+                            <Brain size={10} className="text-blue-200" />
+                            <span className="text-[10px] text-blue-200 font-semibold">Deep analysis</span>
+                          </div>
+                        )}
+                        <div className="relative">
+                          {isAI ? formatMessage(msg.text) : msg.text}
                         </div>
-                      )}
-                      {isAI ? formatMessage(msg.text) : msg.text}
+                      </motion.div>
+
+                      <div className="flex items-center gap-1 mt-1.5 px-1">
+                        <span className="text-[9px] sm:text-[10px] text-slate-400">{msg.time}</span>
+                        {isAI && <CheckCheck size={10} className={msg.read ? "text-blue-500" : "text-slate-300"} />}
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1 mt-1 text-[10px]">
-                      <span className="text-slate-400">{msg.time}</span>
-                      {isAI && <CheckCheck size={12} className={msg.read ? "text-blue-600" : "text-slate-300"} />}
-                    </div>
+                    {isAI && !prevSame && <Avatar size={window.innerWidth < 640 ? 28 : 34} status={true} type="ai" />}
+                    {isAI && prevSame && <div className="w-7 sm:w-8" />}
                   </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
 
-                  {isAI && !prevSame && <Avatar size={32} status={true} type="ai" />}
-                  {isAI && prevSame && <div className="w-8" />}
+          {/* Typing */}
+          <AnimatePresence>
+            {isTyping && (
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-2 justify-end">
+                <div className="px-4 py-3"
+                  style={{ background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)", borderRadius: "20px 20px 6px 20px", boxShadow: "0 6px 22px rgba(37,99,235,0.30)" }}>
+                  <div className="flex items-center gap-1.5">
+                    {[0, 1, 2].map(i => (
+                      <motion.span key={i} className="w-1.5 h-1.5 bg-white rounded-full"
+                        animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 0.75, repeat: Infinity, delay: i * 0.15 }} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+                <Avatar size={window.innerWidth < 640 ? 24 : 28} status={true} type="ai" />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {isTyping && (
-            <div className="flex items-center gap-2 justify-end">
-              <div className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] px-4 py-3 rounded-2xl rounded-br-sm flex items-center gap-1">
-                {[0, 1, 2].map((i) => (
-                  <span key={i} className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: `${i * 0.2}s` }} />
-                ))}
-              </div>
-              <Avatar size={26} status={true} type="ai" />
-            </div>
-          )}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Input - Mobile optimized */}
-        <div className="flex items-center gap-1 flex-shrink-0 px-2 py-2 border-t border-slate-200 bg-white">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Ask something... (try 'reverse a number in cpp')"
-            className="flex-1 px-3 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-          />
-          <button
+        {/* ── Input bar ── */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center gap-1.5 flex-shrink-0 px-2 sm:px-3 py-2.5 bg-white relative"
+          style={{ borderTop: "1px solid #dbeafe" }}
+        >
+          <div className="absolute top-0 inset-x-0 h-px"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.35), transparent)" }} />
+
+          <div className="flex-1">
+            <input
+              type="text"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSend()}
+              placeholder="Ask something... (try 'reverse a number in cpp')"
+              className="w-full px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-slate-700 placeholder-slate-400 focus:outline-none transition-all duration-200"
+              style={{
+                background: "#f8faff",
+                border: "1px solid #dbeafe",
+                boxShadow: "inset 0 1px 2px rgba(37,99,235,0.04)"
+              }}
+              onFocus={e => {
+                e.target.style.border = "1px solid #93c5fd";
+                e.target.style.background = "white";
+                e.target.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.10), inset 0 1px 2px rgba(37,99,235,0.04)";
+              }}
+              onBlur={e => {
+                e.target.style.border = "1px solid #dbeafe";
+                e.target.style.background = "#f8faff";
+                e.target.style.boxShadow = "inset 0 1px 2px rgba(37,99,235,0.04)";
+              }}
+            />
+          </div>
+
+          <motion.button
             onClick={handleSend}
             disabled={!input.trim()}
-            className={`min-w-[44px] h-11 flex items-center justify-center rounded-xl ${input.trim() ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white' : 'bg-slate-200 text-slate-400'
-              }`}
+            whileHover={input.trim() ? { scale: 1.08 } : {}}
+            whileTap={input.trim() ? { scale: 0.92 } : {}}
+            className="w-10 h-10 flex items-center justify-center rounded-2xl flex-shrink-0 transition-all duration-200"
+            style={input.trim() ? {
+              background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
+              boxShadow: "0 4px 16px rgba(37,99,235,0.38)"
+            } : { background: "#f1f5f9" }}
           >
-            <Send size={16} />
-          </button>
-        </div>
+            <Send size={15} strokeWidth={2.2} className={input.trim() ? "text-white" : "text-slate-400"} />
+          </motion.button>
+        </motion.div>
+
       </div>
     </div>
   );
