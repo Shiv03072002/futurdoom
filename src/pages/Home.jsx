@@ -172,7 +172,7 @@ const Home = () => {
       >
         <motion.div
           variants={cardVariants}
-          className="bg-white rounded-xl border border-blue-50 w-full overflow-hidden shadow-lg"
+          className="bg-white rounded-xl border border-blue-50 w-full overflow-hidden "
         >
           {/* Card Header */}
           <motion.div

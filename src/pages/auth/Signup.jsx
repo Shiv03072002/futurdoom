@@ -231,48 +231,54 @@ const Signup = () => {
           </div>
         </motion.div>
 
-       <motion.div 
+      <motion.div 
   initial={{ y: -20, opacity: 0 }}
   animate={{ y: 0, opacity: 1 }}
   transition={{ delay: 0.2, duration: 0.4 }}
-  className="bg-gradient-to-r from-blue-50 to-indigo-50/80 px-6 py-3 flex items-center justify-between "
+  className="bg-gradient-to-r from-blue-50 to-indigo-50/80 px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3"
 >
-  <div className="flex items-center gap-2.5">
-    <div className="relative">
-      <Sparkles size={16} className="text-blue-600" />
+  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center sm:justify-start">
+    <div className="relative flex-shrink-0">
+      <Sparkles size={14} sm:size={16} className="text-blue-600" />
       <motion.div
         animate={{ scale: [1, 1.2, 1] }}
         transition={{ duration: 2, repeat: Infinity, delay: 1 }}
         className="absolute -inset-1 bg-blue-400/20 rounded-full blur-sm -z-10"
       />
     </div>
-    <span className="text-xs font-medium text-blue-700">Where ideas meet innovation</span>
-    <span className="w-1 h-1 rounded-full bg-blue-300" />
+    <span className="text-[10px] sm:text-xs font-medium text-blue-700 text-center sm:text-left">
+      Where ideas meet innovation
+    </span>
+    <span className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-blue-300 hidden xs:inline-block" />
     
   </div>
   
   <motion.div
     whileHover={{ x: 2 }}
     transition={{ type: "spring", stiffness: 400 }}
+    className="w-full sm:w-auto"
   >
     <Link
       to="/signin"
-      className="group flex items-center gap-2.5 bg-white/80 backdrop-blur-sm hover:bg-white px-4 py-2 rounded-lg border border-blue-200 hover:border-blue-300 shadow-sm hover:shadow transition-all"
+      className="group flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2.5 bg-white/80 backdrop-blur-sm hover:bg-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-blue-200 hover:border-blue-300 shadow-sm hover:shadow transition-all w-full sm:w-auto"
     >
-      <div className="flex items-center gap-1.5">
-        <span className="text-xs text-slate-600">Already registered?</span>
-        <span className="text-sm font-semibold text-blue-600">Sign in</span>
+      <div className="flex items-center gap-1 sm:gap-1.5">
+        <span className="text-[10px] sm:text-xs text-slate-600 whitespace-nowrap">
+          Already registered?
+        </span>
+        <span className="text-xs sm:text-sm font-semibold text-blue-600 whitespace-nowrap">
+          Sign in
+        </span>
       </div>
       <motion.div
         animate={{ x: [0, 3, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <ArrowRight size={14} className="text-blue-500" />
+        <ArrowRight size={12} sm:size={14} className="text-blue-500 flex-shrink-0" />
       </motion.div>
     </Link>
   </motion.div>
 </motion.div>
-
         {/* Form Card */}
         <motion.div
           variants={itemVariants}

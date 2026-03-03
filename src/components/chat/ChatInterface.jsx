@@ -16,7 +16,12 @@ import {
   Trash2,
   Heart,
   Brain,
-  User
+  User,
+  Code,
+  Terminal,
+  Check,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,36 +31,197 @@ const DARK_BLUE = "#1a3aad";
 const initialMessages = [
   {
     id: 1,
-    from: "user", // Dipankar's message (left side)
+    from: "user",
     text: "how to do frontend in html",
     time: "2:10 PM",
     read: true
   },
   {
     id: 2,
-    from: "ai", // fD's reply (right side)
+    from: "ai",
     text: "To create a frontend in HTML, follow these steps: start with a basic HTML structure, add CSS for styling, and use JavaScript for interactivity.",
     time: "2:11 PM",
     read: true,
   },
   {
     id: 3,
-    from: "user", // Dipankar's message (left side)
+    from: "user",
     text: "Can you give me a simple example?",
     time: "2:13 PM",
     read: false,
   },
 ];
 
+// Function to format message with code blocks and markdown
+const formatMessage = (text) => {
+  if (!text) return text;
+
+  // Split by code blocks (```language...```)
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  
+  return parts.map((part, index) => {
+    // Check if this part is a code block
+    if (part.startsWith('```') && part.endsWith('```')) {
+      // Extract language and code
+      const firstLineEnd = part.indexOf('\n');
+      const language = part.substring(3, firstLineEnd).trim() || 'text';
+      const code = part.substring(firstLineEnd + 1, part.length - 3).trim();
+      
+      return (
+        <div key={index} className="my-2 rounded-lg overflow-hidden border border-slate-700/50">
+          {/* Code header */}
+          <div className="flex items-center justify-between bg-slate-800 px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Terminal size={14} className="text-slate-400" />
+              <span className="text-xs font-mono text-slate-300">{language}</span>
+            </div>
+            <button
+              onClick={() => navigator.clipboard.writeText(code)}
+              className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            >
+              <Copy size={14} />
+            </button>
+          </div>
+          
+          {/* Code content */}
+          <pre className="bg-slate-900 p-4 overflow-x-auto">
+            <code className="text-sm font-mono text-slate-300 whitespace-pre">
+              {code}
+            </code>
+          </pre>
+        </div>
+      );
+    }
+    
+    // Regular text - parse inline code and formatting
+    if (part) {
+      // Split by inline code (`code`)
+      const inlineParts = part.split(/(`[^`]+`)/g);
+      
+      return (
+        <div key={index} className="space-y-2">
+          {inlineParts.map((inlinePart, inlineIndex) => {
+            if (inlinePart.startsWith('`') && inlinePart.endsWith('`')) {
+              // Inline code
+              return (
+                <code
+                  key={inlineIndex}
+                  className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-sm font-mono text-blue-600 dark:text-blue-400"
+                >
+                  {inlinePart.slice(1, -1)}
+                </code>
+              );
+            }
+            
+            // Split by bold (**text**)
+            const boldParts = inlinePart.split(/(\*\*[^*]+\*\*)/g);
+            
+            return (
+              <React.Fragment key={inlineIndex}>
+                {boldParts.map((boldPart, boldIndex) => {
+                  if (boldPart.startsWith('**') && boldPart.endsWith('**')) {
+                    return (
+                      <strong key={boldIndex} className="font-bold text-slate-900 dark:text-white">
+                        {boldPart.slice(2, -2)}
+                      </strong>
+                    );
+                  }
+                  
+                  // Split by italic (*text*)
+                  const italicParts = boldPart.split(/(\*[^*]+\*)/g);
+                  
+                  return (
+                    <React.Fragment key={boldIndex}>
+                      {italicParts.map((italicPart, italicIndex) => {
+                        if (italicPart.startsWith('*') && italicPart.endsWith('*')) {
+                          return (
+                            <em key={italicIndex} className="italic text-slate-700 dark:text-slate-300">
+                              {italicPart.slice(1, -1)}
+                            </em>
+                          );
+                        }
+                        
+                        // Handle bullet points and numbered lists
+                        const lines = italicPart.split('\n');
+                        return lines.map((line, lineIndex) => {
+                          if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) {
+                            return (
+                              <div key={lineIndex} className="flex items-start gap-2 ml-4">
+                                <span className="text-blue-500">•</span>
+                                <span>{line.trim().substring(2)}</span>
+                              </div>
+                            );
+                          }
+                          
+                          if (/^\d+\.\s/.test(line.trim())) {
+                            const match = line.trim().match(/^(\d+)\.\s(.*)/);
+                            if (match) {
+                              return (
+                                <div key={lineIndex} className="flex items-start gap-2 ml-4">
+                                  <span className="text-blue-500 font-mono text-xs mt-1">{match[1]}.</span>
+                                  <span>{match[2]}</span>
+                                </div>
+                              );
+                            }
+                          }
+                          
+                          return line ? <span key={lineIndex}>{line}{lineIndex < lines.length - 1 ? <br /> : ''}</span> : <br key={lineIndex} />;
+                        });
+                      })}
+                    </React.Fragment>
+                  );
+                })}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      );
+    }
+    
+    return null;
+  });
+};
+
+// Code block component for better organization
+const CodeBlock = ({ language, code }) => {
+  const [copied, setCopied] = useState(false);
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  
+  return (
+    <div className="my-3 rounded-lg overflow-hidden border border-slate-700/50">
+      <div className="flex items-center justify-between bg-slate-800 px-4 py-2">
+        <div className="flex items-center gap-2">
+          <Code size={14} className="text-slate-400" />
+          <span className="text-xs font-mono text-slate-300">{language}</span>
+        </div>
+        <button
+          onClick={handleCopy}
+          className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors relative"
+        >
+          {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+        </button>
+      </div>
+      <pre className="bg-slate-900 p-4 overflow-x-auto">
+        <code className="text-sm font-mono text-slate-300 whitespace-pre">
+          {code}
+        </code>
+      </pre>
+    </div>
+  );
+};
+
 const Avatar = ({ size = 36, status = true, type = "user" }) => {
-  // Different based on who it is
-  let initials = "DP"; // Default for user (Dipankar)
-  let gradient = "from-purple-500 to-pink-500"; // Purple for user
-  let icon = null;
+  let initials = "DP";
+  let gradient = "from-purple-500 to-pink-500";
 
   if (type === "ai") {
-    initials = "fD"; // AI uses fD
-    gradient = "from-[#1a3aad] to-[#2563eb]"; // Blue for AI
+    initials = "fD";
+    gradient = "from-[#1a3aad] to-[#2563eb]";
   }
 
   return (
@@ -69,7 +235,7 @@ const Avatar = ({ size = 36, status = true, type = "user" }) => {
           boxShadow: "0 4px 10px rgba(37,99,235,0.3)",
         }}
       >
-        {icon || initials}
+        {initials}
       </div>
       {status && (
         <motion.span
@@ -105,7 +271,7 @@ const ChatInterface = () => {
   const send = () => {
     if (!input.trim()) return;
 
-    // Add Dipankar's message (left side)
+    // Add user message
     setMessages((prev) => [
       ...prev,
       {
@@ -118,16 +284,77 @@ const ChatInterface = () => {
     ]);
     setInput("");
 
-    // Simulate fD typing response (right side)
+    // Simulate AI typing response with formatted code
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
+      
+      // Check if the user asked for code
+      const userInput = input.toLowerCase();
+      let responseText = "";
+      
+      if (userInput.includes("reverse a number") && userInput.includes("cpp")) {
+        responseText = `Here's a C++ program to reverse a number:
+
+\`\`\`cpp
+#include <iostream>
+using namespace std;
+
+int reverseNumber(int num) {
+    int reversed = 0;
+    
+    while (num > 0) {
+        int lastDigit = num % 10;
+        reversed = reversed * 10 + lastDigit;
+        num = num / 10;
+    }
+    
+    return reversed;
+}
+
+int main() {
+    int number;
+    
+    cout << "Enter a number: ";
+    cin >> number;
+    
+    int reversed = reverseNumber(number);
+    
+    cout << "Original number: " << number << endl;
+    cout << "Reversed number: " << reversed << endl;
+    
+    return 0;
+}
+\`\`\`
+
+**How it works:**
+1. *Extract last digit* using modulo operator (% 10)
+2. *Build reversed number* by multiplying by 10 and adding last digit
+3. *Remove last digit* using division by 10
+4. *Repeat* until original number becomes 0
+
+**Example:**
+- Input: 12345
+- Process:
+  - reversed = 0 * 10 + 5 = 5
+  - reversed = 5 * 10 + 4 = 54  
+  - reversed = 54 * 10 + 3 = 543
+  - reversed = 543 * 10 + 2 = 5432
+  - reversed = 5432 * 10 + 1 = 54321
+- Output: 54321
+
+**Time Complexity:** O(log₁₀ n) - number of digits in the input
+**Space Complexity:** O(1) - constant space used`;
+      } else {
+        responseText = "I understand you're asking about frontend development. Here's a simple HTML example:\n\n```html\n<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n  <style>\n    body { font-family: sans-serif; }\n    h1 { color: blue; }\n  </style>\n</head>\n<body>\n  <h1>Hello World!</h1>\n  <p>This is a paragraph.</p>\n</body>\n</html>\n```\n\nYou can save this as an **.html** file and open it in any browser!";
+      }
+      
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           from: "ai",
-          text: "I understand you're asking about frontend development. Here's a simple HTML example:\n\n<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World!</h1>\n</body>\n</html>",
+          text: responseText,
           time: "Just now",
           read: false
         },
@@ -183,10 +410,8 @@ const ChatInterface = () => {
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           className="flex items-center gap-3 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 px-5 py-3"
         >
-          {/* AI Avatar */}
           <Avatar size={48} status={true} type="ai" />
 
-          {/* AI Name + status */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="text-base font-bold text-slate-800">
@@ -206,7 +431,6 @@ const ChatInterface = () => {
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="flex items-center gap-1">
             {[
               { Icon: Phone, label: "Call" },
@@ -260,9 +484,8 @@ const ChatInterface = () => {
                   layout
                   className="flex flex-col"
                 >
-                  {/* Action Icons - Always visible above message */}
+                  {/* Action Icons */}
                   <div className={`flex items-center gap-1 mb-1 ${isAI ? 'justify-end' : 'justify-start'}`}>
-                    {/* Left side icons for user messages (Dipankar) */}
                     {isUser && (
                       <>
                         <motion.button
@@ -284,40 +507,40 @@ const ChatInterface = () => {
                           <Heart size={14} />
                         </motion.button>
 
-
-
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
                           title="Copy"
+                          onClick={() => navigator.clipboard.writeText(msg.text)}
                         >
                           <Copy size={14} />
                         </motion.button>
 
-                      <motion.button
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }}
-  onClick={() => navigate("/deepaskshare", { 
-    state: { 
-      thread: {
-        userMessage: "how to do frontend in html", // The user's message
-        aiResponse: "To create a frontend in HTML, follow these steps: start with a basic HTML structure, add CSS for styling, and use JavaScript for interactivity.", // The AI's response
-        time: "2:10 PM", // Time of user message
-        responseTime: "2:11 PM", // Time of AI response
-        conversationId: msg.id, // Optional: pass the message ID
-        context: "full-conversation" // Optional: additional context
-      }
-    } 
-  })}
-  className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
-  title="Deep Ask Share - 4 notifications"
->
-  <Brain size={14} />
-  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-    4
-  </span>
-</motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => navigate("/deepaskshare", { 
+                            state: { 
+                              thread: {
+                                userMessage: messages[i-1]?.text || msg.text,
+                                aiResponse: messages[i+1]?.text || "",
+                                time: msg.time,
+                                responseTime: messages[i+1]?.time,
+                                conversationId: msg.id,
+                                context: "full-conversation"
+                              }
+                            } 
+                          })}
+                          className="p-1 rounded-lg hover:bg-indigo-50 text-slate-400 hover:text-indigo-500 transition-colors relative"
+                          title="Deep Ask Share - 4 notifications"
+                        >
+                          <Brain size={14} />
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                            4
+                          </span>
+                        </motion.button>
+
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
@@ -328,25 +551,23 @@ const ChatInterface = () => {
                         </motion.button>
                       </>
                     )}
-
-
                   </div>
 
                   {/* Message bubble with avatar */}
                   <div className={`flex items-end gap-2 ${isAI ? 'justify-end' : 'justify-start'}`}>
-                    {/* Avatar for user messages (Dipankar - left side) */}
+                    {/* Avatar for user messages */}
                     {isUser && !prevSame && (
                       <Avatar size={36} status={true} type="user" />
                     )}
                     {isUser && prevSame && <div className="w-9" />}
 
                     {/* Message bubble */}
-                    <div className={`flex flex-col max-w-[70%] ${isAI ? 'items-end' : 'items-start'}`}>
+                    <div className={`flex flex-col max-w-[80%] ${isAI ? 'items-end' : 'items-start'}`}>
                       <motion.div
                         whileHover={{ scale: 1.01 }}
-                        className={`px-4 py-2.5 text-sm whitespace-pre-wrap ${isAI
+                        className={`px-4 py-3 text-sm ${isAI
                             ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
-                            : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
+                            : 'bg-white text-slate-800 rounded-2xl rounded-bl-sm border border-blue-100'
                           }`}
                         style={{
                           boxShadow: isAI
@@ -354,7 +575,18 @@ const ChatInterface = () => {
                             : '0 2px 8px rgba(0,0,0,0.03)',
                         }}
                       >
-                        {msg.text}
+                        {/* Format the message with code blocks and markdown */}
+                        <div className="prose prose-sm max-w-none dark:prose-invert">
+                          {isAI ? (
+                            <div className="text-white/90 space-y-2">
+                              {formatMessage(msg.text)}
+                            </div>
+                          ) : (
+                            <div className="text-slate-800">
+                              {msg.text}
+                            </div>
+                          )}
+                        </div>
                       </motion.div>
 
                       {/* Time + read receipt */}
@@ -369,7 +601,7 @@ const ChatInterface = () => {
                       </div>
                     </div>
 
-                    {/* Avatar for AI messages (fD - right side) */}
+                    {/* Avatar for AI messages */}
                     {isAI && !prevSame && (
                       <Avatar size={36} status={true} type="ai" />
                     )}
@@ -380,7 +612,7 @@ const ChatInterface = () => {
             })}
           </AnimatePresence>
 
-          {/* Typing indicator (fD typing - right side) */}
+          {/* Typing indicator */}
           <AnimatePresence>
             {isTyping && (
               <motion.div
@@ -414,7 +646,6 @@ const ChatInterface = () => {
           transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
           className="flex items-center gap-2 flex-shrink-0 px-4 py-3 border-t border-slate-200 bg-white"
         >
-          {/* Attachment + emoji */}
           {[Paperclip, Smile].map((Icon, i) => (
             <motion.button
               key={i}
@@ -426,19 +657,17 @@ const ChatInterface = () => {
             </motion.button>
           ))}
 
-          {/* Input */}
           <div className="flex-1">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Ask fD something..."
+              placeholder="Ask fD something... (try 'reverse a number in cpp')"
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
             />
           </div>
 
-          {/* Send */}
           <motion.button
             onClick={send}
             whileHover={{ scale: input.trim() ? 1.1 : 1 }}
