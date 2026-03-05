@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Facebook, Instagram, Twitter, Linkedin,
   MessageCircle, MoreHorizontal, Sparkles, Heart, X,
-  UserPlus, UserCheck, Home, Calendar, User, Mail, Phone, Briefcase, Send, Smile, Paperclip, Star
+  UserPlus, UserCheck, Home, Calendar, User, Mail, Phone, Briefcase, Send, Smile, Paperclip, Star,Github
 } from "lucide-react";
 
 // Inline Chat Panel Component
@@ -14,6 +14,23 @@ const InlineChatPanel = ({ recipient, onClose }) => {
   ]);
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
+  
+  const chatContainerRef = useRef(null); // Add this ref
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Add this useEffect to scroll to chat when it opens
+  useEffect(() => {
+    // Small delay to ensure the animation has started
+    setTimeout(() => {
+      chatContainerRef.current?.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "start" 
+      });
+    }, 100);
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -32,6 +49,7 @@ const InlineChatPanel = ({ recipient, onClose }) => {
 
   return (
     <motion.div
+    ref={chatContainerRef}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
@@ -310,7 +328,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
 
 
          <div className="flex items-center gap-2 mb-4">
-          {[Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
+          {[Instagram,Facebook, Twitter, Linkedin,Github].map((Icon, i) => (
             <motion.a key={i} href="#" whileHover={socialIconHover} whileTap={{ scale: 0.95 }}
               className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-300 transition-all duration-150">
               <Icon size={14} />
