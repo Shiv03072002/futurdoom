@@ -256,114 +256,114 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
               className="w-8 h-8 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-blue-50 transition-colors relative"
             >
               <MoreHorizontal size={15} />
-             <AnimatePresence>
-  {showMenu && (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
-      className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg border border-gray-200 z-10 overflow-hidden"
-    >
-      <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
-        Edit Profile
-      </button>
-      <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-        Share Profile
-      </button>
-    </motion.div>
-  )}
-</AnimatePresence>
+              <AnimatePresence>
+                {showMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg border border-gray-200 z-10 overflow-hidden"
+                  >
+                    <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
+                      Edit Profile
+                    </button>
+                    <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                      Share Profile
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.button>
           </div>
         </div>
 
         {/* Name & Details — hidden when chat is open */}
         <AnimatePresence>
-        {!showChat && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="overflow-hidden"
-        >
-        <div className="mb-4">
-          <div className="mb-4">
-            <h2 className="text-xl font-bold text-slate-800">{sampleUser.name}</h2>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
-                <Mail size={10} className="text-blue-500" />
-              </div>
-              <p className="text-xs text-slate-500">{sampleUser.email}</p>
-              <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium px-1.5 py-0.5 bg-blue-50 rounded">Copy</button>
-            </div>
-          </div>
-
-          {/* Addresses */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-            <motion.div whileHover={{ y: -2, scale: 1.01 }} className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200">
-                  <Home size={14} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-[8px] text-blue-400 uppercase tracking-wider font-semibold mb-1">Home Address</p>
-                  <p className="text-sm font-medium text-slate-700">{sampleUser.homeAddress}</p>
-                </div>
-              </div>
-            </motion.div>
-            <motion.div whileHover={{ y: -2, scale: 1.01 }} className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200">
-                  <MapPin size={14} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-[8px] text-purple-400 uppercase tracking-wider font-semibold mb-1">Current Location</p>
-                  <p className="text-sm font-medium text-slate-700">{sampleUser.currentLocation}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Personal Details Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-            {[
-              { icon: User, label: "Gender", value: sampleUser.gender, color: "blue" },
-              { icon: Calendar, label: "Birthday", value: sampleUser.birthday, sub: "Age: 29 years", color: "purple" },
-              { icon: Phone, label: "Phone", value: sampleUser.phone, sub: "Verified", subColor: "green", color: "green" },
-              { icon: Briefcase, label: "Occupation", value: sampleUser.occupation, sub: "at TechCorp Inc.", color: "orange" },
-            ].map(({ icon: Icon, label, value, sub, subColor, color }) => (
-              <motion.div key={label} whileHover={{ scale: 1.02 }} className={`bg-white border border-slate-100 rounded-xl p-3 hover:border-${color}-200 transition-all duration-200`}>
-                <div className="flex flex-col items-center text-center">
-                  <div className={`w-8 h-8 rounded-full bg-gradient-to-br from-${color}-50 to-${color}-100 flex items-center justify-center mb-2`}>
-                    <Icon size={14} className={`text-${color}-600`} />
+          {!showChat && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="overflow-hidden"
+            >
+              <div className="mb-4">
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-slate-800">{sampleUser.name}</h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
+                      <Mail size={10} className="text-blue-500" />
+                    </div>
+                    <p className="text-xs text-slate-500">{sampleUser.email}</p>
+                    <button className="text-[9px] text-blue-600 hover:text-blue-700 font-medium px-1.5 py-0.5 bg-blue-50 rounded">Copy</button>
                   </div>
-                  <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">{label}</p>
-                  <p className="text-xs font-semibold text-slate-700">{value}</p>
-                  {sub && <p className={`text-[8px] mt-1 ${subColor ? `text-${subColor}-600` : "text-slate-400"}`}>{sub}</p>}
                 </div>
-              </motion.div>
-            ))}
-          </div>
 
-          {/* Bio */}
-          <motion.div className="relative group" whileHover={{ scale: 1.01 }}>
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
-            <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
-                  <Sparkles size={12} className="text-white" />
+                {/* Addresses */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  <motion.div whileHover={{ y: -2, scale: 1.01 }} className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200">
+                        <Home size={14} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[8px] text-blue-400 uppercase tracking-wider font-semibold mb-1">Home Address</p>
+                        <p className="text-sm font-medium text-slate-700">{sampleUser.homeAddress}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                  <motion.div whileHover={{ y: -2, scale: 1.01 }} className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200">
+                        <MapPin size={14} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[8px] text-purple-400 uppercase tracking-wider font-semibold mb-1">Current Location</p>
+                        <p className="text-sm font-medium text-slate-700">{sampleUser.currentLocation}</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-                <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">About Me</p>
-                <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
+
+                {/* Personal Details Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                  {[
+                    { icon: User, label: "Gender", value: sampleUser.gender, color: "blue" },
+                    { icon: Calendar, label: "Birthday", value: sampleUser.birthday, sub: "Age: 29 years", color: "purple" },
+                    { icon: Phone, label: "Phone", value: sampleUser.phone, sub: "Verified", subColor: "green", color: "green" },
+                    { icon: Briefcase, label: "Occupation", value: sampleUser.occupation, sub: "at TechCorp Inc.", color: "orange" },
+                  ].map(({ icon: Icon, label, value, sub, subColor, color }) => (
+                    <motion.div key={label} whileHover={{ scale: 1.02 }} className={`bg-white border border-slate-100 rounded-xl p-3 hover:border-${color}-200 transition-all duration-200`}>
+                      <div className="flex flex-col items-center text-center">
+                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br from-${color}-50 to-${color}-100 flex items-center justify-center mb-2`}>
+                          <Icon size={14} className={`text-${color}-600`} />
+                        </div>
+                        <p className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">{label}</p>
+                        <p className="text-xs font-semibold text-slate-700">{value}</p>
+                        {sub && <p className={`text-[8px] mt-1 ${subColor ? `text-${subColor}-600` : "text-slate-400"}`}>{sub}</p>}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Bio */}
+                <motion.div className="relative group" whileHover={{ scale: 1.01 }}>
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
+                  <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+                        <Sparkles size={12} className="text-white" />
+                      </div>
+                      <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">About Me</p>
+                      <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
+                  </div>
+                </motion.div>
               </div>
-              <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
-            </div>
-          </motion.div>
-        </div>
-        </motion.div>
-        )}
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {/* Stats */}
