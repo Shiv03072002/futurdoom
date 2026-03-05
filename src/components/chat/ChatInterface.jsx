@@ -221,7 +221,7 @@ const ChatInterface = () => {
           </div>
 
           <div className="flex items-center gap-0.5 relative z-10">
-            {[Phone, Video, Info, MoreHorizontal].map((Icon, i) => (
+            {[ MoreHorizontal].map((Icon, i) => (
               <motion.button key={i}
                 whileHover={{ scale: 1.1, backgroundColor: "rgba(37,99,235,0.08)" }}
                 whileTap={{ scale: 0.92 }}

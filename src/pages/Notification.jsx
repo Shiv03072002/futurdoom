@@ -16,8 +16,7 @@ const initialNotifications = [
     date: "Feb 20, 2026",
     type: "comment",
     category: "comments",
-    read: false,
-    unreadCount: 3
+    read: false
   },
   {
     id: 2,
@@ -31,8 +30,7 @@ const initialNotifications = [
     date: "Feb 19, 2026",
     type: "like",
     category: "likes",
-    read: false,
-    unreadCount: 1
+    read: false
   },
   {
     id: 3,
@@ -46,23 +44,21 @@ const initialNotifications = [
     date: "Feb 18, 2026",
     type: "discussion",
     category: "discussion",
-    read: true,
-    unreadCount: 0
+    read: true
   },
   {
     id: 4,
     initials: "RK",
     avatarColor: "from-purple-400 to-pink-500",
     user: "Rahul Kumar",
-    action: "mentioned you in",
-    target: "team",
-    suffix: "group chat",
-    preview: "@you check this out!",
+    action: "sent you a",
+    target: "message",
+    suffix: "",
+    preview: "Hey, check this out!",
     date: "Feb 17, 2026",
-    type: "mention",
-    category: "mentions",
-    read: false,
-    unreadCount: 5
+    type: "message",
+    category: "messages",
+    read: false
   },
   {
     id: 5,
@@ -76,8 +72,7 @@ const initialNotifications = [
     date: "Feb 16, 2026",
     type: "interested",
     category: "interested",
-    read: true,
-    unreadCount: 0
+    read: true
   },
   {
     id: 6,
@@ -91,8 +86,21 @@ const initialNotifications = [
     date: "Feb 15, 2026",
     type: "interesting",
     category: "interesting",
-    read: false,
-    unreadCount: 2
+    read: false
+  },
+  {
+    id: 7,
+    initials: "SN",
+    avatarColor: "from-green-400 to-emerald-500",
+    user: "Shivani Nair",
+    action: "added you to",
+    target: "Design Team",
+    suffix: "group chat",
+    preview: "Welcome to the design group!",
+    date: "Feb 14, 2026",
+    type: "groupchat",
+    category: "groupchats",
+    read: false
   }
 ];
 
@@ -114,37 +122,28 @@ const Notification = () => {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
   
-  // Get counts for each category
+  // Get unread counts for each category (for badges)
   const commentsUnread = notifications.filter(n => n.category === "comments" && !n.read).length;
   const likesUnread = notifications.filter(n => n.category === "likes" && !n.read).length;
   const discussionUnread = notifications.filter(n => n.category === "discussion" && !n.read).length;
-  const mentionsUnread = notifications.filter(n => n.category === "mentions" && !n.read).length;
+  const messagesUnread = notifications.filter(n => n.category === "messages" && !n.read).length;
   const interestedUnread = notifications.filter(n => n.category === "interested" && !n.read).length;
   const interestingUnread = notifications.filter(n => n.category === "interesting" && !n.read).length;
-
-  // Total counts
-  const commentsCount = notifications.filter(n => n.category === "comments").length;
-  const likesCount = notifications.filter(n => n.category === "likes").length;
-  const discussionCount = notifications.filter(n => n.category === "discussion").length;
-  const mentionsCount = notifications.filter(n => n.category === "mentions").length;
-  const interestedCount = notifications.filter(n => n.category === "interested").length;
-  const interestingCount = notifications.filter(n => n.category === "interesting").length;
+  const groupchatsUnread = notifications.filter(n => n.category === "groupchats" && !n.read).length;
 
   const filteredNotifications = activeFilter === "all" 
     ? notifications 
-    : activeFilter === "unread"
-      ? notifications.filter(n => !n.read)
-      : notifications.filter(n => n.category === activeFilter);
+    : notifications.filter(n => n.category === activeFilter);
 
   return (
     <div className="min-h-screen flex items-start justify-center ">
-      <div className="bg-white rounded-xl border border-blue-100 w-full  overflow-hidden shadow-sm">
+      <div className="bg-white rounded-xl border border-blue-100 w-full overflow-hidden shadow-sm">
         
         <NotificationHeader unreadCount={unreadCount} />
 
         <div className="p-4 sm:p-6">
           
-          {/* Filter Tabs - All with red badges */}
+          {/* Filter Tabs - with badges for unread counts */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
             
             {/* All Tab */}
@@ -156,30 +155,30 @@ const Notification = () => {
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              All ({notifications.length})
+              All
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </button>
-            
-            {/* Unread Tab */}
-            <button
-              onClick={() => setActiveFilter("unread")}
+                {/* Likes Tab */}
+             <button
+              onClick={() => setActiveFilter("likes")}
               className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "unread"
+                activeFilter === "likes"
                   ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Unread
-              {unreadCount > 0 && (
+              Likes
+              {likesUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {unreadCount > 9 ? '9+' : unreadCount}
+                  {likesUnread > 9 ? '9+' : likesUnread}
                 </span>
               )}
             </button>
+            
             
             {/* Comments Tab */}
             <button
@@ -190,7 +189,7 @@ const Notification = () => {
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Comments 
+              Comments
               {commentsUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
                   {commentsUnread > 9 ? '9+' : commentsUnread}
@@ -198,23 +197,24 @@ const Notification = () => {
               )}
             </button>
             
-            {/* Likes Tab */}
+           
+           {/* Message Tab */}
             <button
-              onClick={() => setActiveFilter("likes")}
+              onClick={() => setActiveFilter("messages")}
               className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "likes"
+                activeFilter === "messages"
                   ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Likes 
-              {likesUnread > 0 && (
+              Message
+              {messagesUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {likesUnread > 9 ? '9+' : likesUnread}
+                  {messagesUnread > 9 ? '9+' : messagesUnread}
                 </span>
               )}
             </button>
-            
+           
             {/* Discussion Tab */}
             <button
               onClick={() => setActiveFilter("discussion")}
@@ -224,30 +224,32 @@ const Notification = () => {
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Discussion 
+              Discussion
               {discussionUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
                   {discussionUnread > 9 ? '9+' : discussionUnread}
                 </span>
               )}
             </button>
-            
-            {/* Mentions Tab */}
+
+            {/* Group Chat Tab */}
             <button
-              onClick={() => setActiveFilter("mentions")}
+              onClick={() => setActiveFilter("groupchats")}
               className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "mentions"
+                activeFilter === "groupchats"
                   ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Mentions 
-              {mentionsUnread > 0 && (
+              GroupChat
+              {groupchatsUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {mentionsUnread > 9 ? '9+' : mentionsUnread}
+                  {groupchatsUnread > 9 ? '9+' : groupchatsUnread}
                 </span>
               )}
             </button>
+            
+            
             
             {/* Interested Tab */}
             <button
@@ -258,7 +260,7 @@ const Notification = () => {
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Interested 
+              Interested
               {interestedUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
                   {interestedUnread > 9 ? '9+' : interestedUnread}
@@ -275,19 +277,21 @@ const Notification = () => {
                   : "text-slate-600 hover:bg-blue-50 border border-slate-200"
               }`}
             >
-              Interesting 
+              Interesting
               {interestingUnread > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
                   {interestingUnread > 9 ? '9+' : interestingUnread}
                 </span>
               )}
             </button>
+            
+            
           </div>
 
           <div className="h-px bg-slate-100 mb-2" />
 
           {/* Notifications List */}
-          <div className="divide-y divide-slate-100  overflow-y-auto">
+          <div className="divide-y divide-slate-100 overflow-y-auto">
             {filteredNotifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">

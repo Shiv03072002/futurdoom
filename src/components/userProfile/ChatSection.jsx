@@ -143,21 +143,20 @@ const ChatSection = () => {
   };
 
   const handleOpenDeepPage = () => {
-    navigate("/chat", { 
-      state: { 
-        thread: {
-          id: 1,
-          userMessage: "Can you help me with React?",
-          aiResponse: "Sure! I'd be happy to help with React.",
-          time: "10:30 AM",
-          responseTime: "10:32 AM",
-          context: "full-conversation",
-          messages: messages
-        }
-      } 
-    });
+  const threadData = {
+    id: 1,
+    userMessage: "Can you help me with React?",
+    aiResponse: "Sure! I'd be happy to help with React.",
+    time: "10:30 AM",
+    responseTime: "10:32 AM",
+    context: "full-conversation",
+    messages: messages
   };
 
+  navigate(`/thread/${threadData.id}`, {
+    state: { thread: threadData }
+  });
+};
   const attachments = [
     { icon: Image, label: "Image", color: "from-green-400 to-emerald-500" },
     { icon: FileText, label: "Document", color: "from-blue-400 to-indigo-500" },

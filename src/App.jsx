@@ -27,6 +27,7 @@ import Signup from "./pages/auth/Signup";
 import SignIn from "./pages/auth/SignIn";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AIChat from "./pages/AIChat";
+import ThreadPage from './pages/ThreadChatPage'
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       { path: "profile/:username", element: <UserProfilePage /> },
       { path: "searchpeople", element: <Search /> },
       { path: "chat", element: <ChatMain /> },
+     {
+    path: "/thread/:messageId",
+    element: <ThreadPage />,
+  },
       { path: "profile", element: <MyProfile /> },
       { path: "settings", element: <Setting /> },
       { path: "edit", element: <EditProfile /> },
@@ -67,7 +72,7 @@ const router = createBrowserRouter([
       { path: "group-chat/new", element: <GroupChat /> },
       { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
       { path: "discussion/new", element: <DiscussionChatMain /> },
-       {path:"deepaskshare", element:<AIChat />}
+      {path:"deepaskshare", element:<AIChat />}
     ],
   },
 ]);

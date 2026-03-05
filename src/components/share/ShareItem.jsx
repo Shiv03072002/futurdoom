@@ -18,18 +18,18 @@ const ShareItem = ({ share, onDelete }) => {
   };
 
   const handleOpenDeepPage = () => {
-    navigate("/chat", { 
-      state: { 
-        thread: {
-          id: share.id,
-          userMessage: share.message,
-          aiResponse: share.reply,
-          time: share.time,
-          responseTime: share.replyTime,
-          context: "full-conversation"
-        }
-      } 
-    });
+    navigate(`/thread/${share.id}`, { 
+  state: { 
+    thread: {
+      id: share.id,
+      userMessage: share.message,
+      aiResponse: share.reply,
+      time: share.time,
+      responseTime: share.replyTime,
+      context: "full-conversation"
+    }
+  } 
+});
   };
 
   const toggleMessage = (messageId) => {
