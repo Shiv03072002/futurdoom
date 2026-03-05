@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   MessageSquare, 
@@ -14,7 +14,8 @@ import {
   Trash2,
   Clock,
   CheckCircle2,
-  Share2
+  Share2,
+  MoreHorizontal
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -136,6 +137,18 @@ const ChatSidebar = ({ onSelectChat, onNewChat, isOpen, onClose }) => {
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const [showMenuForChat, setShowMenuForChat] = useState(null);
+
+// Add click outside handler
+useEffect(() => {
+  const handleClickOutside = () => {
+    setShowMenuForChat(null);
+  };
+  
+  document.addEventListener('click', handleClickOutside);
+  return () => document.removeEventListener('click', handleClickOutside);
+}, []);
 
   const handleNewChat = () => {
     // Create a new empty chat
@@ -268,27 +281,58 @@ const ChatSidebar = ({ onSelectChat, onNewChat, isOpen, onClose }) => {
                 {chat.date} · {chat.time}
               </span>
               
-              <div className="flex items-center gap-1">
-                {/* Share Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Add your share logic here
-                    console.log("Share chat:", chat.id);
-                  }}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-blue-100"
-                >
-                  <Share2 size={12} className="text-blue-400 hover:text-blue-500" />
-                </button>
-                
-                {/* Delete Button */}
-                <button
-                  onClick={(e) => handleDeleteChat(e, chat.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-100"
-                >
-                  <Trash2 size={12} className="text-red-400 hover:text-red-500" />
-                </button>
-              </div>
+              <div className="flex items-center gap-1 relative">
+  {/* Menu Button */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setShowMenuForChat(chat.id); // Set the current chat id to show menu
+    }}
+    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-100"
+  >
+    <MoreHorizontal size={12} className="text-gray-400 hover:text-gray-600" />
+  </button>
+
+  {/* Menu Modal */}
+  <AnimatePresence>
+    {showMenuForChat === chat.id && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: -10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: -10 }}
+        transition={{ duration: 0.15 }}
+        className="absolute right-0 top-full mt-1 w-36 bg-white rounded-lg border border-gray-200 shadow-lg z-50 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Share Option */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log("Share chat:", chat.id);
+            setShowMenuForChat(null);
+          }}
+          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-100"
+        >
+          <Share2 size={12} className="text-blue-500" />
+          Share
+        </button>
+
+        {/* Delete Option */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteChat(e, chat.id);
+            setShowMenuForChat(null);
+          }}
+          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-red-50 transition-colors"
+        >
+          <Trash2 size={12} className="text-red-500" />
+          Delete
+        </button>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
             </div>
           </div>
         </div>

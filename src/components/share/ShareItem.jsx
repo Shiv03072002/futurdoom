@@ -318,11 +318,10 @@ const ShareItem = ({ share, onDelete }) => {
             {/* Header with icon */}
             <div className="flex items-center gap-2 mb-3">
               <div className="flex items-center gap-1.5">
-               <div className="w-12 h-6 rounded-lg bg-blue-100 flex items-center justify-between px-1">
-  <Brain size={12} className="text-blue-600" />
-  <div className="w-px h-3 bg-blue-300" /> {/* Optional divider */}
-  <MessageCircle size={12} className="text-blue-600" />
-</div>
+               <div className="w-10 h-6 rounded-lg bg-blue-100 flex items-center justify-center gap-1 px-1 overflow-hidden">
+                                  <Brain size={12} className="text-blue-600" />
+                                  <MessageCircle size={12} className="text-blue-600" />
+                                </div>
               </div>
               <span className="text-xs font-medium text-blue-600 group-hover:text-blue-700 transition-colors">
                 Continue reading...

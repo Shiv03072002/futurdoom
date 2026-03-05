@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
+import {
   Settings, Sparkles, Send, Smile, Paperclip, Mic, Image, FileText, X,
   Trash2, Heart, Copy, Share2, CheckCheck, Brain, MoreVertical, MessageCircle, ArrowRight, ChevronDown, ChevronUp
 } from "lucide-react";
@@ -14,7 +14,7 @@ const ChatSection = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [expandedMessages, setExpandedMessages] = useState({});
   const [showFullConversation, setShowFullConversation] = useState(false);
-  
+
   // Messages state with dummy data
   const [messages, setMessages] = useState([
     {
@@ -116,7 +116,7 @@ const ChatSection = () => {
       setMessages([...messages, newMessage]);
       setMessage("");
       setIsTyping(false);
-      
+
       // Simulate reply after 2 seconds
       setTimeout(() => {
         const replyMessage = {
@@ -143,20 +143,20 @@ const ChatSection = () => {
   };
 
   const handleOpenDeepPage = () => {
-  const threadData = {
-    id: 1,
-    userMessage: "Can you help me with React?",
-    aiResponse: "Sure! I'd be happy to help with React.",
-    time: "10:30 AM",
-    responseTime: "10:32 AM",
-    context: "full-conversation",
-    messages: messages
-  };
+    const threadData = {
+      id: 1,
+      userMessage: "Can you help me with React?",
+      aiResponse: "Sure! I'd be happy to help with React.",
+      time: "10:30 AM",
+      responseTime: "10:32 AM",
+      context: "full-conversation",
+      messages: messages
+    };
 
-  navigate(`/thread/${threadData.id}`, {
-    state: { thread: threadData }
-  });
-};
+    navigate(`/thread/${threadData.id}`, {
+      state: { thread: threadData }
+    });
+  };
   const attachments = [
     { icon: Image, label: "Image", color: "from-green-400 to-emerald-500" },
     { icon: FileText, label: "Document", color: "from-blue-400 to-indigo-500" },
@@ -167,7 +167,7 @@ const ChatSection = () => {
   // Avatar component
   const Avatar = ({ size = 32, status = true, initial = "fD" }) => (
     <div className="relative flex-shrink-0">
-      <div 
+      <div
         className="rounded-xl bg-gradient-to-br from-[#1a3aad] to-[#2563eb] flex items-center justify-center text-white font-bold shadow-md"
         style={{ width: size, height: size, fontSize: size * 0.35 }}
       >
@@ -185,7 +185,7 @@ const ChatSection = () => {
   const nextMessages = messages.slice(4, 6);
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-white rounded-xl border border-blue-50 overflow-hidden w-full "
       variants={{
         hidden: { opacity: 0 },
@@ -201,12 +201,12 @@ const ChatSection = () => {
       animate="visible"
     >
       {/* Header */}
-      <motion.div 
+      <motion.div
         className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 bg-gradient-to-r from-blue-50 to-indigo-50"
         variants={itemVariants}
       >
         <div className="flex items-center gap-3">
-          <motion.span 
+          <motion.span
             className="text-sm font-semibold text-slate-800 flex items-center gap-1"
             animate={{
               color: ["#1e293b", "#2563eb", "#1e293b"],
@@ -224,7 +224,7 @@ const ChatSection = () => {
             Feb 20, 2026
           </span>
         </div>
-        
+
         <div className="flex items-center gap-2 relative">
           <motion.button
             whileHover={{ scale: 1.1, rotate: 90 }}
@@ -237,7 +237,7 @@ const ChatSection = () => {
 
           <AnimatePresence>
             {settingsOpen && (
-              <motion.div 
+              <motion.div
                 className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-xl shadow-xl border border-blue-100 z-10 overflow-hidden"
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -267,7 +267,7 @@ const ChatSection = () => {
       </motion.div>
 
       {/* Messages Area */}
-      <motion.div 
+      <motion.div
         className="px-4 sm:px-6 py-5 space-y-4 bg-gradient-to-b from-blue-50/50 to-white min-h-[400px] max-h-[500px] overflow-y-auto"
         variants={itemVariants}
       >
@@ -327,14 +327,8 @@ const ChatSection = () => {
                           4
                         </span>
                       </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-1 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                        title="Share"
-                      >
-                        <Share2 size={14} />
-                      </motion.button>
+
+
                     </>
                   )}
 
@@ -390,31 +384,29 @@ const ChatSection = () => {
                   <div className={`flex flex-col w-full ${isMe ? 'items-end' : 'items-start'}`}>
                     <motion.div
                       whileHover={{ scale: 1.01 }}
-                      className={`px-4 py-2.5 text-sm break-words max-w-full ${
-                        isMe 
-                          ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm' 
+                      className={`px-4 py-2.5 text-sm break-words max-w-full ${isMe
+                          ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
                           : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
-                      }`}
+                        }`}
                       style={{
-                        boxShadow: isMe 
+                        boxShadow: isMe
                           ? '0 4px 15px rgba(37,99,235,0.3)'
                           : '0 2px 8px rgba(0,0,0,0.03)',
                       }}
                     >
                       <div>
-                        {expandedMessages[msg.id] 
-                          ? msg.text 
+                        {expandedMessages[msg.id]
+                          ? msg.text
                           : truncateMessage(msg.text)
                         }
                       </div>
-                      
+
                       {/* Show more/less button for long messages */}
                       {isLongMessage(msg.text) && (
                         <button
                           onClick={() => toggleMessage(msg.id)}
-                          className={`flex items-center gap-1 text-[10px] mt-2 font-medium ${
-                            isMe ? 'text-blue-200 hover:text-white' : 'text-blue-600 hover:text-blue-700'
-                          }`}
+                          className={`flex items-center gap-1 text-[10px] mt-2 font-medium ${isMe ? 'text-blue-200 hover:text-white' : 'text-blue-600 hover:text-blue-700'
+                            }`}
                         >
                           {expandedMessages[msg.id] ? (
                             <>Show less <ChevronUp size={10} /></>
@@ -463,7 +455,9 @@ const ChatSection = () => {
               <div className="bg-gradient-to-b from-blue-50/50 to-white rounded-xl border border-blue-100 p-4 hover:border-blue-300 hover:shadow-md transition-all duration-300">
                 {/* Header */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center">
+
+                  <div className="w-10 h-6 rounded-lg bg-blue-100 flex items-center justify-center gap-1 px-1 overflow-hidden">
+                    <Brain size={12} className="text-blue-600" />
                     <MessageCircle size={12} className="text-blue-600" />
                   </div>
                   <span className="text-xs font-medium text-blue-600 group-hover:text-blue-700 transition-colors">
@@ -485,16 +479,15 @@ const ChatSection = () => {
                             <span className="text-[8px] font-medium text-blue-600">fD</span>
                           </div>
                         )}
-                        
+
                         <div className={`flex-1 max-w-[85%] ${isMe ? 'text-right' : 'text-left'}`}>
                           <p className="text-[10px] text-slate-400 mb-0.5">
                             {isMe ? 'You' : 'futurdoom'}
                           </p>
-                          <div className={`text-[11px] p-2 rounded-lg ${
-                            isMe 
-                              ? 'bg-blue-50 text-blue-700 border border-blue-100' 
+                          <div className={`text-[11px] p-2 rounded-lg ${isMe
+                              ? 'bg-blue-50 text-blue-700 border border-blue-100'
                               : 'bg-white text-slate-600 border border-blue-50'
-                          }`}>
+                            }`}>
                             {msg.text.length > 50 ? msg.text.substring(0, 50) + '...' : msg.text}
                           </div>
                         </div>
@@ -539,11 +532,10 @@ const ChatSection = () => {
                     <div className={`flex items-end gap-2 max-w-[85%] sm:max-w-[70%] ${isMe ? 'flex-row-reverse' : ''}`}>
                       <Avatar size={28} status={false} initial={isMe ? "ME" : "fD"} />
                       <div className="flex flex-col">
-                        <div className={`px-3 py-2 text-xs ${
-                          isMe 
-                            ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm' 
+                        <div className={`px-3 py-2 text-xs ${isMe
+                            ? 'bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white rounded-2xl rounded-br-sm'
                             : 'bg-white text-slate-700 rounded-2xl rounded-bl-sm border border-blue-100'
-                        }`}>
+                          }`}>
                           {msg.text}
                         </div>
                         <span className="text-[8px] text-slate-400 mt-0.5">{msg.time}</span>
@@ -558,7 +550,7 @@ const ChatSection = () => {
 
         {/* Typing indicator */}
         {isTyping && (
-          <motion.div 
+          <motion.div
             className="flex items-center gap-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -567,17 +559,17 @@ const ChatSection = () => {
             <Avatar size={32} status={false} />
             <div className="bg-white border border-blue-100 rounded-2xl px-4 py-3">
               <div className="flex gap-1">
-                <motion.span 
+                <motion.span
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
                   className="w-2 h-2 bg-blue-400 rounded-full"
                 />
-                <motion.span 
+                <motion.span
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
                   className="w-2 h-2 bg-blue-400 rounded-full"
                 />
-                <motion.span 
+                <motion.span
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
                   className="w-2 h-2 bg-blue-400 rounded-full"
@@ -588,7 +580,7 @@ const ChatSection = () => {
         )}
       </motion.div>
 
-    
+
     </motion.div>
   );
 };

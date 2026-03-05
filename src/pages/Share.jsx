@@ -26,16 +26,34 @@ const shareData = [
 ];
 
 export default function Share() {
-    return (
-        <div className="min-h-screen flex items-start justify-center">
-            {/* Main Card Container */}
-            <div className="w-full">
-                {/* Header Card */}
-                <div className="bg-white rounded-t-xl shadow-xl shadow-blue-200/50 border border-blue-50 overflow-hidden mb-6">
-                    <ShareHeader totalConversations={shareData.length} />
-                </div>
+    // Get header height on mount and resize
+    const [headerHeight, setHeaderHeight] = React.useState(0);
+    const headerRef = React.useRef(null);
 
-                {/* Share Items */}
+    React.useEffect(() => {
+        const updateHeight = () => {
+            if (headerRef.current) {
+                setHeaderHeight(headerRef.current.offsetHeight);
+            }
+        };
+
+        updateHeight();
+        window.addEventListener('resize', updateHeight);
+        return () => window.removeEventListener('resize', updateHeight);
+    }, []);
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            {/* Sticky Header with ref */}
+            <div ref={headerRef} className="sticky top-20 z-50 ">
+                <ShareHeader totalConversations={shareData.length} />
+            </div>
+
+            {/* Main Content with dynamic padding */}
+            <div 
+                className="max-w-7xl mx-auto mt-6"
+               
+            >
                 <div className="space-y-6">
                     {shareData.map((share) => (
                         <ShareItem key={share.id} share={share} />

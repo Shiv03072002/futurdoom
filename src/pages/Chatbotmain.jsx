@@ -314,13 +314,7 @@ const Chatbotmain = () => {
 
               <motion.span
                 className="bg-gradient-to-r from-[#1a3aad] to-[#2563eb] bg-clip-text text-transparent inline-block font-bold"
-                animate={{
-                  textShadow: [
-                    "0 0 8px rgba(37,99,235,0.3)",
-                    "0 0 16px rgba(37,99,235,0.6)",
-                    "0 0 8px rgba(37,99,235,0.3)",
-                  ],
-                }}
+                
                 transition={{
                   duration: 2,
                   repeat: Infinity,

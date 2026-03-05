@@ -13,7 +13,7 @@ const MainLayout = () => {
       <Navbar />
 
       {/* Main content area — Instagram 2-column layout */}
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl px-1 mx-auto ">
         <div className="flex gap-4 py-6 items-start">
           {/* LEFT SIDEBAR — fixed width like Instagram */}
           <div className="w-[300px] hidden md:block shrink-0 sticky top-20 h-fit">

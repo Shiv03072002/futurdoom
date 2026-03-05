@@ -222,7 +222,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
         ${showChat ? "bg-blue-50 border-blue-300 text-blue-600" : "border-slate-200 text-slate-700 hover:bg-blue-50"}`}
     >
       <MessageCircle size={12} />
-      {showChat ? "Hide Chat" : "Message"}
+      {showChat ? "Post" : "Message"}
     </motion.button>
     <motion.button onClick={() => setShowMenu(!showMenu)} whileHover={buttonHover} whileTap={buttonTap}
       className="w-8 h-8 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-blue-50 transition-colors relative">
@@ -242,13 +242,22 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
 
         {/* ── 1. Name + Role ── */}
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-slate-800">{sampleUser.name}</h2>
-          <div className="flex items-center gap-1.5 mt-1.5">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[10px] font-semibold">
-              <Star size={8} fill="white" />
-              {sampleUser.role}
-            </span>
-          </div>
+  <div className="flex items-center gap-3 flex-wrap">
+    <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium ">
+      <Star size={10} fill="white" />
+      {sampleUser.role}
+    </span>
+  </div>
+</div>
+
+         <div className="flex items-center gap-2 mb-4">
+          {[Instagram,Facebook, Twitter, Linkedin,Github].map((Icon, i) => (
+            <motion.a key={i} href="#" whileHover={socialIconHover} whileTap={{ scale: 0.95 }}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-300 transition-all duration-150">
+              <Icon size={14} />
+            </motion.a>
+          ))}
         </div>
 
         {/* ── 2. Email, Phone, Occupation ── */}
@@ -313,7 +322,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
 
         {/* ── 3. About Me ── */}
         <motion.div className="relative group mb-4" whileHover={{ scale: 1.01 }}>
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur" />
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 transition-opacity duration-300 blur" />
           <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
@@ -327,14 +336,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
         </motion.div>
 
 
-         <div className="flex items-center gap-2 mb-4">
-          {[Instagram,Facebook, Twitter, Linkedin,Github].map((Icon, i) => (
-            <motion.a key={i} href="#" whileHover={socialIconHover} whileTap={{ scale: 0.95 }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-300 transition-all duration-150">
-              <Icon size={14} />
-            </motion.a>
-          ))}
-        </div>
+        
 
         {/* ── 4. Stats ── */}
         <div className="flex mb-4 bg-slate-50 rounded-xl overflow-hidden border border-slate-100">
