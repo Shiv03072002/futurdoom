@@ -256,19 +256,24 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
               className="w-8 h-8 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-blue-50 transition-colors relative"
             >
               <MoreHorizontal size={15} />
-              <AnimatePresence>
-                {showMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute right-0 top-full mt-1 w-36 bg-white rounded-xl border border-slate-200 shadow-lg z-10 overflow-hidden"
-                  >
-                    <button className="w-full px-3 py-2 text-left text-xs text-slate-700 hover:bg-blue-50 transition-colors">Edit Profile</button>
-                    <button className="w-full px-3 py-2 text-left text-xs text-slate-700 hover:bg-blue-50 transition-colors">Share Profile</button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+             <AnimatePresence>
+  {showMenu && (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+      className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg border border-gray-200 z-10 overflow-hidden"
+    >
+      <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
+        Edit Profile
+      </button>
+      <button className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+        Share Profile
+      </button>
+    </motion.div>
+  )}
+</AnimatePresence>
             </motion.button>
           </div>
         </div>
