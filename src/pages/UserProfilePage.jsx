@@ -447,6 +447,7 @@ const UserProfilePage = () => {
   const [interested, setInterested] = useState(false);
   const [interestedInMe, setInterestedInMe] = useState([]);
   const [iAmInterestedIn, setIAmInterestedIn] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     // Simulate API call
@@ -536,10 +537,12 @@ const UserProfilePage = () => {
             setInterested={setInterested}
             interestedInMe={interestedInMe}
             iAmInterestedIn={iAmInterestedIn}
+            isChatOpen={isChatOpen}
+            setIsChatOpen={setIsChatOpen}
           />
 
           {/* Chat Section Component */}
-          <ChatSection />
+         {!isChatOpen && <ChatSection />}
 
           {/* Footer */}
           <motion.p 

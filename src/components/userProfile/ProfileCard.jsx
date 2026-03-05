@@ -92,11 +92,23 @@ const InlineChatPanel = ({ recipient, onClose }) => {
   );
 };
 
-const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = [], iAmInterestedIn = [] }) => {
+const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = [], iAmInterestedIn = [],isChatOpen,setIsChatOpen   }) => {
   const [showInterestedList, setShowInterestedList] = useState(false);
   const [showInterestingList, setShowInterestingList] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(isChatOpen);
   const [showMenu, setShowMenu] = useState(false);
+  
+
+  // Sync local state with parent state
+  useEffect(() => {
+    setShowChat(isChatOpen);
+  }, [isChatOpen]);
+
+  const handleChatToggle = () => {
+    const newState = !showChat;
+    setShowChat(newState);
+    setIsChatOpen(newState); // Update parent state
+  };
 
   const avatarVariants = {
     hidden: { scale: 0, rotate: -180 },
@@ -184,9 +196,13 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
   </div>
 
   <div className="flex gap-2 items-center mt-10">
-    <motion.button onClick={() => setShowChat(v => !v)} whileHover={buttonHover} whileTap={buttonTap}
+    <motion.button 
+      onClick={handleChatToggle} 
+      whileHover={buttonHover} 
+      whileTap={buttonTap}
       className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border transition-colors
-        ${showChat ? "bg-blue-50 border-blue-300 text-blue-600" : "border-slate-200 text-slate-700 hover:bg-blue-50"}`}>
+        ${showChat ? "bg-blue-50 border-blue-300 text-blue-600" : "border-slate-200 text-slate-700 hover:bg-blue-50"}`}
+    >
       <MessageCircle size={12} />
       {showChat ? "Hide Chat" : "Message"}
     </motion.button>
@@ -210,7 +226,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
         <div className="mb-4">
           <h2 className="text-xl font-bold text-slate-800">{sampleUser.name}</h2>
           <div className="flex items-center gap-1.5 mt-1.5">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[10px] font-semibold">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[10px] font-semibold">
               <Star size={8} fill="white" />
               {sampleUser.role}
             </span>
