@@ -233,7 +233,7 @@ useEffect(() => {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1">
       <div
-        className="flex flex-col overflow-hidden bg-white h-[600px] sm:h-[700px] rounded-xl"
+        className="flex flex-col overflow-hidden bg-white h-[500px] sm:h-[700px] rounded-xl"
         style={{
           border: "1px solid #dbeafe",
         }}
