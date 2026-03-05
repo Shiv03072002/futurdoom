@@ -149,9 +149,9 @@ const Sidebar = () => {
           </div>
 
           {/* About Section */}
-          <div className="p-3 border rounded-sm border-slate-100 mb-4">
+          <div className="p-3 border rounded-sm border-slate-100 mb-4 ">
             <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">About</p>
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
               Full-stack engineer with 6+ years building scalable web products. Passionate about open-source, clean architecture, and shipping things people love. ☕
             </p>
           </div>
