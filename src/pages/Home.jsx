@@ -245,14 +245,14 @@ const Home = () => {
               </motion.h1>
 
               {/* New tagline */}
-          <motion.div
+         <motion.div
   variants={taglineVariants}
-  className="mt-3 space-y-1"
+  className="mt-3"
 >
-  <div className="flex items-baseline gap-1 flex-wrap">
+  <div className="flex items-center gap-1 flex-wrap">
     <span className="text-white/90 text-xs font-medium">A new space where</span>
     
-    {/* Continuous typing animation for Intelligence */}
+    {/* Intelligence with typing animation */}
     <div className="flex items-center">
       <motion.span
         animate={{
@@ -283,6 +283,7 @@ const Home = () => {
       />
     </div>
     
+    {/* meets with pulse */}
     <motion.span 
       animate={{ opacity: [0.5, 1, 0.5] }}
       transition={{ duration: 2, repeat: Infinity }}
@@ -291,23 +292,36 @@ const Home = () => {
       meets
     </motion.span>
     
-    <motion.span
-      animate={{
-        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        opacity: [0.9, 1, 0.9]
-      }}
-      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      className="text-xs font-bold"
-      style={{
-        background: "linear-gradient(90deg, #60a5fa, #bfdbfe, #ffffff, #93c5fd)",
-        backgroundSize: "200% auto",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-      }}
-    >
-      Community
-    </motion.span>
+    {/* Community with same typing animation as Intelligence */}
+    <div className="flex items-center">
+      <motion.span
+        animate={{
+          width: ["0%", "100%", "100%", "0%"],
+        }}
+        transition={{
+          duration: 4,
+          times: [0, 0.3, 0.7, 1],
+          repeat: Infinity,
+          repeatDelay: 1,
+          ease: "easeInOut",
+        }}
+        className="text-xs font-bold overflow-hidden whitespace-nowrap inline-block"
+        style={{
+          background: "linear-gradient(90deg, #60a5fa, #bfdbfe, #ffffff, #93c5fd)",
+          backgroundSize: "200% auto",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Community
+      </motion.span>
+      <motion.span
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        className="w-0.5 h-3 bg-white ml-0.5"
+      />
+    </div>
   </div>
 </motion.div>
 
