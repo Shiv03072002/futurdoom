@@ -180,7 +180,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
 
   const handleSend = () => {
     if (!message.trim()) return;
-    
+
     const newMessage = {
       id: messages.length + 1,
       text: message,
@@ -188,15 +188,15 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       read: false,
     };
-    
+
     setMessages((prev) => [...prev, newMessage]);
     setMessage("");
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    
+
     setIsTyping(true);
-    
+
     setTimeout(() => {
       setIsTyping(false);
       setMessages((prev) => [
@@ -237,35 +237,35 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
   const firstUserMessage = messages.find(msg => msg.from === "user")?.text || "Conversation";
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       className="flex flex-col h-full bg-white rounded-xl overflow-hidden"
       style={{
         border: "1px solid #dbeafe",
       }}
     >
-     {/* Header with user profile */}
-<div className="px-5 py-4 bg-white border-b border-blue-100">
-  <div className="flex items-center gap-3">
-    {/* Avatar */}
-    <img 
-      src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&bold=true" 
-      alt="User" 
-      className="w-10 h-10 rounded-full border-2 border-blue-100"
-    />
-    
-    {/* User details and message */}
-    <div className="flex-1">
-      <div className="flex items-center gap-2">
-        <span className="font-medium text-slate-800">John Doe</span>
-       
-        <span className="text-xs text-slate-400">· 2h</span>
+      {/* Header with user profile */}
+      <div className="px-5 py-4 bg-white border-b border-blue-100">
+        <div className="flex items-center gap-3">
+          {/* Avatar */}
+          <img
+            src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&bold=true"
+            alt="User"
+            className="w-10 h-10 rounded-full border-2 border-blue-100"
+          />
+
+          {/* User details and message */}
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-slate-800">John Doe</span>
+
+              <span className="text-xs text-slate-400">· 2h</span>
+            </div>
+            <p className="text-sm text-slate-600 line-clamp-1">"{firstUserMessage}"</p>
+          </div>
+        </div>
       </div>
-      <p className="text-sm text-slate-600 line-clamp-1">"{firstUserMessage}"</p>
-    </div>
-  </div>
-</div>
 
       {/* Messages */}
       <div
@@ -273,9 +273,9 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
         style={{ background: "#f8faff" }}
       >
         {/* Date separator */}
-        <motion.div 
-          className="flex justify-center" 
-          initial={{ opacity: 0, y: -8 }} 
+        <motion.div
+          className="flex justify-center"
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <span className="text-[10px] sm:text-xs font-semibold text-blue-500 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full"
@@ -291,12 +291,12 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
             const prevSame = i > 0 && messages[i - 1].from === msg.from;
 
             return (
-              <motion.div 
-                key={msg.id} 
-                variants={msgVariants} 
-                initial="hidden" 
-                animate="visible" 
-                exit="exit" 
+              <motion.div
+                key={msg.id}
+                variants={msgVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 layout
               >
                 {/* Action row for user messages */}
@@ -304,13 +304,13 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                   <div className="flex items-center gap-0.5 mb-1.5 ml-1">
                     {[
                       { I: Trash2, h: "hover:bg-red-50 hover:text-red-400", fn: () => removeMsg(msg.id) },
-                      { I: Heart, h: "hover:bg-pink-50 hover:text-pink-400", fn: () => {} },
-                      { I: Copy, h: "hover:bg-blue-50 hover:text-blue-500", fn: () => {} },
+                      { I: Heart, h: "hover:bg-pink-50 hover:text-pink-400", fn: () => { } },
+                      { I: Copy, h: "hover:bg-blue-50 hover:text-blue-500", fn: () => { } },
                     ].map(({ I, h, fn }, idx) => (
-                      <motion.button 
-                        key={idx} 
+                      <motion.button
+                        key={idx}
                         onClick={fn}
-                        whileHover={{ scale: 1.15 }} 
+                        whileHover={{ scale: 1.15 }}
                         whileTap={{ scale: 0.88 }}
                         className={`p-1.5 rounded-lg text-slate-400 transition-all duration-150 ${h}`}
                       >
@@ -318,19 +318,19 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                       </motion.button>
                     ))}
                     <motion.button
-                      whileHover={{ scale: 1.15 }} 
+                      whileHover={{ scale: 1.15 }}
                       whileTap={{ scale: 0.88 }}
-                      onClick={() => navigate("/deepaskshare", { 
-                        state: { 
-                          thread: { 
-                            userMessage: messages[i - 1]?.text || msg.text, 
-                            aiResponse: messages[i + 1]?.text || "", 
-                            time: msg.time, 
-                            responseTime: messages[i + 1]?.time, 
-                            conversationId: msg.id, 
-                            context: "full-conversation" 
-                          } 
-                        } 
+                      onClick={() => navigate("/deepaskshare", {
+                        state: {
+                          thread: {
+                            userMessage: messages[i - 1]?.text || msg.text,
+                            aiResponse: messages[i + 1]?.text || "",
+                            time: msg.time,
+                            responseTime: messages[i + 1]?.time,
+                            conversationId: msg.id,
+                            context: "full-conversation"
+                          }
+                        }
                       })}
                       className="p-1.5 rounded-lg text-slate-400 hover:bg-violet-50 hover:text-violet-500 transition-all duration-150 relative"
                     >
@@ -389,10 +389,10 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
         {/* Typing indicator */}
         <AnimatePresence>
           {isTyping && (
-            <motion.div 
-              initial={{ opacity: 0, y: 8 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
               className="flex items-center gap-2 justify-end"
             >
               <div className="px-4 py-3"
@@ -404,11 +404,11 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
               >
                 <div className="flex items-center gap-1.5">
                   {[0, 1, 2].map(i => (
-                    <motion.span 
-                      key={i} 
+                    <motion.span
+                      key={i}
                       className="w-1.5 h-1.5 bg-white rounded-full"
                       animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }}
-                      transition={{ duration: 0.75, repeat: Infinity, delay: i * 0.15 }} 
+                      transition={{ duration: 0.75, repeat: Infinity, delay: i * 0.15 }}
                     />
                   ))}
                 </div>
@@ -484,10 +484,10 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
           }}
           disabled={!message.trim()}
         >
-          <ArrowUp 
-            size={14} 
-            strokeWidth={2.2} 
-            className={message.trim() ? "text-white" : "text-slate-400"} 
+          <ArrowUp
+            size={14}
+            strokeWidth={2.2}
+            className={message.trim() ? "text-white" : "text-slate-400"}
           />
         </motion.button>
       </motion.div>

@@ -42,9 +42,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
       { path: "chatbotmain", element: <Chatbotmain /> },
-      { path: "discussion", element: <DiscussionMain /> },
-      
-      { path: "groups", element: <Groups /> },
+    
       
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <PrivacyPolicy /> },
@@ -68,6 +66,8 @@ const router = createBrowserRouter([
       { path: "edit", element: <EditProfile /> },
       { path: "share", element: <Share /> },
       { path: "notification", element: <Notification /> },
+      { path: "discussion", element: <DiscussionMain /> },
+      { path: "groups", element: <Groups /> },
       { path: "group-chat/:groupId", element: <GroupChat /> },
       { path: "group-chat/new", element: <GroupChat /> },
       { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
