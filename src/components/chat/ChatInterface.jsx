@@ -142,6 +142,7 @@ const ChatInterface = ({ messages: propMessages, currentChatId, onMessagesUpdate
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+  const [showActionMenu, setShowActionMenu] = useState(false);
   const navigate = useNavigate();
 
   // Update messages when propMessages changes
@@ -243,7 +244,7 @@ useEffect(() => {
         <motion.div
           initial={{ y: -50 }}
           animate={{ y: 0 }}
-          className="flex items-center gap-2 sm:gap-3 flex-shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 relative overflow-hidden"
+          className="flex items-center gap-2 sm:gap-3 flex-shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 relative "
           style={{
             background: "linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%)",
             borderBottom: "1px solid #dbeafe"
@@ -270,16 +271,57 @@ useEffect(() => {
   </div>
 </div>
 
-          <div className="flex items-center gap-0.5 relative z-10">
-            {[MoreHorizontal].map((Icon, i) => (
-              <motion.button key={i}
-                whileHover={{ scale: 1.1, backgroundColor: "rgba(37,99,235,0.08)" }}
-                whileTap={{ scale: 0.92 }}
-                className="w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center rounded-xl text-blue-500 transition-all duration-150">
-                <Icon size={16} strokeWidth={1.8} />
-              </motion.button>
-            ))}
-          </div>
+         <div className="flex items-center gap-0.5 relative z-10">
+  <motion.button
+    onClick={() => setShowActionMenu(!showActionMenu)}
+    whileHover={{ scale: 1.1, backgroundColor: "rgba(37,99,235,0.08)" }}
+    whileTap={{ scale: 0.92 }}
+    className="w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center rounded-xl text-blue-500 transition-all duration-150 relative"
+  >
+    <MoreHorizontal size={16} strokeWidth={1.8} />
+  </motion.button>
+
+  <AnimatePresence>
+    {showActionMenu && (
+      <motion.div
+        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+        transition={{ duration: 0.15 }}
+        className="absolute right-0 top-full mt-2 w-36 bg-white rounded-md border border-gray-200 shadow-lg z-50 overflow-hidden"
+        style={{ position: 'absolute', top: '100%', right: 0, zIndex: 9999 }}
+      >
+        {/* Share Option */}
+        <motion.button
+          whileHover={{ backgroundColor: "rgba(37,99,235,0.08)" }}
+          onClick={() => {
+            // Add share logic here
+            console.log("Share clicked");
+            setShowActionMenu(false);
+          }}
+          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-sm text-gray-700 hover:text-blue-600 transition-colors border-b border-gray-100"
+        >
+          <Share2 size={14} className="text-blue-500" />
+          Share
+        </motion.button>
+
+        {/* Delete Option */}
+        <motion.button
+          whileHover={{ backgroundColor: "rgba(239,68,68,0.08)" }}
+          onClick={() => {
+            // Add delete logic here
+            console.log("Delete clicked");
+            setShowActionMenu(false);
+          }}
+          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-sm text-gray-700 hover:text-red-600 transition-colors"
+        >
+          <Trash2 size={14} className="text-red-500" />
+          Delete
+        </motion.button>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
         </motion.div>
 
         {/* Messages */}

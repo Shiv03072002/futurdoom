@@ -233,9 +233,9 @@ const Sidebar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={social.name}
-                className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
               >
-                <img src={social.img} alt={social.name} className="w-6 h-6 object-contain" />
+                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
               </a>
             ))}
           </div>
