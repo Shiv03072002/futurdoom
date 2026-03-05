@@ -32,15 +32,15 @@ const socialLinks = [
 
 // ── Interest list users ────────────────────────────────────────────────────────
 const interestedInMe = [
-  { id: 1, name: "Dipankar Porey", avatar: "https://i.pravatar.cc/40?img=1", role: "Frontend Developer", mutual: true  },
-  { id: 2, name: "Sneha Rao",      avatar: "https://i.pravatar.cc/40?img=3", role: "Backend Developer",  mutual: false },
-  { id: 3, name: "Priya Patel",    avatar: "https://i.pravatar.cc/40?img=5", role: "Data Scientist",     mutual: true  },
+  { id: 1, name: "Dipankar Porey", avatar: "https://i.pravatar.cc/40?img=1", role: "Frontend Developer", mutual: true },
+  { id: 2, name: "Sneha Rao", avatar: "https://i.pravatar.cc/40?img=3", role: "Backend Developer", mutual: false },
+  { id: 3, name: "Priya Patel", avatar: "https://i.pravatar.cc/40?img=5", role: "Data Scientist", mutual: true },
 ];
 
 const iAmInterestedIn = [
-  { id: 4, name: "Aarav Mehta",  avatar: "https://i.pravatar.cc/40?img=2", role: "UI/UX Designer",  mutual: true  },
+  { id: 4, name: "Aarav Mehta", avatar: "https://i.pravatar.cc/40?img=2", role: "UI/UX Designer", mutual: true },
   { id: 5, name: "Rahul Sharma", avatar: "https://i.pravatar.cc/40?img=4", role: "Product Manager", mutual: false },
-  { id: 6, name: "Amit Kumar",   avatar: "https://i.pravatar.cc/40?img=6", role: "DevOps Engineer", mutual: true  },
+  { id: 6, name: "Amit Kumar", avatar: "https://i.pravatar.cc/40?img=6", role: "DevOps Engineer", mutual: true },
 ];
 
 // ── User List Panel ────────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ const UserListPanel = ({ title, icon, users, buttonColor, hoverColor, borderColo
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 const Sidebar = () => {
-  const [showInterestedList,  setShowInterestedList]  = useState(false);
+  const [showInterestedList, setShowInterestedList] = useState(false);
   const [showInterestingList, setShowInterestingList] = useState(false);
 
   const handleInterestedClick = () => {
@@ -233,9 +233,9 @@ const Sidebar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={social.name}
-                className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+                className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
               >
-                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+                <img src={social.img} alt={social.name} className="w-6 h-6 object-contain" />
               </a>
             ))}
           </div>
