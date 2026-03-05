@@ -45,7 +45,7 @@ export default function Share() {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Sticky Header with ref */}
-            <div ref={headerRef} className="sticky top-20 z-50 ">
+            <div ref={headerRef} className="sticky top-20  ">
                 <ShareHeader totalConversations={shareData.length} />
             </div>
 
