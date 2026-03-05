@@ -1,28 +1,47 @@
 import React, { useState } from "react";
 import ChatInterface from "../components/chat/ChatInterface";
 import ChatSidebar from "../components/chat/ChatSidebar";
-import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react";
+import { ChevronDown, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatMain = () => {
-  const [showSidebar, setShowSidebar] = useState(true); // Default to true to show history first
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [currentMessages, setCurrentMessages] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(null);
+
+  const handleSelectChat = (chat) => {
+  setCurrentMessages(chat.messages || []); // Load existing messages
+  setCurrentChatId(chat.id);
+  if (window.innerWidth < 1024) setShowSidebar(false);
+};
+
+ const handleNewChat = (newChat) => {
+  setCurrentMessages([]); // Set empty array for new chat
+  setCurrentChatId(newChat.id);
+  if (window.innerWidth < 1024) setShowSidebar(false);
+};
 
   return (
     <div className="">
       {/* Desktop Layout */}
       <div className="hidden lg:flex gap-4">
         <div className="flex-1">
-          <ChatInterface />
+          <ChatInterface 
+            messages={currentMessages}
+            currentChatId={currentChatId}
+          />
         </div>
         <div className="w-80 flex-shrink-0">
-          <ChatSidebar />
+          <ChatSidebar 
+            onSelectChat={handleSelectChat}
+            onNewChat={handleNewChat}
+          />
         </div>
       </div>
 
       {/* Mobile Layout */}
       <div className="lg:hidden flex flex-col h-full">
-        {/* Toggle Button for Chat */}
-        <div className="px-4  pb-2">
+        <div className=" pb-2">
           <button
             onClick={() => setShowSidebar(!showSidebar)}
             className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
@@ -43,7 +62,6 @@ const ChatMain = () => {
           </button>
         </div>
 
-        {/* Sidebar - Expandable Section (on top) */}
         <AnimatePresence>
           {showSidebar && (
             <motion.div
@@ -51,16 +69,21 @@ const ChatMain = () => {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden px-4"
+              className="overflow-hidden "
             >
-              <ChatSidebar />
+              <ChatSidebar
+                onSelectChat={handleSelectChat}
+                onNewChat={handleNewChat}
+              />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Chat Interface (below) */}
-        <div className="flex-1 px-4 pb-4 pt-2">
-          <ChatInterface />
+        <div className="flex-1  pb-4 pt-2">
+          <ChatInterface 
+            messages={currentMessages}
+            currentChatId={currentChatId}
+          />
         </div>
       </div>
     </div>

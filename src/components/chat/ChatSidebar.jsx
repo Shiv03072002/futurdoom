@@ -10,58 +10,84 @@ import {
   Globe, 
   Brain,
   Plus,
-  MessageCircle
+  MessageCircle,
+  Trash2,
+  Clock,
+  CheckCircle2
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
 
-// AI Chat history with names (stored but not displayed)
+// AI Chat history with full conversation data
 const chatHistory = [
   {
     id: 1,
-    name: "ChatGPT-4", // Stored but not shown
+    name: "ChatGPT-4",
     lastMessage: "How can I help with your React component?",
     time: "2:10 PM",
     date: "Today",
     unread: 2,
-    icon: <Brain size={16} />
+    icon: <Brain size={16} />,
+    messages: [
+      { id: 101, from: "user", text: "Can you help me with React components?", time: "2:05 PM", read: true },
+      { id: 102, from: "ai", text: "Of course! I'd be happy to help with React components. What specifically would you like to know?", time: "2:07 PM", read: true },
+      { id: 103, from: "user", text: "How can I create a reusable button component?", time: "2:10 PM", read: true },
+      { id: 104, from: "ai", text: "How can I help with your React component?", time: "2:10 PM", read: false }
+    ]
   },
   {
     id: 2,
-    name: "Claude 3", // Stored but not shown
+    name: "Claude 3",
     lastMessage: "Here's an optimized solution for your problem",
     time: "11:30 AM",
     date: "Yesterday",
     unread: 0,
-    icon: <Sparkles size={16} />
+    icon: <Sparkles size={16} />,
+    messages: [
+      { id: 201, from: "user", text: "I need help optimizing my algorithm", time: "11:15 AM", read: true },
+      { id: 202, from: "ai", text: "Here's an optimized solution for your problem", time: "11:30 AM", read: true }
+    ]
   },
   {
     id: 3,
-    name: "Gemini Pro", // Stored but not shown
+    name: "Gemini Pro",
     lastMessage: "Let me analyze that code for you",
     time: "9:15 AM",
     date: "Yesterday",
     unread: 1,
-    icon: <Zap size={16} />
+    icon: <Zap size={16} />,
+    messages: [
+      { id: 301, from: "user", text: "Can you review this code snippet?", time: "9:10 AM", read: true },
+      { id: 302, from: "ai", text: "Let me analyze that code for you", time: "9:15 AM", read: false }
+    ]
   },
   {
     id: 4,
-    name: "Llama 3", // Stored but not shown
+    name: "Llama 3",
     lastMessage: "I can help you debug that issue",
     time: "6:20 PM",
     date: "Feb 25",
     unread: 0,
-    icon: <Cpu size={16} />
+    icon: <Cpu size={16} />,
+    messages: [
+      { id: 401, from: "user", text: "I'm getting a TypeError in my code", time: "6:15 PM", read: true },
+      { id: 402, from: "ai", text: "I can help you debug that issue", time: "6:20 PM", read: true }
+    ]
   },
   {
     id: 5,
-    name: "Copilot", // Stored but not shown
+    name: "Copilot",
     lastMessage: "Here's a suggestion for your code",
     time: "3:45 PM",
     date: "Feb 24",
     unread: 0,
-    icon: <Bot size={16} />
+    icon: <Bot size={16} />,
+    messages: [
+      { id: 501, from: "user", text: "How do I implement authentication?", time: "3:30 PM", read: true },
+      { id: 502, from: "ai", text: "Here's a suggestion for your code", time: "3:45 PM", read: true }
+    ]
   },
 ];
 
@@ -101,8 +127,9 @@ const Avatar = ({ size = 36, status = true, icon }) => (
   </div>
 );
 
-const ChatSidebar = () => {
+const ChatSidebar = ({ onSelectChat, onNewChat, isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const filteredHistory = chatHistory.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -110,18 +137,59 @@ const ChatSidebar = () => {
   );
 
   const handleNewChat = () => {
-    // Handle new chat creation
-    console.log("Starting new chat...");
-    // You can add navigation or state management here
+    // Create a new empty chat
+    const newChat = {
+      id: Date.now(),
+      name: "New Chat",
+      lastMessage: "Start a new conversation",
+      time: "Just now",
+      date: "Today",
+      unread: 0,
+      icon: <Sparkles size={16} />,
+      messages: [
+        { 
+          id: Date.now() + 1, 
+          from: "ai", 
+          text: "Hello! I'm futurDooM. How can I help you today? Feel free to ask me anything about coding, development, or technology.", 
+          time: "Just now", 
+          read: true 
+        }
+      ]
+    };
+    
+    // Pass the new chat to parent
+    onNewChat(newChat);
+    onClose();
+  };
+
+  const handleChatSelect = (chat) => {
+    // Mark messages as read when selected
+    const updatedChat = {
+      ...chat,
+      unread: 0,
+      messages: chat.messages.map(msg => ({ ...msg, read: true }))
+    };
+    onSelectChat(updatedChat);
+    onClose();
+  };
+
+  const handleDeleteChat = (e, chatId) => {
+    e.stopPropagation(); // Prevent triggering chat selection
+    if (window.confirm("Are you sure you want to delete this conversation?")) {
+      // Here you would implement the delete functionality
+      console.log("Deleting chat:", chatId);
+      // You can pass this up to parent component
+    }
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-      className="w-full bg-white rounded-xl border border-blue-50 overflow-hidden flex flex-col"
-      style={{ height: 700 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      className=" lg:w-80 bg-white rounded-xl border border-blue-100 overflow-hidden flex flex-col z-50"
+      style={{ height: 600 }}
     >
       {/* History Header */}
       <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
@@ -130,9 +198,12 @@ const ChatSidebar = () => {
             <MessageSquare size={18} className="text-blue-600" />
             Chat History
           </h2>
-          <span className="text-xs font-semibold text-blue-600 bg-white px-2 py-1 rounded-full border border-blue-200">
-            {chatHistory.length}
-          </span>
+          <button 
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-white/50 transition-colors"
+          >
+            <span className="text-lg">✕</span>
+          </button>
         </div>
         
         {/* Search */}
@@ -167,29 +238,41 @@ const ChatSidebar = () => {
               key={chat.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, x: 100 }}
+              exit={{ opacity: 0, x: -100 }}
               whileHover={{ scale: 1.02 }}
-              className="p-3 mb-2 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-100 transition-all"
+              onClick={() => handleChatSelect(chat)}
+              className="p-3 mb-2 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-100 transition-all relative group"
             >
               <div className="flex items-start gap-3">
                 {/* <Avatar size={40} status={chat.unread > 0} icon={chat.icon} /> */}
                 <div className="flex-1 min-w-0">
-                 
+                  <div className="flex items-center justify-between">
+                    {/* <h3 className="text-sm font-semibold text-slate-800 truncate">
+                      {chat.name}
+                    </h3> */}
+                    {/* {chat.unread > 0 && (
+                      <span className="px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px] font-bold ml-1">
+                        {chat.unread}
+                      </span>
+                    )} */}
+                  </div>
                   
                   <p className="text-xs text-slate-600 mt-1 line-clamp-2">
                     {chat.lastMessage}
                   </p>
                   
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                      {chat.date}.{chat.time}
+                    <span className="text-[9px] text-slate-400 flex items-center gap-1">
+                      <Clock size={8} />
+                      {chat.date} · {chat.time}
                     </span>
                     
-                    {chat.unread > 0 && (
-                      <span className="px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px] font-bold">
-                        {chat.unread} new
-                      </span>
-                    )}
+                    <button
+                      onClick={(e) => handleDeleteChat(e, chat.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-100"
+                    >
+                      <Trash2 size={12} className="text-red-400 hover:text-red-500" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -198,19 +281,23 @@ const ChatSidebar = () => {
         </AnimatePresence>
 
         {filteredHistory.length === 0 && (
-          <div className="text-center py-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-8"
+          >
             <MessageSquare size={32} className="mx-auto text-slate-300 mb-2" />
             <p className="text-sm text-slate-400">No conversations found</p>
             <motion.button
               onClick={handleNewChat}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="mt-3 px-4 py-2 bg-blue-500 text-white text-xs rounded-lg inline-flex items-center gap-1"
+              className="mt-3 px-4 py-2 bg-blue-500 text-white text-xs rounded-lg inline-flex items-center gap-1 hover:bg-blue-600 transition-colors"
             >
               <Plus size={12} />
               Start a new chat
             </motion.button>
-          </div>
+          </motion.div>
         )}
       </div>
 

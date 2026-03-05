@@ -391,7 +391,7 @@ const Home = () => {
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
@@ -435,7 +435,7 @@ const Home = () => {
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-slate-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200  hover:shadow-md hover:border-blue-200 transition-all duration-200"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">

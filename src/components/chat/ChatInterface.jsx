@@ -1,16 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
   Share2,
-  Phone,
-  Video,
-  Info,
   Smile,
   Paperclip,
   MoreHorizontal,
   CheckCheck,
-  Sparkles,
   Copy,
   Trash2,
   Heart,
@@ -18,12 +14,6 @@ import {
   Terminal,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const initialMessages = [
-  { id: 1, from: "user", text: "how to do frontend in html", time: "2:10 PM", read: true },
-  { id: 2, from: "ai", text: "To create a frontend in HTML, follow these steps: start with a basic HTML structure, add CSS for styling, and use JavaScript for interactivity.", time: "2:11 PM", read: true },
-  { id: 3, from: "user", text: "Can you give me a simple example?", time: "2:13 PM", read: false },
-];
 
 const formatMessage = (text) => {
   if (!text) return text;
@@ -146,30 +136,93 @@ const Avatar = ({ size = 36, status = true, type = "user" }) => {
   );
 };
 
-const ChatInterface = () => {
-  const [messages, setMessages] = useState(initialMessages);
+const ChatInterface = ({ messages: propMessages, currentChatId, onMessagesUpdate }) => {
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
+
+  // Update messages when propMessages changes
+  // Update messages when propMessages changes
+useEffect(() => {
+  if (propMessages) {
+    setMessages(propMessages);
+  } else {
+    // When no propMessages (new chat), set to empty array to show welcome message
+    setMessages([]);
+  }
+}, [propMessages]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const send = () => {
     if (!input.trim()) return;
-    setMessages(prev => [...prev, { id: Date.now(), from: "user", text: input.trim(), time: "Just now", read: false }]);
+    
+    const userMessage = { 
+      id: Date.now(), 
+      from: "user", 
+      text: input.trim(), 
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+      read: false 
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
     const userInput = input.toLowerCase();
     setInput("");
     setIsTyping(true);
+
+    // Auto-scroll after user message
+    setTimeout(() => {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      }
+    }, 100);
+
     setTimeout(() => {
       setIsTyping(false);
       let responseText = "I understand your question. Let me help you with that.";
+      
       if (userInput.includes("reverse a number") && userInput.includes("cpp")) {
         responseText = `Here's a C++ program to reverse a number:\n\n\`\`\`cpp\n#include <iostream>\nusing namespace std;\n\nint reverseNumber(int num) {\n    int reversed = 0;\n    while (num > 0) {\n        int lastDigit = num % 10;\n        reversed = reversed * 10 + lastDigit;\n        num = num / 10;\n    }\n    return reversed;\n}\n\nint main() {\n    int number;\n    cout << "Enter a number: ";\n    cin >> number;\n    cout << "Reversed: " << reverseNumber(number) << endl;\n    return 0;\n}\n\`\`\`\n\n**How it works:**\n1. Extract last digit using % 10\n2. Build reversed number\n3. Remove last digit using / 10\n4. Repeat until number becomes 0\n\n**Example:** 12345 → 54321`;
       }
-      setMessages(prev => [...prev, { id: Date.now() + 1, from: "ai", text: responseText, time: "Just now", read: false }]);
+      
+      const aiMessage = { 
+        id: Date.now() + 1, 
+        from: "ai", 
+        text: responseText, 
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+        read: false 
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+      
+      // Notify parent of message update
+      if (onMessagesUpdate) {
+        onMessagesUpdate([...messages, userMessage, aiMessage]);
+      }
+
+      // Auto-scroll after AI response
+      setTimeout(() => {
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+      }, 100);
     }, 2000);
   };
 
-  const removeMsg = (id) => setMessages(prev => prev.filter(m => m.id !== id));
+  const removeMsg = (id) => {
+    setMessages(prev => prev.filter(m => m.id !== id));
+    if (onMessagesUpdate) {
+      onMessagesUpdate(messages.filter(m => m.id !== id));
+    }
+  };
 
   const msgVariants = {
     hidden: { opacity: 0, y: 14, scale: 0.97 },
@@ -178,17 +231,15 @@ const ChatInterface = () => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1 p-2 sm:p-0">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1">
       <div
-        className="flex flex-col overflow-hidden bg-white h-[650px] sm:h-[700px] rounded-xl "
+        className="flex flex-col overflow-hidden bg-white h-[600px] sm:h-[700px] rounded-xl"
         style={{
-        
           border: "1px solid #dbeafe",
-         
         }}
       >
 
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
           initial={{ y: -50 }}
           animate={{ y: 0 }}
@@ -198,30 +249,29 @@ const ChatInterface = () => {
             borderBottom: "1px solid #dbeafe"
           }}
         >
-          {/* top shimmer line */}
           <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-3xl"
             style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.45), transparent)" }} />
 
-          {/* soft glow */}
           <div className="absolute -top-8 -left-8 w-32 h-32 rounded-full pointer-events-none"
             style={{ background: "radial-gradient(circle, rgba(37,99,235,0.10) 0%, transparent 70%)" }} />
 
           <Avatar size={window.innerWidth < 640 ? 40 : 48} status={true} type="ai" />
 
-          <div className="flex-1 min-w-0 relative z-10">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <p className="text-sm sm:text-base font-extrabold text-slate-800 truncate tracking-tight">futurDooM</p>
-              
-            </div>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <motion.span className="w-1.5 h-1.5 rounded-full bg-green-400"
-                animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-              <p className="text-[10px] sm:text-xs font-semibold text-green-500">Online</p>
-            </div>
-          </div>
+         <div className="flex-1 min-w-0 relative z-10">
+  <div className="flex items-center gap-1.5 sm:gap-2">
+    <p className="text-sm sm:text-base font-extrabold text-slate-800 truncate tracking-tight">
+      {currentChatId ? 'futurDooM' : 'New Chat'}
+    </p>
+  </div>
+  <div className="flex items-center gap-1.5 mt-0.5">
+    <motion.span className="w-1.5 h-1.5 rounded-full bg-green-400"
+      animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+    <p className="text-[10px] sm:text-xs font-semibold text-green-500">Online</p>
+  </div>
+</div>
 
           <div className="flex items-center gap-0.5 relative z-10">
-            {[ MoreHorizontal].map((Icon, i) => (
+            {[MoreHorizontal].map((Icon, i) => (
               <motion.button key={i}
                 whileHover={{ scale: 1.1, backgroundColor: "rgba(37,99,235,0.08)" }}
                 whileTap={{ scale: 0.92 }}
@@ -232,18 +282,30 @@ const ChatInterface = () => {
           </div>
         </motion.div>
 
-        {/* ── Messages ── */}
+        {/* Messages */}
         <div
+          ref={messagesContainerRef}
           className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-3 sm:space-y-4"
           style={{ background: "#f8faff" }}
         >
-          {/* Date pill */}
-          <motion.div className="flex justify-center" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[10px] sm:text-xs font-semibold text-blue-500 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full"
-              style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
-              Feb 20, 2026
-            </span>
-          </motion.div>
+          {/* Welcome message for new chat */}
+          {messages.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <Brain size={48} className="text-slate-300 mb-3" />
+              <p className="text-sm text-slate-600 font-medium">Welcome to futurDooM!</p>
+              <p className="text-xs text-slate-400 mt-1">Ask me anything about coding, development, or technology</p>
+            </div>
+          )}
+
+          {/* Date pill - only show if there are messages */}
+          {messages.length > 0 && (
+            <motion.div className="flex justify-center" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+              <span className="text-[10px] sm:text-xs font-semibold text-blue-500 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full"
+                style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
+                {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </motion.div>
+          )}
 
           <AnimatePresence mode="popLayout">
             {messages.map((msg, i) => {
@@ -254,7 +316,7 @@ const ChatInterface = () => {
               return (
                 <motion.div key={msg.id} variants={msgVariants} initial="hidden" animate="visible" exit="exit" layout>
 
-                  {/* Action row */}
+                  {/* Action row for user messages */}
                   {isUser && (
                     <div className="flex items-center gap-0.5 mb-1.5 ml-1">
                       {[
@@ -269,13 +331,6 @@ const ChatInterface = () => {
                           <I size={11} />
                         </motion.button>
                       ))}
-                      <motion.button
-                        whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.88 }}
-                        onClick={() => navigate("/deepaskshare", { state: { thread: { userMessage: messages[i - 1]?.text || msg.text, aiResponse: messages[i + 1]?.text || "", time: msg.time, responseTime: messages[i + 1]?.time, conversationId: msg.id, context: "full-conversation" } } })}
-                        className="p-1.5 rounded-lg text-slate-400 hover:bg-violet-50 hover:text-violet-500 transition-all duration-150 relative">
-                        <Brain size={11} />
-                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[7px] rounded-full h-3 w-3 flex items-center justify-center font-bold">4</span>
-                      </motion.button>
                     </div>
                   )}
 
@@ -300,7 +355,6 @@ const ChatInterface = () => {
                           color: "#1e293b"
                         }}
                       >
-                        {/* Inner shine for AI bubble */}
                         {isAI && (
                           <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ borderRadius: "20px 20px 6px 20px" }}>
                             <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full"
@@ -326,10 +380,15 @@ const ChatInterface = () => {
             })}
           </AnimatePresence>
 
-          {/* Typing */}
+          {/* Typing indicator */}
           <AnimatePresence>
             {isTyping && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-2 justify-end">
+              <motion.div 
+                initial={{ opacity: 0, y: 8 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0 }} 
+                className="flex items-center gap-2 justify-end"
+              >
                 <div className="px-4 py-3"
                   style={{
                     background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
@@ -352,7 +411,7 @@ const ChatInterface = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* ── Input bar ── */}
+        {/* Input bar */}
         <motion.div
           initial={{ y: 50 }}
           animate={{ y: 0 }}
@@ -376,8 +435,13 @@ const ChatInterface = () => {
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && send()}
-              placeholder="Ask fD something..."
+              onKeyDown={e => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send();
+                }
+              }}
+              placeholder="Ask something..."
               className="w-full px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-slate-700 placeholder-slate-400 focus:outline-none transition-all duration-200"
               style={{
                 background: "#f8faff",
