@@ -14,7 +14,7 @@ const ChatLayout = () => {
       <Navbar />
 
       {/* Body row: left sidebar + chat content */}
-      <div className="flex flex-1 overflow-hidden max-w-7xl w-full mx-auto px-1">
+      <div className="flex flex-1 overflow-hidden max-w-7xl w-full mx-auto ">
 
         {/* Left Sidebar — same as MainLayout but doesn't scroll */}
         <div className="w-[320px] hidden md:flex flex-col shrink-0 py-6 pr-4">
