@@ -3,7 +3,7 @@ import { Share2, MessageCircle } from "lucide-react";
 
 const ShareHeader = ({ totalConversations }) => {
   return (
-    <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-4 sm:p-5 md:p-6 relative overflow-hidden sticky top-0 rounded-t-xl">
+    <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-4 sm:p-5 md:p-4 relative overflow-hidden sticky top-0 rounded-t-xl">
       {/* Decorative elements - responsive sizing */}
       <div className="absolute -top-10 -right-10 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 rounded-full bg-white/5" />
       <div className="absolute bottom-0 left-1/2 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full bg-blue-400/10" />

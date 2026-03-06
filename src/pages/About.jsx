@@ -295,6 +295,21 @@ const About = () => {
               </motion.span>
             </motion.div>
 
+             <div className="flex items-center justify-center my-4 pt-4 gap-3 border-t border-slate-100">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={social.name}
+                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+              >
+                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+              </a>
+            ))}
+          </div>
+
             {/* Meta */}
             <motion.div 
               className="flex items-center justify-center gap-3 mb-4"
@@ -342,20 +357,7 @@ const About = () => {
               className="flex items-center justify-between pt-4 border-t border-blue-100"
               variants={itemVariants}
             >
-              <div className="flex gap-3 border-t border-slate-100">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={social.name}
-                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
-              >
-                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
-              </a>
-            ))}
-          </div>
+             
               
               <motion.div
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200"
