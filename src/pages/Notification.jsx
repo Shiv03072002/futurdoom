@@ -137,7 +137,7 @@ const Notification = () => {
 
   return (
     <div className="min-h-screen flex items-start justify-center ">
-      <div className="bg-white rounded-xl border border-blue-100 w-full overflow-hidden shadow-sm">
+      <div className="bg-white rounded-xl  w-full overflow-hidden sticky top-20 z-35  ">
         
         <NotificationHeader unreadCount={unreadCount} />
 

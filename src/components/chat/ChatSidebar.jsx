@@ -207,18 +207,18 @@ useEffect(() => {
     >
       {/* History Header */}
       <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <MessageSquare size={18} className="text-blue-600" />
-            Chat History
-          </h2>
-          <button 
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-white/50 transition-colors"
-          >
-            <span className="text-lg">✕</span>
-          </button>
-        </div>
+        <div className="hidden lg:flex items-center justify-between mb-3">
+  <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+    <MessageSquare size={18} className="text-blue-600" />
+    Chat History
+  </h2>
+  <button 
+    onClick={onClose}
+    className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-white/50 transition-colors"
+  >
+    <span className="text-lg">✕</span>
+  </button>
+</div>
         
         {/* Search */}
         <div className="relative mb-3">

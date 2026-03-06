@@ -7,11 +7,11 @@ import {
   Copy,
   Trash2,
   Heart,
-  Brain,
   Terminal,
   Smile,
   Paperclip,
   ChevronLeft,
+  Share2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -334,7 +334,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                       })}
                       className="p-1.5 rounded-lg text-slate-400 hover:bg-violet-50 hover:text-violet-500 transition-all duration-150 relative"
                     >
-                      <Brain size={11} />
+                      <Share2 size={11} />
                     </motion.button>
                   </div>
                 )}

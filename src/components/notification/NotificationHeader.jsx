@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 const NotificationHeader = ({ unreadCount }) => {
   return (
-    <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-6 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] p-6  overflow-hidden ">
       <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5" />
       <div className="absolute bottom-0 left-1/2 w-24 h-24 rounded-full bg-blue-400/10" />
       <div className="absolute inset-0 opacity-10"

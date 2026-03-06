@@ -14,11 +14,21 @@ import {
   AlertTriangle,
   Info,
   MessageCircle,
-  Facebook
+  Facebook,
+  ChevronRight
 } from "lucide-react";
 
 const Footer = () => {
-  const links = [
+  const currentYear = new Date().getFullYear();
+
+  const productLinks = [
+    { label: "Features", to: "/features" },
+    { label: "Pricing", to: "/pricing" },
+    { label: "FAQ", to: "/faq" },
+    { label: "Blog", to: "/blog" },
+  ];
+
+  const companyLinks = [
     { label: "About", to: "/about", icon: Info },
     { label: "Contact", to: "/contact", icon: Mail },
     { label: "Privacy", to: "/privacy", icon: Shield },
@@ -27,28 +37,25 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/futurdoom", label: "GitHub" },
-    { icon: Twitter, href: "https://twitter.com/futurdoom", label: "Twitter" },
-    { icon: Linkedin, href: "https://linkedin.com/company/futurdoom", label: "LinkedIn" },
-    { icon: Facebook, href: "https://facebook.com/futurdoom", label: "Facebook" },
-    { icon: Mail, href: "mailto:feedbackfuturdoom@gmail.com", label: "Email" },
+    { icon: Github, href: "https://github.com/futurdoom", label: "GitHub", color: "hover:bg-gray-900" },
+    { icon: Twitter, href: "https://twitter.com/futurdoom", label: "Twitter", color: "hover:bg-blue-400" },
+    { icon: Linkedin, href: "https://linkedin.com/company/futurdoom", label: "LinkedIn", color: "hover:bg-blue-600" },
+    { icon: Facebook, href: "https://facebook.com/futurdoom", label: "Facebook", color: "hover:bg-blue-700" },
   ];
 
-  // Animation variants
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
@@ -60,95 +67,100 @@ const Footer = () => {
     },
   };
 
-  const buttonHover = {
-    scale: 1.05,
-    y: -2,
-    transition: { type: "spring", stiffness: 400, damping: 17 },
-  };
-
-  const buttonTap = {
-    scale: 0.95,
-    y: 0,
-  };
-
   return (
     <motion.footer
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="bg-white border-t border-blue-100 shadow-lg shadow-blue-500/5 px-4"
-      style={{
-        background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-      }}
+      className="bg-gradient-to-b from-slate-50 to-white border-t border-slate-200"
     >
-      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Main Footer Content - Equal 3 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
-          {/* Left Section - Brand */}
-          <motion.div
-            variants={itemVariants}
-            className="w-full"
-          >
-            <Link to="/" className="inline-block mb-3">
-              <span className="text-2xl sm:text-3xl tracking-tight leading-none">
-                <span className="font-light text-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Main Footer Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Brand Section - 4 columns */}
+          <motion.div variants={itemVariants} className="lg:col-span-4">
+            <Link to="/" className="inline-block mb-4 group">
+              <span className="text-3xl font-bold tracking-tight">
+                <span className="text-slate-800 group-hover:text-slate-600 transition-colors">
                   futur
                 </span>
-                <span className="font-bold text-[#2563eb]">
+                <span className="text-blue-600 group-hover:text-blue-500 transition-colors">
                   DooM
                 </span>
               </span>
             </Link>
-
-            <p className="text-xs sm:text-sm text-slate-500 mb-3 max-w-xs">
-              Where emotions meet AI. Connect, share, and express yourself freely.
+            
+            <p className="text-sm text-slate-600 mb-6 max-w-md leading-relaxed">
+              Where emotions meet AI. Connect, share, and express yourself freely in a safe, supportive community.
             </p>
-            
-            {/* Version badges moved to left column */}
-            
+
+            {/* Trust Badges - Redesigned */}
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg">
+                <Shield size={14} className="text-blue-600" />
+                <span className="text-xs font-medium text-blue-700">SSL Secure</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg">
+                <MessageCircle size={14} className="text-purple-600" />
+                <span className="text-xs font-medium text-purple-700">24/7 Support</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 rounded-lg">
+                <Globe size={14} className="text-emerald-600" />
+                <span className="text-xs font-medium text-emerald-700">Global Community</span>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Center Section - Navigation Links */}
-          <motion.div
-            variants={itemVariants}
-            className="w-full"
-          >
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-              Quick Links
+          {/* Product Links - 3 columns */}
+          <motion.div variants={itemVariants} className="lg:col-span-2">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+              Product
             </h3>
-            <div className="grid grid-cols-4 gap-2">
-              {links.map((link) => {
+            <ul className="space-y-3">
+              {productLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.to}
+                    className="text-sm text-slate-600 hover:text-blue-600 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>{link.label}</span>
+                    <ChevronRight size={14} className="opacity-0 -ml-1 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Company Links - 3 columns */}
+          <motion.div variants={itemVariants} className="lg:col-span-3">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+              Company
+            </h3>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              {companyLinks.map((link) => {
                 const Icon = link.icon;
                 return (
-                  <motion.div
+                  <Link
                     key={link.label}
-                    variants={itemVariants}
-                    whileHover={{ x: 3 }}
+                    to={link.to}
+                    className="text-sm text-slate-600 hover:text-blue-600 transition-colors inline-flex items-center gap-2 group"
                   >
-                    <Link
-                      to={link.to}
-                      className="flex items-center gap-2 px-2 py-2 rounded-xl text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group"
-                    >
-                      <Icon size={12} className="text-slate-400 group-hover:text-blue-600 flex-shrink-0" />
-                      <span className="text-xs font-medium truncate">{link.label}</span>
-                    </Link>
-                  </motion.div>
+                    <Icon size={14} className="text-slate-400 group-hover:text-blue-600" />
+                    <span>{link.label}</span>
+                  </Link>
                 );
               })}
             </div>
           </motion.div>
 
-          {/* Right Section - Social & Contact - Aligned to end */}
-          <motion.div
-            variants={itemVariants}
-            className="w-full flex flex-col items-end"
-          >
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 ">
-              Connect With Us
+          {/* Newsletter/Social - 2 columns */}
+          <motion.div variants={itemVariants} className="lg:col-span-3">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+              Stay Connected
             </h3>
-
-            {/* Social Icons - Aligned to end */}
-            <div className="flex flex-wrap gap-2 mb-4 justify-center">
+            
+            {/* Social Icons */}
+            <div className="flex flex-wrap gap-2 mb-6">
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
                 return (
@@ -157,37 +169,33 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-white border border-blue-200 flex items-center justify-center text-slate-500 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200"
-                    variants={buttonHover}
-                    whileHover="hover"
-                    whileTap={buttonTap}
+                    className={`w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white transition-all duration-300 ${social.color} hover:border-transparent`}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                     aria-label={social.label}
                   >
-                    <Icon size={16} />
+                    <Icon size={18} />
                   </motion.a>
                 );
               })}
             </div>
 
-            {/* Contact Info - Aligned to end */}
-            <div className="space-y-2 ">
-              <motion.a
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <a
                 href="mailto:feedbackfuturdoom@gmail.com"
-                className="flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition-colors group "
-                whileHover={{ x: -3 }}
+                className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 transition-colors group"
               >
+                <Mail size={16} className="text-slate-400 group-hover:text-blue-600" />
                 <span className="truncate">feedbackfuturdoom@gmail.com</span>
-                <Mail size={12} className="group-hover:text-blue-600 flex-shrink-0" />
-              </motion.a>
-
-              <motion.a
+              </a>
+              <a
                 href="https://www.futurdoom.com"
-                className="flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition-colors group justify-end"
-                whileHover={{ x: -3 }}
+                className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 transition-colors group"
               >
-                <span className="truncate">www.futurdoom.com</span>
-                <Globe size={12} className="group-hover:text-blue-600 flex-shrink-0" />
-              </motion.a>
+                <Globe size={16} className="text-slate-400 group-hover:text-blue-600" />
+                <span>www.futurdoom.com</span>
+              </a>
             </div>
           </motion.div>
         </div>
@@ -195,53 +203,34 @@ const Footer = () => {
         {/* Divider */}
         <motion.div
           variants={itemVariants}
-          className="h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent my-6"
+          className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent my-8 lg:my-10"
         />
 
-        {/* Bottom Bar - Simplified */}
+        {/* Bottom Bar */}
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row justify-between items-center gap-4"
         >
           {/* Copyright */}
-          <p className="text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2">
-            <span>© 2026 futurdoom</span>
+          <p className="text-sm text-slate-500 flex flex-wrap items-center justify-center gap-2">
+            <span>© {currentYear} futurdoom</span>
             <span className="w-1 h-1 rounded-full bg-slate-300 hidden sm:inline-block" />
-            <span className="flex items-center gap-1">
-              Made with <Heart size={10} className="text-pink-500" /> for the community
+            <span className="flex items-center gap-1.5">
+              Made with <Heart size={14} className="text-pink-500 fill-current" /> by futurdoom team
             </span>
           </p>
 
-          <div className="flex items-center gap-2 mt-4">
-              <span className="text-[10px] px-2 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
-                v2.0.0
-              </span>
-              <span className="text-[10px] px-2 py-1 rounded-full bg-purple-50 text-purple-600 border border-purple-200 flex items-center gap-1">
-                <Sparkles size={8} />
-                AI-Powered
-              </span>
-            </div>
+          {/* Version Badges */}
+          <div className="flex items-center gap-3">
+            <span className="text-xs px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 font-medium">
+              v2.0.0
+            </span>
+            <span className="text-xs px-3 py-1.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200 flex items-center gap-1.5 font-medium">
+              <Sparkles size={12} />
+              AI-Powered
+            </span>
+          </div>
         </motion.div>
-
-        {/* Trust Badges */}
-        <motion.div
-          variants={itemVariants}
-          className="mt-4 flex flex-wrap items-center justify-center gap-4 text-[10px] text-slate-400"
-        >
-          <span className="flex items-center gap-1">
-            <Shield size={10} /> SSL Secure
-          </span>
-          <span className="w-1 h-1 rounded-full bg-slate-300" />
-          <span className="flex items-center gap-1">
-            <MessageCircle size={10} /> 24/7 Support
-          </span>
-          <span className="w-1 h-1 rounded-full bg-slate-300" />
-          <span className="flex items-center gap-1">
-            <Globe size={10} /> Global Community
-          </span>
-        </motion.div>
-
-        
       </div>
     </motion.footer>
   );

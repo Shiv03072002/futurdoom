@@ -283,7 +283,7 @@ const Chatbotmain = () => {
                 }}
               />
               <motion.div
-                className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1a3aad] to-[#2563eb] flex items-center justify-center shadow-xl shadow-blue-500/30 cursor-pointer"
+                className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a3aad] to-[#2563eb] flex items-center justify-center  cursor-pointer"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -305,7 +305,7 @@ const Chatbotmain = () => {
 
             {/* App Name */}
             <motion.h1
-              className="text-5xl leading-none mb-2"
+              className="text-4xl leading-none mb-2"
               variants={itemVariants}
             >
               <span className="text-slate-800 font-light">
@@ -349,7 +349,7 @@ const Chatbotmain = () => {
             <motion.div
               className="w-full mb-8 p-5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100"
               variants={itemVariants}
-              whileHover={{ y: -4, boxShadow: "0 12px 24px rgba(37,99,235,0.15)" }}
+              
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <div className="flex items-center justify-between mb-3">
