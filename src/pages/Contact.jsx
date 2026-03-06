@@ -25,6 +25,35 @@ const Contact = () => {
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+
+  const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/330px-Instagram_logo_2022.svg.png",
+  },
+  {
+    name: "Facebook",
+    href: "https://facebook.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/240px-2023_Facebook_icon.svg.png",
+  },
+  {
+    name: "X (Twitter)",
+    href: "https://twitter.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/X_%28formerly_Twitter%29_logo_late_2025.svg/330px-X_%28formerly_Twitter%29_logo_late_2025.svg.png",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+];
+
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -250,21 +279,20 @@ const Contact = () => {
               </motion.div>
 
               {/* Social */}
-              <motion.div variants={itemVariants}>
-                <p className="text-xs text-slate-500 mb-3 px-2">Connect with us</p>
-                <div className="flex gap-2 px-2">
-                  {[Twitter, Facebook, Linkedin, Github].map((Icon, i) => (
-                    <motion.button
-                      key={i}
-                      className="flex items-center justify-center w-9 h-9 rounded-xl bg-white border border-blue-200 text-slate-500 hover:text-blue-600 hover:border-blue-300 transition-all duration-200"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Icon size={16} />
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
+              <div className="flex gap-3 ">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={social.name}
+                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+              >
+                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+              </a>
+            ))}
+          </div>
             </motion.div>
 
             {/* Right — form */}

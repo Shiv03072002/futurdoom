@@ -115,6 +115,35 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
   const [showInterestingList, setShowInterestingList] = useState(false);
   const [showChat, setShowChat] = useState(isChatOpen);
   const [showMenu, setShowMenu] = useState(false);
+
+
+  const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/330px-Instagram_logo_2022.svg.png",
+  },
+  {
+    name: "Facebook",
+    href: "https://facebook.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/240px-2023_Facebook_icon.svg.png",
+  },
+  {
+    name: "X (Twitter)",
+    href: "https://twitter.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/X_%28formerly_Twitter%29_logo_late_2025.svg/330px-X_%28formerly_Twitter%29_logo_late_2025.svg.png",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+];
   
 
   // Sync local state with parent state
@@ -251,14 +280,20 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
   </div>
 </div>
 
-         <div className="flex items-center gap-2 mb-4">
-          {[Instagram,Facebook, Twitter, Linkedin,Github].map((Icon, i) => (
-            <motion.a key={i} href="#" whileHover={socialIconHover} whileTap={{ scale: 0.95 }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-300 transition-all duration-150">
-              <Icon size={14} />
-            </motion.a>
-          ))}
-        </div>
+         <div className="flex gap-3  mb-4 border-slate-100">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={social.name}
+                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+              >
+                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+              </a>
+            ))}
+          </div>
 
         {/* ── 2. Email, Phone, Occupation ── */}
         <div className="bg-slate-50 rounded-xl p-3 mb-4">
