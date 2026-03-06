@@ -240,7 +240,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col h-full bg-white rounded-xl overflow-hidden"
+      className="flex flex-col h-140 lg:h-full bg-white rounded-xl overflow-hidden"
       style={{
         border: "1px solid #dbeafe",
       }}

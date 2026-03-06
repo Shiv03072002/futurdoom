@@ -58,6 +58,8 @@ const router = createBrowserRouter([
       { path: "group-chat/new", element: <GroupChat /> },
       { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
       { path: "discussion/new", element: <DiscussionChatMain /> },
+      { path:"deepaskshare", element:<AIChat />},
+      { path: "/thread/:messageId",element: <ThreadPage />},
     ],
   },
   {
@@ -67,10 +69,7 @@ const router = createBrowserRouter([
       { path: "profile/:username", element: <UserProfilePage /> },
       { path: "searchpeople", element: <Search /> },
       { path: "chat", element: <ChatMain /> },
-     {
-    path: "/thread/:messageId",
-    element: <ThreadPage />,
-  },
+     
       { path: "profile", element: <MyProfile /> },
       { path: "settings", element: <Setting /> },
       { path: "edit", element: <EditProfile /> },
@@ -78,9 +77,7 @@ const router = createBrowserRouter([
       { path: "notification", element: <Notification /> },
       { path: "discussion", element: <DiscussionMain /> },
       { path: "groups", element: <Groups /> },
-      
      
-      {path:"deepaskshare", element:<AIChat />}
     ],
   },
 ]);

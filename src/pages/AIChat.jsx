@@ -171,7 +171,7 @@ const SimpleChat = () => {
   return (
     <div className="flex items-center justify-center">
       <div
-        className="w-full flex flex-col overflow-hidden bg-white h-[650px] rounded-xl"
+        className="w-full flex flex-col overflow-hidden bg-white h-140 lg:h-[650px] rounded-xl"
         style={{
          
           border: "1px solid #dbeafe",

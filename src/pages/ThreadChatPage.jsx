@@ -11,7 +11,7 @@ const ThreadPage = () => {
   const thread = location.state?.thread;
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col  bg-white">
       {/* Chat Interface - Full height, no header */}
       <div className="flex-1 overflow-hidden">
         <ChatInterfaceFull thread={thread} />
