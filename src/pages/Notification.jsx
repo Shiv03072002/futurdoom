@@ -136,183 +136,179 @@ const Notification = () => {
     : notifications.filter(n => n.category === activeFilter);
 
   return (
-    <div className="min-h-screen flex items-start justify-center ">
-      <div className="bg-white rounded-xl  w-full overflow-hidden sticky top-20 z-35  ">
+    <div className="min-h-screen bg-slate-50 flex items-start justify-center ">
+      <div className="bg-white rounded-xl w-full  overflow-hidden relative">
         
-        <NotificationHeader unreadCount={unreadCount} />
-
-        <div className="p-4 sm:p-6">
+        {/* Sticky Header Section */}
+        <div className="sticky top-0 z-10 bg-white border-b border-slate-200">
+          <NotificationHeader unreadCount={unreadCount} />
           
           {/* Filter Tabs - with badges for unread counts */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            
-            {/* All Tab */}
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "all"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              All
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
-                {/* Likes Tab */}
-             <button
-              onClick={() => setActiveFilter("likes")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "likes"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Likes
-              {likesUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {likesUnread > 9 ? '9+' : likesUnread}
-                </span>
-              )}
-            </button>
-            
-            
-            {/* Comments Tab */}
-            <button
-              onClick={() => setActiveFilter("comments")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "comments"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Comments
-              {commentsUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {commentsUnread > 9 ? '9+' : commentsUnread}
-                </span>
-              )}
-            </button>
-            
-           
-           {/* Message Tab */}
-            <button
-              onClick={() => setActiveFilter("messages")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "messages"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Message
-              {messagesUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {messagesUnread > 9 ? '9+' : messagesUnread}
-                </span>
-              )}
-            </button>
-           
-            {/* Discussion Tab */}
-            <button
-              onClick={() => setActiveFilter("discussion")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "discussion"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Discussion
-              {discussionUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {discussionUnread > 9 ? '9+' : discussionUnread}
-                </span>
-              )}
-            </button>
+          <div className="px-4 sm:px-6 pb-3 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-1">
+              
+              {/* All Tab */}
+              <button
+                onClick={() => setActiveFilter("all")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "all"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                All
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+                  
+              {/* Likes Tab */}
+              <button
+                onClick={() => setActiveFilter("likes")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "likes"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Likes
+                {likesUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {likesUnread > 9 ? '9+' : likesUnread}
+                  </span>
+                )}
+              </button>
+              
+              {/* Comments Tab */}
+              <button
+                onClick={() => setActiveFilter("comments")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "comments"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Comments
+                {commentsUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {commentsUnread > 9 ? '9+' : commentsUnread}
+                  </span>
+                )}
+              </button>
+             
+              {/* Message Tab */}
+              <button
+                onClick={() => setActiveFilter("messages")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "messages"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Message
+                {messagesUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {messagesUnread > 9 ? '9+' : messagesUnread}
+                  </span>
+                )}
+              </button>
+             
+              {/* Discussion Tab */}
+              <button
+                onClick={() => setActiveFilter("discussion")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "discussion"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Discussion
+                {discussionUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {discussionUnread > 9 ? '9+' : discussionUnread}
+                  </span>
+                )}
+              </button>
 
-            {/* Group Chat Tab */}
-            <button
-              onClick={() => setActiveFilter("groupchats")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "groupchats"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              GroupChat
-              {groupchatsUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {groupchatsUnread > 9 ? '9+' : groupchatsUnread}
-                </span>
-              )}
-            </button>
-            
-            
-            
-            {/* Interested Tab */}
-            <button
-              onClick={() => setActiveFilter("interested")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "interested"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Interested
-              {interestedUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {interestedUnread > 9 ? '9+' : interestedUnread}
-                </span>
-              )}
-            </button>
-            
-            {/* Interesting Tab */}
-            <button
-              onClick={() => setActiveFilter("interesting")}
-              className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
-                activeFilter === "interesting"
-                  ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-blue-50 border border-slate-200"
-              }`}
-            >
-              Interesting
-              {interestingUnread > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
-                  {interestingUnread > 9 ? '9+' : interestingUnread}
-                </span>
-              )}
-            </button>
-            
-            
+              {/* Group Chat Tab */}
+              <button
+                onClick={() => setActiveFilter("groupchats")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "groupchats"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                GroupChat
+                {groupchatsUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {groupchatsUnread > 9 ? '9+' : groupchatsUnread}
+                  </span>
+                )}
+              </button>
+              
+              {/* Interested Tab */}
+              <button
+                onClick={() => setActiveFilter("interested")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "interested"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Interested
+                {interestedUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {interestedUnread > 9 ? '9+' : interestedUnread}
+                  </span>
+                )}
+              </button>
+              
+              {/* Interesting Tab */}
+              <button
+                onClick={() => setActiveFilter("interesting")}
+                className={`py-2 px-1 rounded-lg text-xs font-medium transition-all relative ${
+                  activeFilter === "interesting"
+                    ? "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-sm"
+                    : "text-slate-600 hover:bg-blue-50 border border-slate-200"
+                }`}
+              >
+                Interesting
+                {interestingUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm">
+                    {interestingUnread > 9 ? '9+' : interestingUnread}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
+          <div className="h-px bg-slate-100" />
+        </div>
 
-          <div className="h-px bg-slate-100 mb-2" />
-
-          {/* Notifications List */}
-          <div className="divide-y divide-slate-100 overflow-y-auto">
-            {filteredNotifications.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-                  <Bell size={24} className="text-slate-400" />
-                </div>
-                <p className="text-sm text-slate-400 font-medium">No notifications</p>
-                <p className="text-xs text-slate-300 mt-1">
-                  {activeFilter === "all" ? "You're all caught up!" : `No ${activeFilter} notifications`}
-                </p>
+        {/* Scrollable Notifications List */}
+        <div className="p-4 sm:p-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+          {filteredNotifications.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                <Bell size={24} className="text-slate-400" />
               </div>
-            ) : (
-              filteredNotifications.map((n) => (
-                <NotificationItem
-                  key={n.id}
-                  notification={n}
-                  onMarkAsRead={markAsRead}
-                  onRemove={remove}
-                />
-              ))
-            )}
-          </div>
+              <p className="text-sm text-slate-400 font-medium">No notifications</p>
+              <p className="text-xs text-slate-300 mt-1">
+                {activeFilter === "all" ? "You're all caught up!" : `No ${activeFilter} notifications`}
+              </p>
+            </div>
+          ) : (
+            filteredNotifications.map((n) => (
+              <NotificationItem
+                key={n.id}
+                notification={n}
+                onMarkAsRead={markAsRead}
+                onRemove={remove}
+              />
+            ))
+          )}
 
           {/* Mark all as read */}
           {unreadCount > 0 && (
