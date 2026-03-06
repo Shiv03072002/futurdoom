@@ -511,13 +511,35 @@ const Footer = ({ logoSrc }) => {
     { label: "Disclaimer", to: "/disclaimer" },
   ];
 
-  const social = [
-    { Icon: Github,   href: "https://github.com/futurdoom",           label: "GitHub"   },
-    { Icon: Twitter,  href: "https://twitter.com/futurdoom",          label: "Twitter"  },
-    { Icon: Linkedin, href: "https://linkedin.com/company/futurdoom", label: "LinkedIn" },
-    { Icon: Facebook, href: "https://facebook.com/futurdoom",         label: "Facebook" },
-    { Icon: Mail,     href: "mailto:feedbackfuturdoom@gmail.com",     label: "Email"    },
-  ];
+   const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/330px-Instagram_logo_2022.svg.png",
+  },
+  {
+    name: "Facebook",
+    href: "https://facebook.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/240px-2023_Facebook_icon.svg.png",
+  },
+  {
+    name: "X (Twitter)",
+    href: "https://twitter.com",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/X_%28formerly_Twitter%29_logo_late_2025.svg/330px-X_%28formerly_Twitter%29_logo_late_2025.svg.png",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com",
+    img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+];
+
+  
 
   return (
     <footer
@@ -528,17 +550,7 @@ const Footer = ({ logoSrc }) => {
       {/* ── top gradient accent ── */}
       
 
-      {/* ── soft blue radial wash top-right ── */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full opacity-[0.07]"
-        style={{ background: "radial-gradient(circle, #3b82f6, transparent 65%)", filter: "blur(60px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-20 -left-20 w-[380px] h-[380px] rounded-full opacity-[0.05]"
-        style={{ background: "radial-gradient(circle, #7c3aed, transparent 65%)", filter: "blur(60px)" }}
-      />
+     
 
       {/* ════════════════════════════════════════
           UPPER CARD — brand + newsletter
@@ -546,7 +558,7 @@ const Footer = ({ logoSrc }) => {
       <div className="relative px-6 sm:px-12 lg:px-20 pt-14 pb-0">
         <motion.div
           variants={col(0)} initial="hidden" animate={controls}
-          className="relative rounded-3xl overflow-hidden p-8 sm:p-10 mb-0"
+          className="relative rounded-xl overflow-hidden p-8 sm:p-10 mb-0"
           style={{
             background: "linear-gradient(135deg, #eff6ff 0%, #f5f3ff 60%, #fdf2f8 100%)",
             border: "1px solid #e8f0fe",
@@ -568,14 +580,10 @@ const Footer = ({ logoSrc }) => {
                 <img src={logoSrc} alt="futurdoom" className="h-9 w-auto object-contain" />
               ) : (
                 <Link to="/" className="text-[26px] tracking-tight leading-none select-none w-fit">
-                  <span className="font-thin text-slate-500">futur</span>
+                  <span className="font-thin text-black">futur</span>
                   <span
-                    className="font-black"
-                    style={{
-                      background: "linear-gradient(90deg,#2563eb,#7c3aed)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
+                    className="font-black text-blue-500"
+                    
                   >
                     DooM
                   </span>
@@ -699,9 +707,20 @@ const Footer = ({ logoSrc }) => {
             <p className="text-[10px] font-black tracking-[0.18em] uppercase text-slate-400 mb-4">
               Follow Us
             </p>
-            <div className="flex flex-wrap gap-2">
-              {social.map(s => <SocialIcon key={s.label} {...s} />)}
-            </div>
+            <div className="flex gap-3 ">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={social.name}
+                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+              >
+                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+              </a>
+            ))}
+          </div>
           </motion.div>
         </div>
       </div>
