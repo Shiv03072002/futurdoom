@@ -547,15 +547,10 @@ const Footer = ({ logoSrc }) => {
       className="relative overflow-hidden bg-white"
       style={{ borderTop: "1px solid #e8f0fe" }}
     >
-      {/* ── top gradient accent ── */}
-      
-
-     
-
       {/* ════════════════════════════════════════
           UPPER CARD — brand + newsletter
       ════════════════════════════════════════ */}
-      <div className="relative px-6 sm:px-12 lg:px-20 pt-14 pb-0">
+      <div className="relative px-6 sm:px-12 lg:px-6 pt-6 pb-0">
         <motion.div
           variants={col(0)} initial="hidden" animate={controls}
           className="relative rounded-xl overflow-hidden p-8 sm:p-10 mb-0"
@@ -648,7 +643,7 @@ const Footer = ({ logoSrc }) => {
       {/* ════════════════════════════════════════
           MIDDLE — 4-column grid
       ════════════════════════════════════════ */}
-      <div className="relative px-6 sm:px-12 lg:px-20 py-12">
+      <div className="relative px-6 sm:px-12 lg:px-6 py-12">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
 
           {/* Quick Links */}
@@ -730,7 +725,7 @@ const Footer = ({ logoSrc }) => {
       ════════════════════════════════════════ */}
       <motion.div
         variants={col(0.5)} initial="hidden" animate={controls}
-        className="relative px-6 sm:px-12 lg:px-20 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
+        className="relative px-6 sm:px-12 lg:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
         style={{ borderTop: "1px solid #f1f5f9" }}
       >
         <span className="text-[11px] text-slate-400">

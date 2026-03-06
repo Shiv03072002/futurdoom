@@ -28,6 +28,7 @@ import SignIn from "./pages/auth/SignIn";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AIChat from "./pages/AIChat";
 import ThreadPage from './pages/ThreadChatPage'
+import ChatLayout from "./layouts/ChatLayout";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -42,12 +43,21 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
       { path: "chatbotmain", element: <Chatbotmain /> },
-    
-      
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <PrivacyPolicy /> },
       { path: "disclaimer", element: <Disclaimer /> },
      
+    ],
+  },
+  {
+    path: "/",
+    element:<ChatLayout/>,
+    children: [
+      { path: "chat", element: <ChatMain /> },
+      { path: "group-chat/:groupId", element: <GroupChat /> },
+      { path: "group-chat/new", element: <GroupChat /> },
+      { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
+      { path: "discussion/new", element: <DiscussionChatMain /> },
     ],
   },
   {
@@ -68,10 +78,8 @@ const router = createBrowserRouter([
       { path: "notification", element: <Notification /> },
       { path: "discussion", element: <DiscussionMain /> },
       { path: "groups", element: <Groups /> },
-      { path: "group-chat/:groupId", element: <GroupChat /> },
-      { path: "group-chat/new", element: <GroupChat /> },
-      { path: "discussion/:discussionId", element: <DiscussionChatMain /> },
-      { path: "discussion/new", element: <DiscussionChatMain /> },
+      
+     
       {path:"deepaskshare", element:<AIChat />}
     ],
   },

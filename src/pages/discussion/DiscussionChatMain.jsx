@@ -94,7 +94,7 @@ const DiscussionChatMain = () => {
       <div style={{
         display: "flex",
         flexDirection: "column",
-        height: "calc(70vh - 50px)", /* subtract your navbar height */
+        height: "calc(80vh - 50px)", /* subtract your navbar height */
         maxWidth: "80rem",            /* max-w-7xl */
         width: "100%",
         margin: "0 auto",

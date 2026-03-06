@@ -223,7 +223,7 @@ const GroupChat = () => {
           <div
             className="flex flex-col overflow-hidden bg-white rounded-xl border border-blue-50"
             style={{
-              height: "calc(100vh - 2rem)",
+              height: "calc(80vh - 2rem)",
               maxHeight: 700,
               fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             }}
