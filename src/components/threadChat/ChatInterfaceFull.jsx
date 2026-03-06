@@ -172,9 +172,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
   const textareaRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  
 
   const handleSend = () => {
     if (!message.trim()) return;
