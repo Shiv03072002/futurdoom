@@ -127,9 +127,7 @@ const SimpleChat = () => {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  
 
   const handleSend = () => {
     if (!input.trim()) return;

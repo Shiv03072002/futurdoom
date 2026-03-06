@@ -70,12 +70,6 @@ const GroupChat = () => {
     }
   }, []);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, isTyping]);
 
   const send = () => {
     if (!input.trim()) return;

@@ -46,9 +46,7 @@ const DiscussionChatMain = () => {
     ]);
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  
 
   const send = () => {
     if (!input.trim()) return;
