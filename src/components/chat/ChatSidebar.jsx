@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   MessageSquare, 
@@ -13,11 +13,9 @@ import {
   MessageCircle,
   Trash2,
   Clock,
-  CheckCircle2,
   Share2,
   MoreHorizontal
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const BLUE = "#2563eb";
 const DARK_BLUE = "#1a3aad";
@@ -107,7 +105,7 @@ const Avatar = ({ size = 36, status = true, icon }) => (
       {icon || <Bot size={size * 0.5} />}
     </div>
     {status && (
-      <motion.span
+      <span
         className="absolute rounded-full ring-2 ring-white"
         style={{ 
           width: size * 0.25, 
@@ -116,14 +114,6 @@ const Avatar = ({ size = 36, status = true, icon }) => (
           bottom: 0, 
           right: 0 
         }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
     )}
   </div>
@@ -131,27 +121,29 @@ const Avatar = ({ size = 36, status = true, icon }) => (
 
 const ChatSidebar = ({ onSelectChat, onNewChat, isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
+  const [activeMenu, setActiveMenu] = useState(null);
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target) && 
+          buttonRef.current && !buttonRef.current.contains(e.target)) {
+        setActiveMenu(null);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const filteredHistory = chatHistory.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const [showMenuForChat, setShowMenuForChat] = useState(null);
-
-// Add click outside handler
-useEffect(() => {
-  const handleClickOutside = () => {
-    setShowMenuForChat(null);
-  };
-  
-  document.addEventListener('click', handleClickOutside);
-  return () => document.removeEventListener('click', handleClickOutside);
-}, []);
-
   const handleNewChat = () => {
-    // Create a new empty chat
     const newChat = {
       id: Date.now(),
       name: "New Chat",
@@ -164,20 +156,18 @@ useEffect(() => {
         { 
           id: Date.now() + 1, 
           from: "ai", 
-          text: "Hello! I'm futurDooM. How can I help you today? Feel free to ask me anything about coding, development, or technology.", 
+          text: "Hello! I'm futurDooM. How can I help you today?", 
           time: "Just now", 
           read: true 
         }
       ]
     };
     
-    // Pass the new chat to parent
     onNewChat(newChat);
     onClose();
   };
 
   const handleChatSelect = (chat) => {
-    // Mark messages as read when selected
     const updatedChat = {
       ...chat,
       unread: 0,
@@ -188,12 +178,16 @@ useEffect(() => {
   };
 
   const handleDeleteChat = (e, chatId) => {
-    e.stopPropagation(); // Prevent triggering chat selection
+    e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this conversation?")) {
-      // Here you would implement the delete functionality
       console.log("Deleting chat:", chatId);
-      // You can pass this up to parent component
+      setActiveMenu(null);
     }
+  };
+
+  const toggleMenu = (e, chatId) => {
+    e.stopPropagation();
+    setActiveMenu(activeMenu === chatId ? null : chatId);
   };
 
   return (
@@ -202,23 +196,23 @@ useEffect(() => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className=" lg:w-80 bg-white rounded-xl border border-blue-100 overflow-hidden flex flex-col z-50"
+      className="lg:w-80 bg-white rounded-xl border border-blue-100 overflow-hidden flex flex-col"
       style={{ height: 600 }}
     >
       {/* History Header */}
       <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
         <div className="hidden lg:flex items-center justify-between mb-3">
-  <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-    <MessageSquare size={18} className="text-blue-600" />
-    Chat History
-  </h2>
-  <button 
-    onClick={onClose}
-    className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-white/50 transition-colors"
-  >
-    <span className="text-lg">✕</span>
-  </button>
-</div>
+          <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <MessageSquare size={18} className="text-blue-600" />
+            Chat History
+          </h2>
+          <button 
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-white/50 transition-colors"
+          >
+            <span className="text-lg">✕</span>
+          </button>
+        </div>
         
         {/* Search */}
         <div className="relative mb-3">
@@ -233,133 +227,93 @@ useEffect(() => {
         </div>
 
         {/* Start New Chat Button */}
-        <motion.button
+        <button
           onClick={handleNewChat}
-          whileHover={{ scale: 1.02, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white text-sm font-semibold shadow-md shadow-blue-500/30 hover:shadow-lg transition-all duration-200"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200"
         >
           <Plus size={16} />
           Start New Chat
-        </motion.button>
+        </button>
       </div>
 
       {/* History List */}
-     <div className="flex-1 overflow-y-auto p-2">
-  <AnimatePresence mode="popLayout">
-    {filteredHistory.map((chat) => (
-      <motion.div
-        key={chat.id}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, x: -100 }}
-        whileHover={{ scale: 1.02 }}
-        onClick={() => handleChatSelect(chat)}
-        className="p-3 mb-2 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-100 transition-all relative group"
-      >
-        <div className="flex items-start gap-3">
-          {/* <Avatar size={40} status={chat.unread > 0} icon={chat.icon} /> */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              {/* <h3 className="text-sm font-semibold text-slate-800 truncate">
-                {chat.name}
-              </h3> */}
-              {/* {chat.unread > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px] font-bold ml-1">
-                  {chat.unread}
-                </span>
-              )} */}
-            </div>
-            
-            <p className="text-xs text-slate-600 mt-1 line-clamp-2">
-              {chat.lastMessage}
-            </p>
-            
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-[9px] text-slate-400 flex items-center gap-1">
-                <Clock size={8} />
-                {chat.date} · {chat.time}
-              </span>
-              
-              <div className="flex items-center gap-1 relative">
-  {/* Menu Button */}
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setShowMenuForChat(chat.id); // Set the current chat id to show menu
-    }}
-    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-100"
-  >
-    <MoreHorizontal size={12} className="text-gray-400 hover:text-gray-600" />
-  </button>
+      <div className="flex-1 overflow-y-auto p-2">
+        {filteredHistory.map((chat) => (
+          <div
+            key={chat.id}
+            onClick={() => handleChatSelect(chat)}
+            className="p-3 mb-2 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 border border-slate-100 transition-all relative group"
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+                  {chat.lastMessage}
+                </p>
+                
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-[9px] text-slate-400 flex items-center gap-1">
+                    <Clock size={8} />
+                    {chat.date} · {chat.time}
+                  </span>
+                  
+                  {/* Menu Button */}
+                  <div className="relative">
+                    <button
+                      ref={activeMenu === chat.id ? buttonRef : null}
+                      onClick={(e) => toggleMenu(e, chat.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-200"
+                    >
+                      <MoreHorizontal size={12} className="text-gray-500" />
+                    </button>
 
-  {/* Menu Modal */}
-  <AnimatePresence>
-    {showMenuForChat === chat.id && (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: -10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: -10 }}
-        transition={{ duration: 0.15 }}
-        className="absolute right-0 top-full mt-1 w-36 bg-white rounded-lg border border-gray-200 shadow-lg z-50 overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Share Option */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log("Share chat:", chat.id);
-            setShowMenuForChat(null);
-          }}
-          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-100"
-        >
-          <Share2 size={12} className="text-blue-500" />
-          Share
-        </button>
+                    {/* Menu Dropdown */}
+                    {activeMenu === chat.id && (
+                      <div
+                        ref={menuRef}
+                        className="absolute right-0 bottom-0 w-36 bg-white rounded-lg border border-gray-200 shadow-xl z-50 overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          onClick={() => {
+                            console.log("Share chat:", chat.id);
+                            setActiveMenu(null);
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-100"
+                        >
+                          <Share2 size={12} className="text-blue-500" />
+                          Share
+                        </button>
 
-        {/* Delete Option */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteChat(e, chat.id);
-            setShowMenuForChat(null);
-          }}
-          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-red-50 transition-colors"
-        >
-          <Trash2 size={12} className="text-red-500" />
-          Delete
-        </button>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
+                        <button
+                          onClick={(e) => handleDeleteChat(e, chat.id)}
+                          className="w-full px-4 py-2.5 flex items-center gap-2 text-left text-xs text-gray-700 hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 size={12} className="text-red-500" />
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </motion.div>
-    ))}
-  </AnimatePresence>
+        ))}
 
-  {filteredHistory.length === 0 && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="text-center py-8"
-    >
-      <MessageSquare size={32} className="mx-auto text-slate-300 mb-2" />
-      <p className="text-sm text-slate-400">No conversations found</p>
-      <motion.button
-        onClick={handleNewChat}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="mt-3 px-4 py-2 bg-blue-500 text-white text-xs rounded-lg inline-flex items-center gap-1 hover:bg-blue-600 transition-colors"
-      >
-        <Plus size={12} />
-        Start a new chat
-      </motion.button>
-    </motion.div>
-  )}
-</div>
+        {filteredHistory.length === 0 && (
+          <div className="text-center py-8">
+            <MessageSquare size={32} className="mx-auto text-slate-300 mb-2" />
+            <p className="text-sm text-slate-400">No conversations found</p>
+            <button
+              onClick={handleNewChat}
+              className="mt-3 px-4 py-2 bg-blue-500 text-white text-xs rounded-lg inline-flex items-center gap-1 hover:bg-blue-600 transition-colors"
+            >
+              <Plus size={12} />
+              Start a new chat
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* History Footer */}
       <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-blue-100">
