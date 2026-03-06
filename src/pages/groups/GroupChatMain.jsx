@@ -136,7 +136,7 @@ const GroupChat = () => {
   return (
     // ✅ Full height minus top navbar + bottom navbar (mobile) or just top navbar (desktop)
     <div
-      className="lg:h-[calc(100dvh-144px)] h-[calc(98dvh-144px)] overflow-hidden"
+      className="lg:h-[calc(100dvh-144px)] h-[calc(86dvh-80px)] overflow-hidden"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
