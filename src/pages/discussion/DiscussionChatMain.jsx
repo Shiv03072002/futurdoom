@@ -39,7 +39,7 @@ const DiscussionChatMain = () => {
 
   useEffect(() => {
     const starter = discussionInfo.participants.find(p => p.isStarter)?.name || "Shiv";
-    const others   = discussionInfo.participants.filter(p => !p.isStarter).map(p => p.name).join(", ");
+    const others = discussionInfo.participants.filter(p => !p.isStarter).map(p => p.name).join(", ");
     setMessages([
       { id: "sys-1", type: "system", text: `${starter} started a discussion` },
       { id: "sys-2", type: "system", text: others ? `👋 ${starter} invited ${others} to discuss` : `👋 ${starter} started a discussion` },
@@ -88,20 +88,17 @@ const DiscussionChatMain = () => {
   );
 
   return (
-    <>
-      
-      {/* Fills the page content area — works inside your existing navbar+sidebar layout */}
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "calc(80vh - 50px)", /* subtract your navbar height */
-        maxWidth: "80rem",            /* max-w-7xl */
-        width: "100%",
-        margin: "0 auto",
-        background: "#fafcff",
+    // ✅ desktop: minus top navbar (80px) | mobile: minus top + bottom navbar (144px)
+    <div
+      className="lg:h-[calc(100dvh-100px)] h-[calc(98dvh-144px)] overflow-hidden"
+      style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        overflow: "hidden",           /* children handle their own scroll */
-      }}>
+        background: "#fafcff",
+      }}
+    >
+      {/* ✅ h-full flex col — fills the parent exactly */}
+      <div className="h-full flex flex-col overflow-hidden bg-white rounded-xl"
+        style={{ border: "1px solid #dbeafe" }}>
 
         {/* ══════════ HEADER ══════════ */}
         <div style={{
@@ -151,7 +148,7 @@ const DiscussionChatMain = () => {
           </div>
         </div>
 
-        {/* ══════════ PARTICIPANTS PANEL (collapsible) ══════════ */}
+        {/* ══════════ PARTICIPANTS PANEL ══════════ */}
         <AnimatePresence>
           {showParticipants && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
@@ -161,9 +158,7 @@ const DiscussionChatMain = () => {
                   <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>
                     Participants ({discussionInfo.participants.length})
                   </span>
-                  <button style={{ fontSize: 11, color: "#2563eb", background: "none", border: "none", cursor: "pointer" }}>
-                    + Add
-                  </button>
+                  <button style={{ fontSize: 11, color: "#2563eb", background: "none", border: "none", cursor: "pointer" }}>+ Add</button>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 150, overflowY: "auto" }}>
                   {discussionInfo.participants.map(p => (
@@ -184,9 +179,11 @@ const DiscussionChatMain = () => {
         </AnimatePresence>
 
         {/* ══════════ MESSAGES — ONLY SCROLLABLE SECTION ══════════ */}
+        {/* ✅ minHeight: 0 is critical — without it flex children overflow in column flex */}
         <div style={{
-          flex: 1,           /* fill all space between header and input */
-          overflowY: "auto", /* scroll here and ONLY here */
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
           overscrollBehavior: "contain",
           padding: "14px 12px",
           display: "flex",
@@ -194,14 +191,12 @@ const DiscussionChatMain = () => {
           gap: 10,
           background: "#fafcff",
         }}>
-          {/* Date chip */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <span style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", background: "#eff6ff", padding: "4px 14px", borderRadius: 999, border: "1px solid #bfdbfe" }}>
               {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
             </span>
           </div>
 
-          {/* System messages */}
           {messages.filter(m => m.type === "system").map(msg => (
             <motion.div key={msg.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
               style={{ display: "flex", justifyContent: "center" }}>
@@ -211,7 +206,6 @@ const DiscussionChatMain = () => {
             </motion.div>
           ))}
 
-          {/* Chat bubbles */}
           <AnimatePresence mode="popLayout">
             {messages.filter(m => m.type !== "system").map(msg => {
               const isMe = msg.from === "me";
@@ -222,7 +216,6 @@ const DiscussionChatMain = () => {
                   layout
                   style={{ display: "flex", flexDirection: "column" }}
                 >
-                  {/* Action icons */}
                   <div style={{ display: "flex", gap: 2, marginBottom: 3, justifyContent: isMe ? "flex-end" : "flex-start" }}>
                     {(isMe ? [Trash2, Settings, Copy, Share2] : [Trash2, Reply, Copy, Heart, Share2]).map((Icon, i) => (
                       <motion.button key={i} whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
@@ -267,7 +260,6 @@ const DiscussionChatMain = () => {
             })}
           </AnimatePresence>
 
-          {/* Typing indicator */}
           <AnimatePresence>
             {isTyping && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
@@ -283,11 +275,10 @@ const DiscussionChatMain = () => {
             )}
           </AnimatePresence>
 
-          {/* Scroll anchor */}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* ══════════ INPUT BAR ══════════ */}
+        {/* ══════════ INPUT BAR — flexShrink:0 always pinned at bottom ══════════ */}
         <div style={{
           flexShrink: 0,
           display: "flex",
@@ -307,30 +298,22 @@ const DiscussionChatMain = () => {
           ))}
 
           <input
-            type="text"
-            value={input}
+            type="text" value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && send()}
             placeholder={`Message ${discussionInfo.participants.filter(p => !p.isStarter).map(p => p.name).join(", ") || "participants"}…`}
             style={{
               flex: 1, minWidth: 0,
-              padding: "9px 14px",
-              borderRadius: 20,
-              border: "1px solid #e2e8f0",
-              background: "#f8fafc",
-              fontSize: 13,
-              color: "#334155",
-              outline: "none",
-              fontFamily: "inherit",
+              padding: "9px 14px", borderRadius: 20,
+              border: "1px solid #e2e8f0", background: "#f8fafc",
+              fontSize: 13, color: "#334155", outline: "none", fontFamily: "inherit",
             }}
             onFocus={e => { e.target.style.borderColor = "#2563eb"; e.target.style.background = "#fff"; }}
             onBlur={e => { e.target.style.borderColor = "#e2e8f0"; e.target.style.background = "#f8fafc"; }}
           />
 
-          <motion.button
-            onClick={send}
-            whileHover={{ scale: input.trim() ? 1.1 : 1 }}
-            whileTap={{ scale: input.trim() ? 0.95 : 1 }}
+          <motion.button onClick={send}
+            whileHover={{ scale: input.trim() ? 1.1 : 1 }} whileTap={{ scale: input.trim() ? 0.95 : 1 }}
             disabled={!input.trim()}
             style={{
               flexShrink: 0, width: 40, height: 40, borderRadius: 12,
@@ -346,7 +329,7 @@ const DiscussionChatMain = () => {
         </div>
 
       </div>
-    </>
+    </div>
   );
 };
 

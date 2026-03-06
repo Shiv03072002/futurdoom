@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUp,
-  Sparkles,
   CheckCheck,
   Copy,
   Trash2,
@@ -10,7 +9,6 @@ import {
   Terminal,
   Smile,
   Paperclip,
-  ChevronLeft,
   Share2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -233,33 +231,27 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
     exit: { opacity: 0, scale: 0.95, transition: { duration: 0.15 } }
   };
 
-  // Get the first user message for the header
   const firstUserMessage = messages.find(msg => msg.from === "user")?.text || "Conversation";
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col h-140 lg:h-full bg-white rounded-xl overflow-hidden"
-      style={{
-        border: "1px solid #dbeafe",
-      }}
+      // ✅ h-full — parent (ThreadPage) controls the height, not this component
+      className="flex flex-col h-full bg-white rounded-xl overflow-hidden"
+      style={{ border: "1px solid #dbeafe" }}
     >
-      {/* Header with user profile */}
-      <div className="px-5 py-4 bg-white border-b border-blue-100">
+      {/* Header */}
+      <div className="flex-shrink-0 px-5 py-4 bg-white border-b border-blue-100">
         <div className="flex items-center gap-3">
-          {/* Avatar */}
           <img
             src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&bold=true"
             alt="User"
             className="w-10 h-10 rounded-full border-2 border-blue-100"
           />
-
-          {/* User details and message */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span className="font-medium text-slate-800">John Doe</span>
-
               <span className="text-xs text-slate-400">· 2h</span>
             </div>
             <p className="text-sm text-slate-600 line-clamp-1">"{firstUserMessage}"</p>
@@ -267,12 +259,11 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages — flex-1 + min-h-0 so this scrolls instead of pushing input off */}
       <div
-        className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-3 sm:space-y-4"
+        className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-5 space-y-3 sm:space-y-4"
         style={{ background: "#f8faff" }}
       >
-        {/* Date separator */}
         <motion.div
           className="flex justify-center"
           initial={{ opacity: 0, y: -8 }}
@@ -291,35 +282,22 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
             const prevSame = i > 0 && messages[i - 1].from === msg.from;
 
             return (
-              <motion.div
-                key={msg.id}
-                variants={msgVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                layout
-              >
-                {/* Action row for user messages */}
+              <motion.div key={msg.id} variants={msgVariants} initial="hidden" animate="visible" exit="exit" layout>
                 {isUser && (
                   <div className="flex items-center gap-0.5 mb-1.5 ml-1">
                     {[
                       { I: Trash2, h: "hover:bg-red-50 hover:text-red-400", fn: () => removeMsg(msg.id) },
-                      { I: Heart, h: "hover:bg-pink-50 hover:text-pink-400", fn: () => { } },
-                      { I: Copy, h: "hover:bg-blue-50 hover:text-blue-500", fn: () => { } },
+                      { I: Heart, h: "hover:bg-pink-50 hover:text-pink-400", fn: () => {} },
+                      { I: Copy, h: "hover:bg-blue-50 hover:text-blue-500", fn: () => {} },
                     ].map(({ I, h, fn }, idx) => (
-                      <motion.button
-                        key={idx}
-                        onClick={fn}
-                        whileHover={{ scale: 1.15 }}
-                        whileTap={{ scale: 0.88 }}
-                        className={`p-1.5 rounded-lg text-slate-400 transition-all duration-150 ${h}`}
-                      >
+                      <motion.button key={idx} onClick={fn}
+                        whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.88 }}
+                        className={`p-1.5 rounded-lg text-slate-400 transition-all duration-150 ${h}`}>
                         <I size={11} />
                       </motion.button>
                     ))}
                     <motion.button
-                      whileHover={{ scale: 1.15 }}
-                      whileTap={{ scale: 0.88 }}
+                      whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.88 }}
                       onClick={() => navigate("/deepaskshare", {
                         state: {
                           thread: {
@@ -332,7 +310,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                           }
                         }
                       })}
-                      className="p-1.5 rounded-lg text-slate-400 hover:bg-violet-50 hover:text-violet-500 transition-all duration-150 relative"
+                      className="p-1.5 rounded-lg text-slate-400 hover:bg-violet-50 hover:text-violet-500 transition-all duration-150"
                     >
                       <Share2 size={11} />
                     </motion.button>
@@ -360,7 +338,6 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                         color: "#1e293b"
                       }}
                     >
-                      {/* Inner shine for AI bubble */}
                       {isAI && (
                         <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ borderRadius: "20px 20px 6px 20px" }}>
                           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full"
@@ -386,13 +363,10 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
           })}
         </AnimatePresence>
 
-        {/* Typing indicator */}
         <AnimatePresence>
           {isTyping && (
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="flex items-center gap-2 justify-end"
             >
               <div className="px-4 py-3"
@@ -400,16 +374,12 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
                   background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
                   borderRadius: "20px 20px 6px 20px",
                   boxShadow: "0 6px 22px rgba(37,99,235,0.30)"
-                }}
-              >
+                }}>
                 <div className="flex items-center gap-1.5">
                   {[0, 1, 2].map(i => (
-                    <motion.span
-                      key={i}
-                      className="w-1.5 h-1.5 bg-white rounded-full"
+                    <motion.span key={i} className="w-1.5 h-1.5 bg-white rounded-full"
                       animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }}
-                      transition={{ duration: 0.75, repeat: Infinity, delay: i * 0.15 }}
-                    />
+                      transition={{ duration: 0.75, repeat: Infinity, delay: i * 0.15 }} />
                   ))}
                 </div>
               </div>
@@ -421,10 +391,10 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input area */}
+      {/* Input bar — flex-shrink-0 keeps it always pinned at bottom */}
       <motion.div
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 px-2 sm:px-4 py-2.5 sm:py-3 bg-white relative"
         style={{ borderTop: "1px solid #dbeafe" }}
       >
@@ -432,12 +402,10 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
           style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.35), transparent)" }} />
 
         {[Paperclip, Smile].map((Icon, i) => (
-          <motion.button
-            key={i}
+          <motion.button key={i}
             whileHover={{ scale: 1.1, backgroundColor: "#eff6ff" }}
             whileTap={{ scale: 0.92 }}
-            className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-blue-500 transition-all duration-150"
-          >
+            className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-blue-500 transition-all duration-150">
             <Icon size={16} strokeWidth={1.8} />
           </motion.button>
         ))}
@@ -484,11 +452,7 @@ const ChatInterfaceFull = ({ thread, onBack }) => {
           }}
           disabled={!message.trim()}
         >
-          <ArrowUp
-            size={14}
-            strokeWidth={2.2}
-            className={message.trim() ? "text-white" : "text-slate-400"}
-          />
+          <ArrowUp size={14} strokeWidth={2.2} className={message.trim() ? "text-white" : "text-slate-400"} />
         </motion.button>
       </motion.div>
     </motion.div>

@@ -7,15 +7,13 @@ const ThreadPage = () => {
   const { messageId } = useParams();
   const location = useLocation();
 
-  // thread data passed from Share page
   const thread = location.state?.thread;
 
   return (
-    <div className="flex flex-col  bg-white">
-      {/* Chat Interface - Full height, no header */}
-      <div className="flex-1 overflow-hidden">
-        <ChatInterfaceFull thread={thread} />
-      </div>
+    // Top navbar = ~64px, bottom navbar = ~64px, total = 128px
+    // Extra 16px for any padding/gap = 144px total
+    <div style={{ height: "calc(98dvh - 144px)" }} className="overflow-hidden">
+      <ChatInterfaceFull thread={thread} />
     </div>
   );
 };
