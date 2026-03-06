@@ -69,7 +69,6 @@ const router = createBrowserRouter([
       { path: "profile/:username", element: <UserProfilePage /> },
       { path: "searchpeople", element: <Search /> },
       { path: "chat", element: <ChatMain /> },
-     
       { path: "profile", element: <MyProfile /> },
       { path: "settings", element: <Setting /> },
       { path: "edit", element: <EditProfile /> },

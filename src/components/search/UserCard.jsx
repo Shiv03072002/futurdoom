@@ -1,8 +1,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Zap, ChevronRight } from 'lucide-react';
+import { Star, Zap, ChevronRight, Circle, CheckCircle } from 'lucide-react';
 
 const UserCard = ({ user, onUserClick, onInterestToggle }) => {
+  // Helper function to generate random last seen time
+  const getRandomLastSeen = () => {
+    const times = [
+      "online now",
+      "2m ago",
+      "15m ago",
+      "1h ago",
+      "3h ago",
+      "yesterday",
+      "2d ago",
+      "1w ago"
+    ];
+    return times[Math.floor(Math.random() * times.length)];
+  };
+
+  // Helper function to determine if user is online
+  const isOnline = () => {
+    return Math.random() > 0.7; // 30% chance of being online
+  };
+
+  // Generate online status and last seen
+  const online = isOnline();
+  const lastSeen = online ? "online" : getRandomLastSeen();
+
   const getInterestButton = () => {
     if (user.interest === "interested") {
       return (
@@ -67,30 +91,67 @@ const UserCard = ({ user, onUserClick, onInterestToggle }) => {
       onClick={() => onUserClick(user)}
       className="group flex items-center justify-between py-3 px-2 rounded-lg cursor-pointer hover:bg-blue-50/50 transition-all duration-200"
     >
-      <div className="flex items-center gap-3">
-        {/* Avatar with gradient */}
-        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center text-white font-semibold text-sm shadow-md`}>
-          {user.initials}
+      <div className="flex items-center gap-3 flex-1">
+        {/* Avatar with gradient and online status */}
+        <div className="relative">
+          <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center text-white font-semibold text-sm shadow-md`}>
+            {user.initials}
+          </div>
+          
+          {/* Online/Offline Indicator */}
+          <div className="absolute -bottom-1 -right-1">
+            {online ? (
+              <div className="relative group/status">
+                <div className="w-4 h-4 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-sm">
+                  <CheckCircle size={10} className="text-green-500" fill="currentColor" />
+                </div>
+                <span className="absolute -top-8 right-0 bg-gray-800 text-white text-[8px] px-1.5 py-0.5 rounded opacity-0 group-hover/status:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  Online
+                </span>
+              </div>
+            ) : (
+              <div className="relative group/status">
+                <div className="w-4 h-4 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-sm">
+                  <Circle size={10} className="text-gray-400" fill="currentColor" />
+                </div>
+                <span className="absolute -top-8 right-0 bg-gray-800 text-white text-[8px] px-1.5 py-0.5 rounded opacity-0 group-hover/status:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  Last seen {lastSeen}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         
         {/* User info */}
-        <div>
-          <div className="flex items-center gap-2 mb-0.5">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
             <h3 className="font-semibold text-slate-800 text-sm">{user.name}</h3>
+            
+            {/* Online/Offline Badge */}
+            <span className={`text-[8px] font-medium px-1.5 py-0.5 rounded-full ${
+              online 
+                ? 'bg-green-100 text-green-600' 
+                : 'bg-gray-100 text-gray-500'
+            }`}>
+              {online ? '● Online' : '○ Offline'}
+            </span>
+            
             {getInterestButton()}
           </div>
+          
           <p className="text-xs text-slate-400">{user.location}</p>
           <p className="text-xs text-slate-500 mt-1 line-clamp-1">{user.bio}</p>
           
-          {/* Stats */}
-          {/* <div className="flex items-center gap-3 mt-1">
-            <span className="text-xs text-slate-400">{user.followers} followers</span>
-            <span className="text-xs text-slate-400">{user.posts} posts</span>
-          </div> */}
+          {/* Last seen text for offline users */}
+          {!online && (
+            <p className="text-[9px] text-slate-400 mt-1">
+              Last active: {lastSeen}
+            </p>
+          )}
         </div>
       </div>
       
-      <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all duration-200" />
+      <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0" />
     </motion.div>
   );
 };
