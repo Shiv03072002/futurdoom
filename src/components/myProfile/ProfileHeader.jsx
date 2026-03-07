@@ -130,7 +130,7 @@ const ProfileCard = ({
         <div className="flex items-start gap-4 mb-4">
 
           {/* LEFT */}
-          <div className="w-1/2 min-w-0 flex flex-col gap-1.5">
+          <div className="w-1/2 min-w-0 flex flex-col gap-2.5">
             <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
             <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
               <MapPin size={11} />

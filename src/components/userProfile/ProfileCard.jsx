@@ -207,25 +207,34 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
         </div>
 
         {/* Name + Role + Socials (LEFT) | Stats + Buttons (RIGHT) */}
-        <div className="flex gap-4 mb-4 items-start">
+        <div className="flex gap-4 mb-4 items-start mt-4">
           {/* LEFT: name, role, socials */}
-          <div className="w-[50%] min-w-0 flex flex-col gap-1.5">
-            <h2 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">{sampleUser.name}</h2>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[10px] font-medium w-fit">
-              <Star size={9} fill="white" />{sampleUser.role}
-            </span>
-            <div className="flex items-center gap-0.5 mt-1 -ml-1">
-              {socialLinks.map((s) => (
-                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" title={s.name}
-                  className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-slate-100 transition-all duration-200">
-                  <img src={s.img} alt={s.name} className="w-4 h-4 object-contain" />
-                </a>
-              ))}
-            </div>
-          </div>
+         <div className="w-1/2 min-w-0 flex flex-col gap-2.5">
+                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
+                     <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
+                       <MapPin size={11} />
+                       <span className="text-xs">{sampleUser.location}</span>
+                     </motion.div>
+                     <motion.span
+                       className="inline-flex items-center gap-1.5 mt-1 mb-1 px-3 py-1 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium w-fit"
+                       animate={{ boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"] }}
+                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                     >
+                       <Sparkles size={10} />{sampleUser.role}
+                     </motion.span>
+                     <div className="flex items-center gap-0.5 mt-1">
+                       {socialLinks.map((social, i) => (
+                         <motion.a key={i} href={social.href} target="_blank" rel="noopener noreferrer" title={social.name}
+                           whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.95 }}
+                           className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 transition-all duration-150">
+                           <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
+                         </motion.a>
+                       ))}
+                     </div>
+                   </div>
 
           {/* RIGHT: stats + buttons */}
-          <div className="w-[50%] flex flex-col gap-2">
+          <div className="w-[50%] flex flex-col gap-2 mt-2.5">
             {/* Stats */}
             <div className="flex divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
               {[
