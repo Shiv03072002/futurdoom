@@ -407,7 +407,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
+    <div className="min-h-screen bg-slate-100">
       <div className="w-full">
         <ProfileCard isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
       </div>

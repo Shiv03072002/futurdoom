@@ -66,7 +66,7 @@ const ProfileCard = ({
 
   return (
     <motion.div
-      className="bg-white rounded-2xl border border-blue-50 overflow-hidden"
+      className="bg-white rounded-xl border border-blue-50 overflow-hidden"
       variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
       initial="hidden" animate="visible"
     >
