@@ -144,7 +144,7 @@ const Notification = () => {
           <NotificationHeader unreadCount={unreadCount} />
           
           {/* Filter Tabs - with badges for unread counts */}
-          <div className="px-4 sm:px-6 pb-3 pt-1">
+          <div className="px-4 sm:px-6 pb-3 pt-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-1">
               
               {/* All Tab */}

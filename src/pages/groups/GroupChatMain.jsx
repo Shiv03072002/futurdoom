@@ -204,9 +204,8 @@ const GroupChat = () => {
   {/* Action Buttons - Responsive grid */}
   <div className="flex items-center gap-0.5 xs:gap-1 sm:gap-1">
     {[
-      { Icon: Phone, label: "Call", showOnMobile: true },
-      { Icon: Video, label: "Video", showOnMobile: false },
-      { Icon: Info, label: "Info", action: () => setShowMembers(!showMembers), showOnMobile: true },
+     
+      
       { Icon: MoreHorizontal, label: "More", showOnMobile: true },
     ].map(({ Icon, label, action, showOnMobile }) => (
       <motion.button

@@ -136,7 +136,7 @@ const DiscussionChatMain = () => {
           </div>
 
           <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
-            {[Phone, Video, Info, MoreHorizontal].map((Icon, i) => (
+            {[MoreHorizontal].map((Icon, i) => (
               <motion.button key={i} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
                 onClick={i === 2 ? () => setShowParticipants(v => !v) : undefined}
                 style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", background: "transparent", border: "none", cursor: "pointer" }}>
