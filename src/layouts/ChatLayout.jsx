@@ -22,7 +22,7 @@ const ChatLayout = () => {
         </div>
 
         {/* Chat content — fills all remaining space */}
-        <div className="flex-1 min-w-0 overflow-hidden py-6 pb-16 md:pb-6">
+        <div className="flex-1 min-w-0 overflow-hidden py-2 lg:py-6 pb-16 md:pb-6">
           <Outlet />
         </div>
       </div>

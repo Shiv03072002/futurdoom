@@ -155,7 +155,7 @@ const SimpleChat = () => {
 
   return (
     // ✅ desktop: minus top navbar | mobile: minus top + bottom navbar
-    <div className="lg:h-[calc(100dvh-100px)] h-[calc(98dvh-144px)] overflow-hidden">
+    <div className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)] overflow-hidden">
       {/* ✅ h-full — fills parent, no fixed height */}
       <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-xl"
         style={{ border: "1px solid #dbeafe" }}>

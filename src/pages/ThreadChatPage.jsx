@@ -12,7 +12,7 @@ const ThreadPage = () => {
   return (
     // Top navbar = ~64px, bottom navbar = ~64px, total = 128px
     // Extra 16px for any padding/gap = 144px total
-    <div style={{ height: "calc(80dvh - 30px)" }} className="overflow-hidden">
+    <div  className="overflow-hidden lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)]">
       <ChatInterfaceFull thread={thread} />
     </div>
   );

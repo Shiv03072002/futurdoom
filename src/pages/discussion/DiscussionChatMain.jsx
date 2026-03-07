@@ -88,7 +88,7 @@ const DiscussionChatMain = () => {
   return (
     // ✅ desktop: minus top navbar (80px) | mobile: minus top + bottom navbar (144px)
     <div
-      className="lg:h-[calc(100dvh-100px)] h-[calc(86dvh-80px)] overflow-hidden"
+      className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)] overflow-hidden"
       style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         background: "#fafcff",

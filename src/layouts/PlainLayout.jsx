@@ -13,7 +13,7 @@ const PlainLayout = () => {
       <Navbar />
 
       {/* Page Content */}
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-2 lg:py-6">
         <Outlet />
       </div>
 
