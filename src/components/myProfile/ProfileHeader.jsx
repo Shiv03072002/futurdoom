@@ -196,6 +196,68 @@ const ProfileCard = ({
           </div>
         </div>
 
+         <AnimatePresence>
+          {showInterestedList && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+              className="mb-4 border border-pink-100 rounded-xl overflow-hidden bg-white shadow-lg">
+              <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-3 border-b border-pink-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Heart size={14} className="text-pink-500" fill="currentColor" />
+                  <span className="text-xs font-semibold text-slate-600">Interested in you ({interestedInMe.length})</span>
+                </div>
+                <button onClick={() => setShowInterestedList(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
+              </div>
+              <div className="max-h-60 overflow-y-auto p-2">
+                {interestedInMe.length > 0 ? interestedInMe.map(u => (
+                  <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-pink-50 transition-all">
+                    <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover ring-2 ring-white" />
+                    <div>
+                      <p className="text-sm font-medium text-slate-800">{u.name}</p>
+                      <p className="text-[10px] text-slate-400">@{u.username}</p>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center py-6">
+                    <Heart size={24} className="text-pink-200 mx-auto mb-2" />
+                    <p className="text-xs text-slate-400">No one has shown interest yet</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showInterestingList && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+              className="mb-4 border border-blue-100 rounded-xl overflow-hidden bg-white shadow-lg">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 border-b border-blue-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UserCheck size={14} className="text-blue-500" />
+                  <span className="text-xs font-semibold text-slate-600">You're interested in ({iAmInterestedIn.length})</span>
+                </div>
+                <button onClick={() => setShowInterestingList(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
+              </div>
+              <div className="max-h-60 overflow-y-auto p-2">
+                {iAmInterestedIn.length > 0 ? iAmInterestedIn.map(u => (
+                  <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition-all">
+                    <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover ring-2 ring-white" />
+                    <div>
+                      <p className="text-sm font-medium text-slate-800">{u.name}</p>
+                      <p className="text-[10px] text-slate-400">@{u.username}</p>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center py-6">
+                    <UserPlus size={24} className="text-blue-200 mx-auto mb-2" />
+                    <p className="text-xs text-slate-400">You haven't shown interest in anyone yet</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* About Me */}
         <motion.div className="relative group mb-4" whileHover={{ scale: 1.01 }} variants={itemVariants}>
           <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">

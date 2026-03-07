@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ProfileCard from "../components/userProfile/ProfileCard";
 import ChatSection from "../components/userProfile/ChatSection";
 
-// Dummy users database
+// ... (your dummy data remains the same)
 const dummyUsers = {
   shivkumar: {
     id: 1,
@@ -437,7 +437,6 @@ const iAmInterestedInData = {
     }
   ]
 };
-
 const UserProfilePage = () => {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -448,6 +447,11 @@ const UserProfilePage = () => {
   const [interestedInMe, setInterestedInMe] = useState([]);
   const [iAmInterestedIn, setIAmInterestedIn] = useState([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Add debug logging
+  useEffect(() => {
+    console.log("UserProfilePage - isChatOpen changed:", isChatOpen);
+  }, [isChatOpen]);
 
   useEffect(() => {
     // Simulate API call
@@ -522,8 +526,8 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen ">
-      <div className="">
+    <div className="min-h-screen bg-[#f0f4ff]">
+      <div className="container mx-auto px-4 py-6">
         <motion.div 
           className="space-y-6"
           variants={containerVariants}
@@ -541,15 +545,38 @@ const UserProfilePage = () => {
             setIsChatOpen={setIsChatOpen}
           />
 
-          {/* Chat Section Component */}
-         {!isChatOpen && <ChatSection />}
+          {/* Chat Section Component - Animate presence for smooth transitions */}
+          <AnimatePresence mode="wait">
+            {!isChatOpen ? (
+              <motion.div
+                key="chat-section"
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChatSection />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="chat-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0 }}
+                exit={{ opacity: 0 }}
+                className="hidden"
+              >
+                {/* Hidden placeholder when chat is open */}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Footer */}
+          {/* Footer - Always visible with chat state indicator */}
           <motion.p 
             variants={itemVariants}
             className="text-xs text-slate-400 text-center"
           >
-            © 2025 futurdoom · Profile Page
+            © 2025 futurdoom · Profile Page 
           </motion.p>
         </motion.div>
       </div>

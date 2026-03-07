@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, MessageCircle, MoreHorizontal, Sparkles, Heart, X,
@@ -15,7 +15,6 @@ const InlineChatPanel = ({ recipient, onClose }) => {
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
 
- 
   const sendMessage = () => {
     if (!input.trim()) return;
     setMessages(prev => [...prev, {
@@ -24,6 +23,11 @@ const InlineChatPanel = ({ recipient, onClose }) => {
     }]);
     setInput("");
   };
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className="border-t border-blue-100 bg-gradient-to-b from-slate-50 to-white">
@@ -47,7 +51,7 @@ const InlineChatPanel = ({ recipient, onClose }) => {
       </div>
 
       {/* Messages */}
-      <div className="h-full overflow-y-auto px-4 py-3 flex flex-col gap-2">
+      <div className="h-64 overflow-y-auto px-4 py-3 flex flex-col gap-2">
         {messages.map((msg) => (
           <motion.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
@@ -88,8 +92,13 @@ const InlineChatPanel = ({ recipient, onClose }) => {
 const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isChatOpen, setIsChatOpen }) => {
   const [showInterestedList, setShowInterestedList] = useState(false);
   const [showInterestingList, setShowInterestingList] = useState(false);
-  const [showChat, setShowChat] = useState(isChatOpen || false);
   const [showMenu, setShowMenu] = useState(false);
+
+  // Debug props
+  useEffect(() => {
+    console.log("ProfileCard - isChatOpen prop:", isChatOpen);
+    console.log("ProfileCard - setIsChatOpen type:", typeof setIsChatOpen);
+  }, [isChatOpen, setIsChatOpen]);
 
   const socialLinks = [
     { name: "Instagram", href: "https://instagram.com", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/330px-Instagram_logo_2022.svg.png" },
@@ -99,12 +108,15 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
     { name: "GitHub", href: "https://github.com", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
   ];
 
-  useEffect(() => { setShowChat(isChatOpen); }, [isChatOpen]);
-
   const handleChatToggle = () => {
-    const next = !showChat;
-    setShowChat(next);
-    setIsChatOpen?.(next);
+    console.log("ProfileCard - Toggle chat. Current isChatOpen:", isChatOpen);
+    const next = !isChatOpen;
+    if (setIsChatOpen) {
+      setIsChatOpen(next);
+      console.log("ProfileCard - Called setIsChatOpen with:", next);
+    } else {
+      console.error("ProfileCard - setIsChatOpen is not defined!");
+    }
   };
 
   const buttonHover = { scale: 1.02, y: -2, transition: { type: "spring", stiffness: 400, damping: 17 } };
@@ -134,7 +146,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
       initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
-      {/* ── Cover ── */}
+      {/* Cover */}
       <div className="relative h-36 bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] overflow-hidden">
         <motion.div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "30px 30px" }}
@@ -146,8 +158,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
       </div>
 
       <div className="px-6 pb-6">
-
-        {/* ── Avatar row ── */}
+        {/* Avatar row */}
         <div className="flex items-end justify-between -mt-10 mb-4">
           <div className="flex items-end gap-3">
             <motion.div className="relative"
@@ -168,11 +179,14 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
 
           {/* Action buttons */}
           <div className="flex gap-2 items-center mt-10">
-            <motion.button onClick={handleChatToggle} whileHover={buttonHover} whileTap={buttonTap}
+            <motion.button 
+              onClick={handleChatToggle} 
+              whileHover={buttonHover} 
+              whileTap={buttonTap}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border transition-colors
-                ${showChat ? "bg-blue-50 border-blue-300 text-blue-600" : "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white border-transparent shadow-md shadow-blue-300/30"}`}>
+                ${isChatOpen ? "bg-blue-50 border-blue-300 text-blue-600" : "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white border-transparent shadow-md shadow-blue-300/30"}`}>
               <MessageCircle size={12} />
-              {showChat ? "Post" : "Message"}
+              {isChatOpen ? "Post" : "Message"}
             </motion.button>
             <div className="relative">
               <motion.button onClick={() => setShowMenu(!showMenu)} whileHover={buttonHover} whileTap={buttonTap}
@@ -192,9 +206,8 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           </div>
         </div>
 
-        {/* ── Name + Role + Socials (LEFT) | Stats + Buttons (RIGHT) ── */}
+        {/* Name + Role + Socials (LEFT) | Stats + Buttons (RIGHT) */}
         <div className="flex gap-4 mb-4 items-start">
-
           {/* LEFT: name, role, socials */}
           <div className="w-[50%] min-w-0 flex flex-col gap-1.5">
             <h2 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">{sampleUser.name}</h2>
@@ -212,7 +225,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           </div>
 
           {/* RIGHT: stats + buttons */}
-          <div className="w-[50%]  flex flex-col gap-2">
+          <div className="w-[50%] flex flex-col gap-2">
             {/* Stats */}
             <div className="flex divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
               {[
@@ -284,9 +297,10 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           )}
         </AnimatePresence>
 
-        {/* ── Details section — hidden when chat is open ── */}
+       
+        {/* Details section — hidden when chat is open */}
         <AnimatePresence>
-          {!showChat && (
+          {!isChatOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -383,9 +397,9 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
         </AnimatePresence>
       </div>
 
-      {/* ── Chat panel ── */}
+      {/* Chat panel */}
       <AnimatePresence>
-        {showChat && (
+        {isChatOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -395,7 +409,12 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           >
             <InlineChatPanel
               recipient={{ name: sampleUser.name, email: sampleUser.email }}
-              onClose={() => { setShowChat(false); setIsChatOpen?.(false); }}
+              onClose={() => {
+                console.log("InlineChatPanel - onClose called");
+                if (setIsChatOpen) {
+                  setIsChatOpen(false);
+                }
+              }}
             />
           </motion.div>
         )}
@@ -404,13 +423,4 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
   );
 };
 
-export default function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  return (
-    <div className="min-h-screen bg-slate-100">
-      <div className="w-full">
-        <ProfileCard isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
-      </div>
-    </div>
-  );
-}
+export default ProfileCard;
