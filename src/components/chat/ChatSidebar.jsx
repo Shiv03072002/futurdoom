@@ -261,7 +261,7 @@ const ChatSidebar = ({ onSelectChat, onNewChat, isOpen, onClose }) => {
                     <button
                       ref={activeMenu === chat.id ? buttonRef : null}
                       onClick={(e) => toggleMenu(e, chat.id)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-200"
+                      className=" transition-opacity p-1 rounded hover:bg-gray-200"
                     >
                       <MoreHorizontal size={12} className="text-gray-500" />
                     </button>

@@ -280,7 +280,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
   </div>
 </div>
 
-         <div className="flex gap-3  mb-4 border-slate-100">
+         <div className="flex gap-2  mb-4 border-slate-100">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
@@ -288,12 +288,26 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
                 target="_blank"
                 rel="noopener noreferrer"
                 title={social.name}
-                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+                className="w-7 h-7 rounded-md bg-slate-50  flex items-center justify-center hover:scale-140 hover:shadow-md transition-all duration-200"
               >
                 <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
               </a>
             ))}
           </div>
+
+            <motion.div className="relative group mb-4" whileHover={{ scale: 1.01 }}>
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 transition-opacity duration-300 blur" />
+          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+                <Sparkles size={12} className="text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">About Me</p>
+              <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
+          </div>
+        </motion.div>
 
         {/* ── 2. Email, Phone, Occupation ── */}
         <div className="bg-slate-50 rounded-xl p-3 mb-4">
@@ -356,19 +370,7 @@ const ProfileCard = ({ user = {}, interested, setInterested, interestedInMe = []
 </div>
 
         {/* ── 3. About Me ── */}
-        <motion.div className="relative group mb-4" whileHover={{ scale: 1.01 }}>
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl opacity-0 transition-opacity duration-300 blur" />
-          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
-                <Sparkles size={12} className="text-white" />
-              </div>
-              <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">About Me</p>
-              <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
-          </div>
-        </motion.div>
+      
 
 
         

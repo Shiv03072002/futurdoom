@@ -285,9 +285,8 @@ const Home = () => {
     
     {/* meets with pulse */}
     <motion.span 
-      animate={{ opacity: [0.5, 1, 0.5] }}
-      transition={{ duration: 2, repeat: Infinity }}
-      className="text-blue-200/70 text-[10px] font-medium italic"
+     
+      className="text-white text-[10px] font-medium italic"
     >
       meets
     </motion.span>
@@ -327,7 +326,7 @@ const Home = () => {
 
               <motion.p
                 variants={subtitleVariants}
-                className="text-blue-100/70 text-[10px] mt-2 leading-relaxed"
+                className="text-white/90 text-[10px] mt-2 leading-relaxed"
               >
                 Enjoy a new experience with—<span className="text-blue-200 font-semibold">futurDooM</span>
               </motion.p>
@@ -405,12 +404,12 @@ const Home = () => {
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200 hover:shadow-md hover:border-blue-600 transition-all duration-200"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
-          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
-            <Info size={12} className="text-blue-600 group-hover:text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
+          <div className="w-6 h-6 sm:w-8 sm:h-8  rounded-lg group-hover:bg-blue-50 border border-blue-100 flex items-center justify-center bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
+            <Info size={12} className="group-hover:text-blue-600 text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-slate-800 text-[11px] sm:text-sm leading-tight sm:leading-normal line-clamp-1">
@@ -449,12 +448,12 @@ const Home = () => {
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200  hover:shadow-md hover:border-blue-200 transition-all duration-200"
+        className="flex items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-4 py-4 sm:py-4 rounded-xl bg-white border border-blue-200  hover:shadow-md hover:border-blue-600 transition-all duration-200"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
-          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
-            <Mail size={12} className="text-blue-600 group-hover:text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg group-hover:bg-blue-50 border border-blue-100 flex items-center justify-center bg-blue-600 group-hover:border-blue-600 transition-colors duration-200 flex-shrink-0">
+            <Mail size={12} className="group-hover:text-blue-600 text-white transition-colors duration-200 sm:w-3.5 sm:h-3.5" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-slate-800 text-[11px] sm:text-sm leading-tight sm:leading-normal line-clamp-1">
@@ -505,7 +504,7 @@ const Home = () => {
                 Disclaimer
               </Link>
             </div>
-            <p className="text-xs text-slate-300 text-center">© 2026 futurdoom · All rights reserved</p>
+            <p className="text-xs text-slate-400 text-center">© 2026 futurdoom · All rights reserved</p>
           </motion.div>
         </motion.div>
       </motion.div>

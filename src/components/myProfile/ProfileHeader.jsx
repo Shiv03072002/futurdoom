@@ -412,57 +412,134 @@ const ProfileCard = ({
           </div>
         </div>
 
-        {/* Name only - Removed @username */}
-        <motion.div 
-          className="mb-4"
-          variants={itemVariants}
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
-            <motion.span 
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium"
-              animate={{
-                boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Sparkles size={10} />
-              {sampleUser.role}
-            </motion.span>
-          </div>
-          <motion.div 
-            className="flex items-center gap-1 text-slate-400"
-            whileHover={{ x: 5 }}
-          >
-            <MapPin size={11} />
-            <span className="text-xs">{sampleUser.location}</span>
-          </motion.div>
-        </motion.div>
+        {/* TWO COLUMN: Left = Name/Location/Role/Socials | Right = Stats/Buttons */}
+<div className="flex items-start gap-26 mb-4">
 
-        {/* Social icons */}
-        <motion.div 
-          className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-4"
+  {/* LEFT COLUMN */}
+  <div className="flex flex-col gap-1.5">
+    {/* Name */}
+    <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
+    
+    {/* Location */}
+    <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
+      <MapPin size={11} />
+      <span className="text-xs">{sampleUser.location}</span>
+    </motion.div>
+
+    {/* Role badge */}
+    <motion.span 
+      className="inline-flex items-center gap-1.5 mt-2 mb-2 px-3 py-1 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium w-fit"
+      animate={{
+        boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"],
+      }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <Sparkles size={10} />
+      {sampleUser.role}
+    </motion.span>
+
+    {/* Social icons */}
+    <div className="flex items-center gap-0.5 mt-1">
+      {socialLinks.map((social, i) => (
+        <motion.a 
+          key={i} 
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={social.name}
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 transition-all duration-150"
+        >
+          <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
+        </motion.a>
+      ))}
+    </div>
+  </div>
+
+  {/* RIGHT COLUMN */}
+  <div className="flex-1 flex flex-col gap-2">
+    
+    {/* Stats */}
+    <motion.div 
+      className="flex bg-slate-50 rounded-xl overflow-hidden border border-slate-100"
+      variants={itemVariants}
+    >
+      <div className="flex-1 text-center py-2 border-r border-slate-200">
+        <p className="text-base font-bold text-slate-800">{sampleUser.posts}</p>
+        <p className="text-[10px] text-slate-400">Posts</p>
+      </div>
+      <div 
+        className="flex-1 text-center py-2.5 border-r border-slate-200 cursor-pointer hover:bg-white transition-colors" 
+        onClick={handleInterestedClick}
+      >
+        <p className="text-base font-bold text-slate-800">{sampleUser.followers?.toLocaleString()}</p>
+        <p className="text-[10px] text-slate-400 flex items-center justify-center gap-1">
+          <Heart size={9} className="text-pink-500" /> Interested
+        </p>
+      </div>
+      <div 
+        className="flex-1 text-center py-2.5 cursor-pointer hover:bg-white transition-colors" 
+        onClick={handleInterestingClick}
+      >
+        <p className="text-base font-bold text-slate-800">{sampleUser.following}</p>
+        <p className="text-[10px] text-slate-400 flex items-center justify-center gap-1">
+          <UserPlus size={9} className="text-blue-500" /> Interesting
+        </p>
+      </div>
+    </motion.div>
+
+    {/* Buttons */}
+    <motion.div className="flex gap-22" variants={itemVariants}>
+      <motion.button 
+        onClick={handleInterestedClick} whileHover={buttonHover} whileTap={buttonTap}
+        className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold transition-all duration-200
+          ${showInterestedList 
+            ? "bg-pink-50 text-pink-600 border border-pink-200" 
+            : "bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-md shadow-pink-300/30"}`}
+      >
+        <Heart size={12} fill={showInterestedList ? "currentColor" : "none"} />
+        Interested
+        {interestedInMe.length > 0 && (
+          <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-[9px]">{interestedInMe.length}</span>
+        )}
+      </motion.button>
+      <motion.button 
+        onClick={handleInterestingClick} whileHover={buttonHover} whileTap={buttonTap}
+        className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold transition-all duration-200
+          ${showInterestingList 
+            ? "bg-blue-50 text-blue-600 border border-blue-200" 
+            : "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md shadow-blue-300/30"}`}
+      >
+        <UserPlus size={12} />
+        Interesting
+        {iAmInterestedIn.length > 0 && (
+          <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-[9px]">{iAmInterestedIn.length}</span>
+        )}
+      </motion.button>
+    </motion.div>
+
+  </div>
+</div>
+
+
+          <motion.div 
+          className="relative group mb-4" 
+          whileHover={{ scale: 1.01 }}
           variants={itemVariants}
         >
-          {socialLinks.map((social, i) => (
-            <motion.a 
-              key={i} 
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={social.name}
-              variants={socialIconHover}
-              whileHover="hover"
-              whileTap={{ scale: 0.95 }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-300 transition-all duration-150"
-            >
-              <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
-            </motion.a>
-          ))}
+          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+                <Sparkles size={12} className="text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">
+                About Me
+              </p>
+              <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
+          </div>
         </motion.div>
 
         {/* Email, Phone, Occupation Grid */}
@@ -503,6 +580,8 @@ const ProfileCard = ({
               </div>
             </div>
 
+
+
             {/* Gender */}
             <div className="col-span-1 md:col-span-1">
               <div className="flex items-center gap-2">
@@ -533,96 +612,9 @@ const ProfileCard = ({
         </motion.div>
 
         {/* About Me */}
-        <motion.div 
-          className="relative group mb-4" 
-          whileHover={{ scale: 1.01 }}
-          variants={itemVariants}
-        >
-          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
-                <Sparkles size={12} className="text-white" />
-              </div>
-              <p className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 uppercase tracking-wider">
-                About Me
-              </p>
-              <div className="h-px flex-1 bg-gradient-to-r from-blue-200 to-transparent" />
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed">{sampleUser.bio}</p>
-          </div>
-        </motion.div>
+      
 
-        {/* Stats */}
-        <motion.div 
-          className="flex mb-4 bg-slate-50 rounded-xl overflow-hidden border border-slate-100"
-          variants={itemVariants}
-        >
-          <div className="flex-1 text-center py-3 border-r border-slate-200">
-            <p className="text-xl font-bold text-slate-800">{sampleUser.posts}</p>
-            <p className="text-xs text-slate-400">Posts</p>
-          </div>
-          <div 
-            className="flex-1 text-center py-3 border-r border-slate-200 cursor-pointer hover:bg-white transition-colors" 
-            onClick={handleInterestedClick}
-          >
-            <p className="text-xl font-bold text-slate-800">{sampleUser.followers?.toLocaleString()}</p>
-            <p className="text-xs text-slate-400 flex items-center justify-center gap-1">
-              <Heart size={10} className="text-pink-500" />
-              Interested
-            </p>
-          </div>
-          <div 
-            className="flex-1 text-center py-3 cursor-pointer hover:bg-white transition-colors" 
-            onClick={handleInterestingClick}
-          >
-            <p className="text-xl font-bold text-slate-800">{sampleUser.following}</p>
-            <p className="text-xs text-slate-400 flex items-center justify-center gap-1">
-              <UserPlus size={10} className="text-blue-500" />
-              Interesting
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Action Buttons */}
-        <motion.div 
-          className="flex gap-3 mb-4"
-          variants={itemVariants}
-        >
-          <motion.button 
-            onClick={handleInterestedClick} 
-            whileHover={buttonHover} 
-            whileTap={buttonTap}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
-              ${showInterestedList 
-                ? "bg-pink-50 text-pink-600 border border-pink-200" 
-                : "bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-md shadow-pink-300/30"}`}
-          >
-            <Heart size={14} fill={showInterestedList ? "currentColor" : "none"} />
-            Interested
-            {interestedInMe.length > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-[10px]">
-                {interestedInMe.length}
-              </span>
-            )}
-          </motion.button>
-          <motion.button 
-            onClick={handleInterestingClick} 
-            whileHover={buttonHover} 
-            whileTap={buttonTap}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200
-              ${showInterestingList 
-                ? "bg-blue-50 text-blue-600 border border-blue-200" 
-                : "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md shadow-blue-300/30"}`}
-          >
-            <UserPlus size={14} />
-            Interesting
-            {iAmInterestedIn.length > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-[10px]">
-                {iAmInterestedIn.length}
-              </span>
-            )}
-          </motion.button>
-        </motion.div>
+      
 
         {/* Interested In Me List */}
         <AnimatePresence>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Settings, Sparkles, Send, Smile, Paperclip, Mic, Image, FileText, X,
-  Trash2, Heart, Copy, Share2, CheckCheck, Brain, MoreVertical, MessageCircle, ArrowRight, ChevronDown, ChevronUp
+  Trash2, Heart, Copy, Share2, CheckCheck, Brain, MoreVertical, MessageCircle, ArrowRight, ChevronDown, ChevronUp,Calendar
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -201,74 +201,56 @@ const ChatSection = () => {
       animate="visible"
     >
       {/* Header */}
-      <motion.div
-        className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 bg-gradient-to-r from-blue-50 to-indigo-50"
-        variants={itemVariants}
-      >
-        <div className="flex items-center gap-3">
-          <motion.span
-            className="text-sm font-semibold text-slate-800 flex items-center gap-1"
-            animate={{
-              color: ["#1e293b", "#2563eb", "#1e293b"],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            futurDooM
-            <Sparkles size={12} className="text-blue-400" />
-          </motion.span>
-          <span className="text-xs text-slate-400 bg-white px-2.5 py-0.5 rounded-full border border-blue-100">
-            Feb 20, 2026
-          </span>
-        </div>
+     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-blue-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-blue-200">
+                <Calendar size={12} className="text-blue-500" />
+                <span className="text-xs font-medium text-slate-700">Feb 19, 2026</span>
+              </div>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-2 relative">
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setSettingsOpen(!settingsOpen)}
-            className="w-8 h-8 rounded-xl hover:bg-blue-100 flex items-center justify-center text-slate-500 hover:text-blue-600 transition-colors"
-          >
-            <MoreVertical size={16} />
-          </motion.button>
+          <div className="flex items-center gap-2">
+            {/* Share Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 rounded-lg hover:bg-white text-slate-500 hover:text-blue-600 transition-colors"
+              title="Share"
+            >
+              <Share2 size={14} />
+            </motion.button>
 
-          <AnimatePresence>
-            {settingsOpen && (
-              <motion.div
-                className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-xl shadow-xl border border-blue-100 z-10 overflow-hidden"
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              >
-                <div className="p-2">
-                  {["Mute", "Block", "Report", "Hide", "Clear Chat", "Export Chat"].map((item, i) => (
-                    <motion.button
-                      key={item}
-                      className="w-full text-left px-3 py-2 text-xs text-slate-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      whileHover={{ x: 5 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => {
-                        if (item === "Clear Chat") setMessages([]);
-                        setSettingsOpen(false);
-                      }}
-                    >
-                      {item}
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+             <motion.button
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.95 }}
+    className="p-1.5 rounded-lg hover:bg-white text-slate-500 hover:text-pink-500 transition-colors"
+    title="Like"
+  >
+    <Heart size={14} />
+  </motion.button>
+
+            {/* Delete Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 rounded-lg hover:bg-white text-slate-500 hover:text-red-500 transition-colors"
+              title="Delete"
+            >
+              <Trash2 size={14} />
+            </motion.button>
+
+           
+          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Messages Area */}
       <motion.div
-        className="px-4 sm:px-6 py-5 space-y-4 bg-gradient-to-b from-blue-50/50 to-white min-h-[400px] max-h-[500px] overflow-y-auto"
+        className="px-4 sm:px-6 py-5 space-y-4 bg-gradient-to-b from-blue-50/50 to-white  overflow-y-auto"
         variants={itemVariants}
       >
         <AnimatePresence mode="popLayout">

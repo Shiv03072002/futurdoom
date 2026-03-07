@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapPin, Heart, UserPlus, UserCheck, X } from "lucide-react";
+import { MapPin, Heart, UserPlus, UserCheck, X ,Sparkles} from "lucide-react";
 
 // ── Social links — real colored logos via img ──────────────────────────────────
 const socialLinks = [
@@ -143,13 +143,28 @@ const Sidebar = () => {
           <h2 className="font-bold text-slate-800 text-lg mb-1">Shiv Kumar</h2>
 
           {/* Location — left aligned, no pill */}
-          <div className="flex items-center gap-1.5 text-blue-500 mb-4">
+          <div className="flex items-center gap-1.5 text-blue-500 mb-2">
             <MapPin size={12} />
             <span className="text-xs">San Francisco, CA</span>
           </div>
 
+           <span 
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium"
+              animate={{
+                boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Sparkles size={10} />
+              Senior Product Designer
+            </span>
 
-           <div className="flex gap-3 mt-6  mb-4 pt-4 border-t border-slate-100">
+
+           <div className="flex gap-1 mt-4  mb-4 pt-4 border-t border-slate-100">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
@@ -157,9 +172,9 @@ const Sidebar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={social.name}
-                className="w-7 h-7 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-200"
+                className="w-7 h-7 rounded-md bg-slate-50  flex items-center justify-center hover:scale-140 hover:shadow-md transition-all duration-200"
               >
-                <img src={social.img} alt={social.name} className="w-5 h-5 object-contain" />
+                <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
               </a>
             ))}
           </div>
