@@ -24,10 +24,7 @@ const InlineChatPanel = ({ recipient, onClose }) => {
     setInput("");
   };
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+ 
 
   return (
     <div className="border-t border-blue-100 bg-gradient-to-b from-slate-50 to-white">
@@ -51,7 +48,7 @@ const InlineChatPanel = ({ recipient, onClose }) => {
       </div>
 
       {/* Messages */}
-      <div className="h-64 overflow-y-auto px-4 py-3 flex flex-col gap-2">
+      <div className="h-full overflow-y-auto px-4 py-3 flex flex-col gap-2">
         {messages.map((msg) => (
           <motion.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
