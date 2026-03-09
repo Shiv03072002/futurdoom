@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Send, Share2, Settings, Phone, Video, Info, Smile, Paperclip, 
   MoreHorizontal, CheckCheck, Sparkles, Reply, Copy, Trash2, Heart,
-  Users, UserPlus, Crown, ArrowLeft,
+  Users, UserPlus, Crown, ArrowLeft, ChevronDown,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -16,7 +16,9 @@ const DiscussionChatMain = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
   const messagesEndRef = useRef(null);
+  const outerRef = useRef(null); // ← outer div scrolls
 
   const [discussionInfo] = useState({
     name: selectedUsers.length === 1 ? selectedUsers[0]?.name || "New Discussion" : "Group Discussion",
@@ -46,7 +48,24 @@ const DiscussionChatMain = () => {
     ]);
   }, []);
 
-  
+  // Auto scroll to bottom on new messages
+  useEffect(() => {
+    if (outerRef.current) {
+      outerRef.current.scrollTop = outerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  // Show/hide scroll button
+  const handleScroll = () => {
+    const el = outerRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setShowScrollBtn(distanceFromBottom > 100);
+  };
+
+  const scrollToBottom = () => {
+    outerRef.current?.scrollTo({ top: outerRef.current.scrollHeight, behavior: "smooth" });
+  };
 
   const send = () => {
     if (!input.trim()) return;
@@ -86,19 +105,19 @@ const DiscussionChatMain = () => {
   );
 
   return (
-    // ✅ desktop: minus top navbar (80px) | mobile: minus top + bottom navbar (144px)
     <div
-      className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)] overflow-hidden"
-      style={{
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        background: "#fafcff",
-      }}
+      className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)]"
+      style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: "#fafcff" }}
     >
-      {/* ✅ h-full flex col — fills the parent exactly */}
-      <div className="h-full flex flex-col overflow-hidden bg-white rounded-xl"
-        style={{ border: "1px solid #dbeafe" }}>
+      {/* ✅ outer div scrolls — header scrolls away, input sticky bottom */}
+      <div
+        ref={outerRef}
+        onScroll={handleScroll}
+        className="h-full flex flex-col overflow-y-auto bg-white rounded-xl"
+        style={{ border: "1px solid #dbeafe" }}
+      >
 
-        {/* ══════════ HEADER ══════════ */}
+        {/* ══════════ HEADER — scrolls away ══════════ */}
         <div style={{
           flexShrink: 0,
           display: "flex",
@@ -107,7 +126,6 @@ const DiscussionChatMain = () => {
           background: "linear-gradient(to right, #eff6ff, #eef2ff)",
           borderBottom: "1px solid #dbeafe",
           padding: "10px 14px",
-          zIndex: 10,
         }}>
           <motion.button whileHover={{ scale: 1.1, x: -2 }} whileTap={{ scale: 0.95 }}
             onClick={() => navigate(-1)}
@@ -136,13 +154,10 @@ const DiscussionChatMain = () => {
           </div>
 
           <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
-            {[MoreHorizontal].map((Icon, i) => (
-              <motion.button key={i} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                onClick={i === 2 ? () => setShowParticipants(v => !v) : undefined}
-                style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", background: "transparent", border: "none", cursor: "pointer" }}>
-                <Icon size={17} strokeWidth={1.8} />
-              </motion.button>
-            ))}
+            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+              style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#2563eb", background: "transparent", border: "none", cursor: "pointer" }}>
+              <MoreHorizontal size={17} strokeWidth={1.8} />
+            </motion.button>
           </div>
         </div>
 
@@ -150,7 +165,7 @@ const DiscussionChatMain = () => {
         <AnimatePresence>
           {showParticipants && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-              style={{ flexShrink: 0, borderBottom: "1px solid #dbeafe", background: "rgba(239,246,255,0.8)", overflow: "hidden", zIndex: 9 }}>
+              style={{ flexShrink: 0, borderBottom: "1px solid #dbeafe", background: "rgba(239,246,255,0.8)", overflow: "hidden" }}>
               <div style={{ padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>
@@ -176,18 +191,15 @@ const DiscussionChatMain = () => {
           )}
         </AnimatePresence>
 
-        {/* ══════════ MESSAGES — ONLY SCROLLABLE SECTION ══════════ */}
-        {/* ✅ minHeight: 0 is critical — without it flex children overflow in column flex */}
+        {/* ══════════ MESSAGES — flex-1, no overflow (outer scrolls) ══════════ */}
         <div style={{
           flex: 1,
-          minHeight: 0,
-          overflowY: "auto",
-          overscrollBehavior: "contain",
           padding: "14px 12px",
           display: "flex",
           flexDirection: "column",
           gap: 10,
           background: "#fafcff",
+          position: "relative",
         }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <span style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", background: "#eff6ff", padding: "4px 14px", borderRadius: 999, border: "1px solid #bfdbfe" }}>
@@ -273,10 +285,42 @@ const DiscussionChatMain = () => {
             )}
           </AnimatePresence>
 
+          {/* ── Scroll to bottom button ── */}
+          <AnimatePresence>
+            {showScrollBtn && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.7, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.7, y: 10 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                onClick={scrollToBottom}
+                style={{
+                  position: "sticky",
+                  bottom: 65,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
+                  boxShadow: "0 4px 16px rgba(37,99,235,0.45)",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 40,
+                }}
+              >
+                <ChevronDown size={18} color="white" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
           <div ref={messagesEndRef} />
         </div>
 
-        {/* ══════════ INPUT BAR — flexShrink:0 always pinned at bottom ══════════ */}
+        {/* ══════════ INPUT BAR — sticky bottom-0 ══════════ */}
         <div style={{
           flexShrink: 0,
           display: "flex",
@@ -286,6 +330,8 @@ const DiscussionChatMain = () => {
           paddingBottom: "max(10px, env(safe-area-inset-bottom))",
           background: "#ffffff",
           borderTop: "1px solid #e2e8f0",
+          position: "sticky",
+          bottom: 0,
           zIndex: 10,
         }}>
           {[Paperclip, Smile].map((Icon, i) => (

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Send, CheckCheck, ArrowLeft, Brain, MessageSquare,
-  Sparkles, Copy, Heart, Trash2, Share2, MoreHorizontal, Terminal,
+  Sparkles, Copy, Heart, Trash2, Share2, MoreHorizontal, Terminal, ChevronDown,
 } from "lucide-react";
 
 const formatMessage = (text) => {
@@ -113,7 +113,9 @@ const SimpleChat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [threadContext, setThreadContext] = useState(null);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
   const messagesEndRef = useRef(null);
+  const outerRef = useRef(null); // ← outer scrollable div
 
   useEffect(() => {
     if (location.state?.thread) {
@@ -127,7 +129,24 @@ const SimpleChat = () => {
     }
   }, [location.state]);
 
-  
+  // Auto scroll to bottom on new messages
+  useEffect(() => {
+    if (outerRef.current) {
+      outerRef.current.scrollTop = outerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  // Show/hide scroll button
+  const handleScroll = () => {
+    const el = outerRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setShowScrollBtn(distanceFromBottom > 100);
+  };
+
+  const scrollToBottom = () => {
+    outerRef.current?.scrollTo({ top: outerRef.current.scrollHeight, behavior: "smooth" });
+  };
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -154,13 +173,16 @@ const SimpleChat = () => {
   };
 
   return (
-    // ✅ desktop: minus top navbar | mobile: minus top + bottom navbar
-    <div className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)] overflow-hidden">
-      {/* ✅ h-full — fills parent, no fixed height */}
-      <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-xl"
-        style={{ border: "1px solid #dbeafe" }}>
+    <div className="lg:h-[calc(100dvh-100px)] h-[calc(100dvh-140px)]">
+      {/* ✅ outer div scrolls — header scrolls away, input stays sticky bottom */}
+      <div
+        ref={outerRef}
+        onScroll={handleScroll}
+        className="w-full h-full flex flex-col overflow-y-auto bg-white rounded-xl"
+        style={{ border: "1px solid #dbeafe" }}
+      >
 
-        {/* ── Header ── */}
+        {/* ── Header — scrolls away with content ── */}
         <div className="flex flex-col flex-shrink-0 relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%)", borderBottom: "1px solid #dbeafe" }}>
           <div className="absolute top-0 inset-x-0 h-0.5"
@@ -209,8 +231,8 @@ const SimpleChat = () => {
           </div>
         </div>
 
-        {/* ── Messages — flex-1 + min-h-0 so it scrolls, not pushes ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 space-y-3" style={{ background: "#f8faff" }}>
+        {/* ── Messages — flex-1 grows, no overflow needed (outer scrolls) ── */}
+        <div className="flex-1 p-3 sm:p-4 space-y-3 relative" style={{ background: "#f8faff" }}>
           <motion.div className="flex justify-center" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-[10px] sm:text-xs font-semibold text-blue-500 px-3 py-1 sm:py-1.5 rounded-full"
               style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}>
@@ -306,12 +328,33 @@ const SimpleChat = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* ── Scroll to bottom button ── */}
+          <AnimatePresence>
+            {showScrollBtn && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.7, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.7, y: 10 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                onClick={scrollToBottom}
+                className="sticky bottom-20 left-1/2 -translate-x-1/2 flex items-center justify-center w-9 h-9 rounded-full z-10"
+                style={{
+                  background: "linear-gradient(135deg, #1a3aad 0%, #2563eb 100%)",
+                  boxShadow: "0 4px 16px rgba(37,99,235,0.45)",
+                }}
+              >
+                <ChevronDown size={18} className="text-white" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
           <div ref={messagesEndRef} />
         </div>
 
-        {/* ── Input bar — flex-shrink-0 always pinned at bottom ── */}
+        {/* ── Input bar — sticky bottom-0, always visible ── */}
         <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-          className="flex items-center gap-1.5 flex-shrink-0 px-2 sm:px-3 py-2.5 bg-white relative"
+          className="flex items-center gap-1.5 flex-shrink-0 px-2 sm:px-3 py-2.5 bg-white relative sticky bottom-0"
           style={{ borderTop: "1px solid #dbeafe" }}>
           <div className="absolute top-0 inset-x-0 h-px"
             style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.35), transparent)" }} />
