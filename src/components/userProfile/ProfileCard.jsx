@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, MessageCircle, MoreHorizontal, Sparkles, Heart, X,
@@ -24,8 +24,6 @@ const InlineChatPanel = ({ recipient, onClose }) => {
     setInput("");
   };
 
- 
-
   return (
     <div className="border-t border-blue-100 bg-gradient-to-b from-slate-50 to-white">
       {/* Chat header */}
@@ -48,11 +46,11 @@ const InlineChatPanel = ({ recipient, onClose }) => {
       </div>
 
       {/* Messages */}
-      <div className="h-full overflow-y-auto px-4 py-3 flex flex-col gap-2">
+      <div className="h-full overflow-y-auto px-3 sm:px-4 py-3 flex flex-col gap-2">
         {messages.map((msg) => (
           <motion.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[75%] flex flex-col gap-0.5 ${msg.from === "me" ? "items-end" : "items-start"}`}>
+            <div className={`max-w-[85%] sm:max-w-[75%] flex flex-col gap-0.5 ${msg.from === "me" ? "items-end" : "items-start"}`}>
               <div className={`px-3 py-1.5 rounded-2xl text-xs leading-relaxed
                 ${msg.from === "me"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-br-sm"
@@ -91,7 +89,6 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
   const [showInterestingList, setShowInterestingList] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  // Debug props
   useEffect(() => {
     console.log("ProfileCard - isChatOpen prop:", isChatOpen);
     console.log("ProfileCard - setIsChatOpen type:", typeof setIsChatOpen);
@@ -106,14 +103,8 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
   ];
 
   const handleChatToggle = () => {
-    console.log("ProfileCard - Toggle chat. Current isChatOpen:", isChatOpen);
     const next = !isChatOpen;
-    if (setIsChatOpen) {
-      setIsChatOpen(next);
-      console.log("ProfileCard - Called setIsChatOpen with:", next);
-    } else {
-      console.error("ProfileCard - setIsChatOpen is not defined!");
-    }
+    if (setIsChatOpen) setIsChatOpen(next);
   };
 
   const buttonHover = { scale: 1.02, y: -2, transition: { type: "spring", stiffness: 400, damping: 17 } };
@@ -144,7 +135,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
       {/* Cover */}
-      <div className="relative h-36 bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] overflow-hidden">
+      <div className="relative h-24 sm:h-32 lg:h-36 bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] overflow-hidden">
         <motion.div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "30px 30px" }}
           animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} />
@@ -154,19 +145,19 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           animate={{ scale: [1, 1.3, 1], x: [0, 20, 0] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} />
       </div>
 
-      <div className="px-6 pb-6">
+      <div className="px-3 sm:px-5 lg:px-6 pb-6">
         {/* Avatar row */}
-        <div className="flex items-end justify-between -mt-10 mb-4">
-          <div className="flex items-end gap-3">
+        <div className="flex items-end justify-between -mt-8 sm:-mt-10 mb-4">
+          <div className="flex items-end gap-2 sm:gap-3">
             <motion.div className="relative"
               initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
             >
               <motion.div whileHover={{ scale: 1.05, rotate: 5 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className={`w-20 h-20 rounded-full bg-gradient-to-br ${sampleUser.color} ring-4 ring-white shadow-xl flex items-center justify-center text-3xl select-none text-white font-bold`}>
+                className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br ${sampleUser.color} ring-4 ring-white shadow-xl flex items-center justify-center text-2xl sm:text-3xl select-none text-white font-bold`}>
                 {sampleUser.initials}
               </motion.div>
-              <motion.span className="absolute bottom-1 right-1 w-4 h-4 bg-green-400 rounded-full ring-2 ring-white"
+              <motion.span className="absolute bottom-1 right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full ring-2 ring-white"
                 animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} />
             </motion.div>
             <div className="mb-2">
@@ -175,15 +166,15 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2 items-center mt-10">
-            <motion.button 
-              onClick={handleChatToggle} 
-              whileHover={buttonHover} 
+          <div className="flex gap-1.5 sm:gap-2 items-center mt-10">
+            <motion.button
+              onClick={handleChatToggle}
+              whileHover={buttonHover}
               whileTap={buttonTap}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border transition-colors
+              className={`flex items-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-xl text-xs font-semibold border transition-colors
                 ${isChatOpen ? "bg-blue-50 border-blue-300 text-blue-600" : "bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white border-transparent shadow-md shadow-blue-300/30"}`}>
               <MessageCircle size={12} />
-              {isChatOpen ? "Post" : "Message"}
+              <span className="hidden xs:inline sm:inline">{isChatOpen ? "Post" : "Message"}</span>
             </motion.button>
             <div className="relative">
               <motion.button onClick={() => setShowMenu(!showMenu)} whileHover={buttonHover} whileTap={buttonTap}
@@ -204,34 +195,34 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
         </div>
 
         {/* Name + Role + Socials (LEFT) | Stats + Buttons (RIGHT) */}
-        <div className="flex gap-4 mb-4 items-start mt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 items-start mt-2 sm:mt-4">
           {/* LEFT: name, role, socials */}
-         <div className="w-1/2 min-w-0 flex flex-col gap-2.5">
-                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
-                     <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
-                       <MapPin size={11} />
-                       <span className="text-xs">{sampleUser.location}</span>
-                     </motion.div>
-                     <motion.span
-                       className="inline-flex items-center gap-1.5 mt-1 mb-1 px-3 py-1 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium w-fit"
-                       animate={{ boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"] }}
-                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                     >
-                       <Sparkles size={10} />{sampleUser.role}
-                     </motion.span>
-                     <div className="flex items-center gap-0.5 mt-1">
-                       {socialLinks.map((social, i) => (
-                         <motion.a key={i} href={social.href} target="_blank" rel="noopener noreferrer" title={social.name}
-                           whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.95 }}
-                           className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 transition-all duration-150">
-                           <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
-                         </motion.a>
-                       ))}
-                     </div>
-                   </div>
+          <div className="w-full sm:w-1/2 min-w-0 flex flex-col gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
+            <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
+              <MapPin size={11} />
+              <span className="text-xs">{sampleUser.location}</span>
+            </motion.div>
+            <motion.span
+              className="inline-flex items-center gap-1.5 mt-1 mb-1 px-3 py-1 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium w-fit"
+              animate={{ boxShadow: ["0 0 0 0 rgba(37,99,235,0.4)", "0 0 0 4px rgba(37,99,235,0)", "0 0 0 0 rgba(37,99,235,0.4)"] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles size={10} />{sampleUser.role}
+            </motion.span>
+            <div className="flex items-center gap-0.5 mt-1">
+              {socialLinks.map((social, i) => (
+                <motion.a key={i} href={social.href} target="_blank" rel="noopener noreferrer" title={social.name}
+                  whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.95 }}
+                  className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 transition-all duration-150">
+                  <img src={social.img} alt={social.name} className="w-4 h-4 object-contain" />
+                </motion.a>
+              ))}
+            </div>
+          </div>
 
           {/* RIGHT: stats + buttons */}
-          <div className="w-[50%] flex flex-col gap-2 mt-2.5">
+          <div className="w-full sm:w-[50%] flex flex-col gap-2 sm:mt-2.5">
             {/* Stats */}
             <div className="flex divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
               {[
@@ -303,7 +294,6 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           )}
         </AnimatePresence>
 
-       
         {/* Details section — hidden when chat is open */}
         <AnimatePresence>
           {!isChatOpen && (
@@ -315,7 +305,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
               className="overflow-hidden"
             >
               {/* About Me */}
-              <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100 mb-4">
+              <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-4 sm:p-5 rounded-xl border border-blue-100 mb-4">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
                     <Sparkles size={12} className="text-white" />
@@ -329,7 +319,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
               {/* Contact info */}
               <div className="bg-slate-50 rounded-xl p-3 mb-4">
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="col-span-2 md:col-span-1">
+                  <div className="col-span-2 sm:col-span-1">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0"><Mail size={12} className="text-blue-500" /></div>
                       <div className="flex-1 min-w-0">
@@ -339,7 +329,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
                       <button className="text-[9px] text-blue-600 font-semibold px-1.5 py-0.5 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors flex-shrink-0">Copy</button>
                     </div>
                   </div>
-                  <div className="col-span-2 md:col-span-1">
+                  <div className="col-span-2 sm:col-span-1">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0"><Phone size={12} className="text-green-500" /></div>
                       <div className="flex-1">
@@ -374,26 +364,26 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
               {/* Addresses */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <motion.div whileHover={{ y: -2, scale: 1.01 }}
-                  className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
+                  className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200 flex-shrink-0">
                       <Home size={14} className="text-white" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className="text-[8px] text-blue-400 uppercase tracking-wider font-semibold mb-1">Home Address</p>
-                      <p className="text-sm font-medium text-slate-700">{sampleUser.homeAddress}</p>
+                      <p className="text-sm font-medium text-slate-700 break-words">{sampleUser.homeAddress}</p>
                     </div>
                   </div>
                 </motion.div>
                 <motion.div whileHover={{ y: -2, scale: 1.01 }}
-                  className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
+                  className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200 flex-shrink-0">
                       <MapPin size={14} className="text-white" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className="text-[8px] text-purple-400 uppercase tracking-wider font-semibold mb-1">Current Location</p>
-                      <p className="text-sm font-medium text-slate-700">{sampleUser.currentLocation}</p>
+                      <p className="text-sm font-medium text-slate-700 break-words">{sampleUser.currentLocation}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -415,12 +405,7 @@ const ProfileCard = ({ user = {}, interestedInMe = [], iAmInterestedIn = [], isC
           >
             <InlineChatPanel
               recipient={{ name: sampleUser.name, email: sampleUser.email }}
-              onClose={() => {
-                console.log("InlineChatPanel - onClose called");
-                if (setIsChatOpen) {
-                  setIsChatOpen(false);
-                }
-              }}
+              onClose={() => { if (setIsChatOpen) setIsChatOpen(false); }}
             />
           </motion.div>
         )}

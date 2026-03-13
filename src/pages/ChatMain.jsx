@@ -1,45 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ChatInterface from "../components/chat/ChatInterface";
 import ChatSidebar from "../components/chat/ChatSidebar";
-import { ChevronDown, MessageSquare } from "lucide-react";
+import { ChevronDown, MessageSquare, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatMain = () => {
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [currentMessages, setCurrentMessages] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
+  const sidebarRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const handleSelectChat = (chat) => {
     setCurrentMessages(chat.messages || []);
     setCurrentChatId(chat.id);
-    if (window.innerWidth < 1024) setShowSidebar(false);
+    setShowSidebar(false);
   };
 
   const handleNewChat = (newChat) => {
     setCurrentMessages([]);
     setCurrentChatId(newChat.id);
-    if (window.innerWidth < 1024) setShowSidebar(false);
+    setShowSidebar(false);
   };
 
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showSidebar &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setShowSidebar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showSidebar]);
+
   return (
-    <div className="">
-      {/* ── Desktop Layout ──
-          Your navbar is ~80px tall, so we subtract that.
-          Adjust 80px if your navbar is taller/shorter.
-      -->*/}
+    <div className="h-full w-full">
+      {/* Desktop Layout */}
       <div
         className="hidden lg:flex gap-4"
         style={{ height: "calc(98dvh - 80px)" }}
       >
-        {/* Chat fills all remaining vertical space */}
         <div className="flex-1 min-h-0">
           <ChatInterface
             messages={currentMessages}
             currentChatId={currentChatId}
           />
         </div>
-
-        {/* Sidebar scrolls independently */}
         <div className="w-80 flex-shrink-0 overflow-y-auto">
           <ChatSidebar
             onSelectChat={handleSelectChat}
@@ -48,17 +62,15 @@ const ChatMain = () => {
         </div>
       </div>
 
-      {/* ── Mobile Layout ──
-          Subtract top navbar (~64px) + bottom navbar (~64px) + page padding (~16px)
-          Adjust if things still clip.
-      -->*/}
+      {/* Mobile Layout - EXACT same chat height as original */}
       <div
         className="lg:hidden flex flex-col"
-        style={{ height: "calc(98dvh - 140px)" }}
+        style={{ height: "calc(98dvh - 140px)" }} /* Original height - unchanged */
       >
-        {/* Chat History toggle — never shrinks */}
+        {/* Chat History toggle */}
         <div className="flex-shrink-0 pb-2">
           <button
+            ref={buttonRef}
             onClick={() => setShowSidebar(!showSidebar)}
             className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
           >
@@ -76,26 +88,54 @@ const ChatMain = () => {
           </button>
         </div>
 
-        {/* Sidebar — flex-shrink-0 so it never squishes the chat */}
+        {/* Sidebar - Overlay on top, doesn't affect chat height */}
         <AnimatePresence>
           {showSidebar && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="flex-shrink-0 overflow-hidden"
-            >
-              <ChatSidebar
-                onSelectChat={handleSelectChat}
-                onNewChat={handleNewChat}
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowSidebar(false)}
+                className="fixed inset-0 bg-black z-40 lg:hidden"
+                style={{ top: 0, left: 0, right: 0, bottom: 0 }}
               />
-            </motion.div>
+              
+              {/* Sidebar panel - slides over, doesn't push content */}
+              <motion.div
+                ref={sidebarRef}
+                initial={{ y: "-100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-100%" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="fixed top-0 left-0 right-0 z-50 lg:hidden"
+                style={{ maxHeight: "60vh" }}
+              >
+                <div className="bg-white rounded-b-2xl shadow-xl border-b border-x border-blue-100 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+                    <span className="font-semibold text-slate-800">Chat History</span>
+                    <button
+                      onClick={() => setShowSidebar(false)}
+                      className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm"
+                    >
+                      <X size={14} className="text-slate-600" />
+                    </button>
+                  </div>
+                  <div className="overflow-y-auto" style={{ maxHeight: "calc(60vh - 57px)" }}>
+                    <ChatSidebar
+                      onSelectChat={handleSelectChat}
+                      onNewChat={handleNewChat}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
 
-        {/* Chat — flex-1 + min-h-0 fills remaining space, input stays visible */}
-        <div className="flex-1 min-h-0 pt-2 overflow-hidden ">
+        {/* Chat - EXACT same height and position as original */}
+        <div className="flex-1 min-h-0 pt-2 overflow-hidden">
           <ChatInterface
             messages={currentMessages}
             currentChatId={currentChatId}

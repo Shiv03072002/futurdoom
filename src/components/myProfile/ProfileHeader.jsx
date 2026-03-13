@@ -71,7 +71,7 @@ const ProfileCard = ({
       initial="hidden" animate="visible"
     >
       {/* Cover */}
-      <motion.div className="relative h-36 bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] overflow-hidden" variants={coverVariants}>
+      <motion.div className="relative h-24 sm:h-32 lg:h-36 bg-gradient-to-br from-[#0f1f6e] via-[#1a3aad] to-[#2563eb] overflow-hidden" variants={coverVariants}>
         <motion.div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "30px 30px" }}
           animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} />
@@ -81,19 +81,19 @@ const ProfileCard = ({
           animate={{ scale: [1, 1.3, 1], x: [0, 20, 0], y: [0, -20, 0] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} />
       </motion.div>
 
-      <div className="px-6 pb-6">
+      <div className="px-3 sm:px-5 lg:px-6 pb-6">
         {/* Avatar row */}
-        <div className="flex items-end justify-between -mt-10 mb-4">
-          <div className="flex items-end gap-3">
+        <div className="flex items-end justify-between -mt-8 sm:-mt-10 lg:-mt-10 mb-4">
+          <div className="flex items-end gap-2 sm:gap-3">
             <motion.div className="relative group" variants={avatarVariants}>
               <motion.div
-                className={`w-20 h-20 rounded-full bg-gradient-to-br ${sampleUser.color} ring-4 ring-white shadow-xl flex items-center justify-center text-3xl select-none text-white font-bold`}
+                className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br ${sampleUser.color} ring-4 ring-white shadow-xl flex items-center justify-center text-2xl sm:text-3xl lg:text-3xl select-none text-white font-bold`}
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 {sampleUser.initials || sampleUser.name?.charAt(0) || "U"}
               </motion.div>
-              <motion.span className="absolute bottom-1 right-1 w-4 h-4 bg-green-400 rounded-full ring-2 ring-white"
+              <motion.span className="absolute bottom-1 right-1 w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 bg-green-400 rounded-full ring-2 ring-white"
                 animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
             </motion.div>
             <div className="flex flex-col mb-2">
@@ -101,12 +101,12 @@ const ProfileCard = ({
             </div>
           </div>
 
-          {/* Edit Profile + More — no Message button */}
-          <div className="flex gap-2 items-center mt-10">
+          {/* Edit Profile + More */}
+          <div className="flex gap-1.5 sm:gap-2 items-center mt-8 sm:mt-10 lg:mt-10">
             <motion.button whileHover={buttonHover} whileTap={buttonTap}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-300/30">
+              className="flex items-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#1a3aad] to-[#2563eb] text-white shadow-md shadow-blue-300/30">
               <Settings size={12} />
-              Edit Profile
+              <span className="hidden sm:inline lg:inline">Edit Profile</span>
             </motion.button>
             <div className="relative">
               <motion.button onClick={() => setShowMenu(!showMenu)} whileHover={buttonHover} whileTap={buttonTap}
@@ -127,11 +127,11 @@ const ProfileCard = ({
         </div>
 
         {/* TWO COLUMN: Left = Name/Location/Role/Socials | Right = Stats/Buttons */}
-        <div className="flex items-start gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 lg:gap-4 mb-4">
 
           {/* LEFT */}
-          <div className="w-1/2 min-w-0 flex flex-col gap-2.5">
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
+          <div className="w-full sm:w-1/2 lg:w-1/2 min-w-0 flex flex-col gap-2.5">
+            <h2 className="text-xl sm:text-2xl lg:text-2xl font-bold text-slate-800 tracking-tight">{sampleUser.name}</h2>
             <motion.div className="flex items-center gap-1 text-slate-400" whileHover={{ x: 5 }}>
               <MapPin size={11} />
               <span className="text-xs">{sampleUser.location}</span>
@@ -155,7 +155,7 @@ const ProfileCard = ({
           </div>
 
           {/* RIGHT */}
-          <div className="w-1/2 flex flex-col gap-2">
+          <div className="w-full sm:w-1/2 lg:w-1/2 flex flex-col gap-2">
             {/* Stats */}
             <motion.div className="flex bg-slate-50 rounded-xl overflow-hidden border border-slate-100" variants={itemVariants}>
               <div className="flex-1 text-center py-2 border-r border-slate-200">
@@ -196,7 +196,8 @@ const ProfileCard = ({
           </div>
         </div>
 
-         <AnimatePresence>
+        {/* Interested dropdown */}
+        <AnimatePresence>
           {showInterestedList && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
               className="mb-4 border border-pink-100 rounded-xl overflow-hidden bg-white shadow-lg">
@@ -227,6 +228,7 @@ const ProfileCard = ({
           )}
         </AnimatePresence>
 
+        {/* Interesting dropdown */}
         <AnimatePresence>
           {showInterestingList && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
@@ -260,7 +262,7 @@ const ProfileCard = ({
 
         {/* About Me */}
         <motion.div className="relative group mb-4" whileHover={{ scale: 1.01 }} variants={itemVariants}>
-          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-5 rounded-xl border border-blue-100">
+          <div className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-4 sm:p-5 lg:p-5 rounded-xl border border-blue-100">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
                 <Sparkles size={12} className="text-white" />
@@ -274,8 +276,8 @@ const ProfileCard = ({
 
         {/* Contact grid */}
         <motion.div className="bg-slate-50 rounded-xl p-3 mb-4" variants={itemVariants}>
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-3">
-            <div className="col-span-2 md:col-span-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 sm:col-span-1 lg:col-span-1">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0"><Mail size={12} className="text-blue-500" /></div>
                 <div className="flex-1 min-w-0">
@@ -285,7 +287,7 @@ const ProfileCard = ({
                 <button className="text-[9px] text-blue-600 font-semibold px-1.5 py-0.5 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors flex-shrink-0">Copy</button>
               </div>
             </div>
-            <div className="col-span-2 md:col-span-1">
+            <div className="col-span-2 sm:col-span-1 lg:col-span-1">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0"><Phone size={12} className="text-green-500" /></div>
                 <div className="flex-1">
@@ -317,92 +319,29 @@ const ProfileCard = ({
           </div>
         </motion.div>
 
-        {/* Interested / Interesting dropdowns */}
-        <AnimatePresence>
-          {showInterestedList && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-              className="mb-4 border border-pink-100 rounded-xl overflow-hidden bg-white shadow-lg">
-              <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-3 border-b border-pink-100 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Heart size={14} className="text-pink-500" fill="currentColor" />
-                  <span className="text-xs font-semibold text-slate-600">Interested in you ({interestedInMe.length})</span>
-                </div>
-                <button onClick={() => setShowInterestedList(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
-              </div>
-              <div className="max-h-60 overflow-y-auto p-2">
-                {interestedInMe.length > 0 ? interestedInMe.map(u => (
-                  <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-pink-50 transition-all">
-                    <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover ring-2 ring-white" />
-                    <div>
-                      <p className="text-sm font-medium text-slate-800">{u.name}</p>
-                      <p className="text-[10px] text-slate-400">@{u.username}</p>
-                    </div>
-                  </div>
-                )) : (
-                  <div className="text-center py-6">
-                    <Heart size={24} className="text-pink-200 mx-auto mb-2" />
-                    <p className="text-xs text-slate-400">No one has shown interest yet</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {showInterestingList && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-              className="mb-4 border border-blue-100 rounded-xl overflow-hidden bg-white shadow-lg">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 border-b border-blue-100 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <UserCheck size={14} className="text-blue-500" />
-                  <span className="text-xs font-semibold text-slate-600">You're interested in ({iAmInterestedIn.length})</span>
-                </div>
-                <button onClick={() => setShowInterestingList(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
-              </div>
-              <div className="max-h-60 overflow-y-auto p-2">
-                {iAmInterestedIn.length > 0 ? iAmInterestedIn.map(u => (
-                  <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition-all">
-                    <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover ring-2 ring-white" />
-                    <div>
-                      <p className="text-sm font-medium text-slate-800">{u.name}</p>
-                      <p className="text-[10px] text-slate-400">@{u.username}</p>
-                    </div>
-                  </div>
-                )) : (
-                  <div className="text-center py-6">
-                    <UserPlus size={24} className="text-blue-200 mx-auto mb-2" />
-                    <p className="text-xs text-slate-400">You haven't shown interest in anyone yet</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Addresses */}
-        <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4" variants={itemVariants}>
+        <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 mb-4" variants={itemVariants}>
           <motion.div whileHover={{ y: -2, scale: 1.01 }}
-            className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
+            className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 rounded-xl p-3 sm:p-4 lg:p-4 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-200 flex-shrink-0">
                 <Home size={14} className="text-white" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-[8px] text-blue-400 uppercase tracking-wider font-semibold mb-1">Home Address</p>
-                <p className="text-sm font-medium text-slate-700">{sampleUser.homeAddress}</p>
+                <p className="text-sm font-medium text-slate-700 break-words">{sampleUser.homeAddress}</p>
               </div>
             </div>
           </motion.div>
           <motion.div whileHover={{ y: -2, scale: 1.01 }}
-            className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
+            className="bg-gradient-to-br from-white to-purple-50/30 border border-purple-100 rounded-xl p-3 sm:p-4 lg:p-4 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md shadow-purple-200 flex-shrink-0">
                 <MapPin size={14} className="text-white" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-[8px] text-purple-400 uppercase tracking-wider font-semibold mb-1">Current Location</p>
-                <p className="text-sm font-medium text-slate-700">{sampleUser.currentLocation}</p>
+                <p className="text-sm font-medium text-slate-700 break-words">{sampleUser.currentLocation}</p>
               </div>
             </div>
           </motion.div>
